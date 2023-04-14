@@ -1,19 +1,17 @@
-import {Platform, StyleSheet, Text, View, TextInput, Button, Alert, Fetch, Dimensions, } from 'react-native';
+import {Platform, StyleSheet, Text, View, TextInput, Button, Alert, Fetch, Dimensions } from 'react-native';
 import React from 'react';
 
 
-export default class HomeScreen extends React.Component{
-  
+export default class HomeScreen extends React.Component {
   //构造函数
-  constructor(props){
+  constructor(props) {
     super(props);
     //初始化数据
-    this.state={
+    this.state = {
         username:'',
-        pwdFirst:'',
-        pwdSecond:'',
+        pwd:'',
         isDisable:true,
-  }
+    }
   }
   //方法 提交
   Submit = () => {
@@ -35,8 +33,7 @@ export default class HomeScreen extends React.Component{
       Alert.alert('请确认输入密码是否一致');
       return; 
     }
-    this.props. navigation.navigate('Details')
-
+    this.props.navigation.navigate('Details')
   }
 
   render() {
@@ -75,10 +72,14 @@ export default class HomeScreen extends React.Component{
           onPress={() => Alert.alert('Simple Button pressed')}
         />
 
-        {/* <Text style={[styles.Contentfont]}>还没有账号？请先注册</Text>  */}
+        <Text style={[styles.Contentfont]}>
+          还没有账号？请先
+          <a onClick={() => this.props.navigation.navigate('注册')}>注册</a>
+        </Text> 
         
 
       </View>
+
     );
   }
 }
@@ -87,6 +88,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#696969',
     alignItems : 'center',
+    flex: 1, // 布局
   },
   Titlefont: {
     fontSize: 30,

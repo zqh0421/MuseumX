@@ -81,8 +81,7 @@ export default class HomeScreen extends React.Component{
           onPress={() => Alert.alert('Simple Button pressed')}
         />
 
-        {/* <Text style={[styles.Contentfont]}>已有账号？登录</Text> */}
-
+        <Text style={[styles.Contentfont]}>已有账号？登录</Text>
       </View>
     );
   }
