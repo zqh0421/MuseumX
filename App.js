@@ -1,57 +1,24 @@
-import React, { useState } from 'react';
-import { View, Button, Image, Text, StyleSheet, Alert } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React, { Component } from 'react'
+import { Text, StyleSheet, View, Button } from 'react-native'
 
+import Login from './src/login'
+import Register from './src/register'
 
-const ImgPicker = props => {
-  const [pickedImage, setPickedImage] = useState();
+const Stack = createNativeStackNavigator();
 
-  const takeImageHandler = async () => {
-    const image = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect: [16, 9],
-      quality: 0.5
-    });
-
-    setPickedImage(image.uri);
-    props.onImageTaken(image.uri);
-  };
-
-  return (
-    <View style={styles.imagePicker}>
-      <View style={styles.imagePreview}>
-        {!pickedImage ? (
-          <Text>No image picked yet.</Text>
-        ) : (
-          <Image style={styles.image} source={{ uri: pickedImage }} />
-        )}
-      </View>
-      <Button
-        title="Take Image"
-        onPress={takeImageHandler}
-      />
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  imagePicker: {
-    alignItems: 'center',
-    marginBottom: 15
-  },
-  imagePreview: {
-    width: '100%',
-    height: 200,
-    marginBottom: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderColor: '#ccc',
-    borderWidth: 1
-  },
-  image: {
-    width: '100%',
-    height: '100%'
+export default class App extends Component {
+  render() {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName= "登录" headerShown={false}>
+        <Stack.Screen name="登录" component={Login} />
+        <Stack.Screen name="注册" component={Register} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    )
   }
-});
+}
 
-export default ImgPicker;
+const styles = StyleSheet.create({})
