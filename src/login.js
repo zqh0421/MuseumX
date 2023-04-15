@@ -1,42 +1,41 @@
 import {Platform, StyleSheet, Text, View, TextInput, Button, Alert, Fetch, Dimensions } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 
 
-export default class HomeScreen extends React.Component {
-  //构造函数
-  constructor(props) {
-    super(props);
-    //初始化数据
-    this.state = {
-        username:'',
-        pwd:'',
-        isDisable:true,
-    }
-  }
+
+const Login=(props)=> {
+  const[username,setUername]=useState('')
+  const[pwd,setPwd]=useState('')
+  const[isDisable,setIsDisable]=useState(true)
+  
+const onLogin=()=>{//点击登录按钮打印用户名和密码
+   console.log(username);
+   console.log(pwd);
+}
   //方法 提交
-  Submit = () => {
-    const   { username, pwdFirst,pwdSecond} = this.state;
-    if (!username || !username.trim()) {
-      Alert.alert('请输入用户名');
-      return;
-    }
+  // Submit = () => {
+  //   const   { username, pwdFirst,pwdSecond} = this.state;
+  //   if (!username || !username.trim()) {
+  //     Alert.alert('请输入用户名');
+  //     return;
+  //   }
 
-    if (!pwdFirst || !pwdFirst.trim()) {
-      Alert.alert('请输入密码');
-      return;
-    } 
-    if (!pwdSecond || !pwdSecond.trim()) {
-      Alert.alert('请输入密码');
-      return;
-    }
-    if(!(pwdFirst==pwdSecond)){
-      Alert.alert('请确认输入密码是否一致');
-      return; 
-    }
-    this.props.navigation.navigate('Details')
-  }
+  //   if (!pwdFirst || !pwdFirst.trim()) {
+  //     Alert.alert('请输入密码');
+  //     return;
+  //   } 
+  //   if (!pwdSecond || !pwdSecond.trim()) {
+  //     Alert.alert('请输入密码');
+  //     return;
+  //   }
+  //   if(!(pwdFirst==pwdSecond)){
+  //     Alert.alert('请确认输入密码是否一致');
+  //     return; 
+  //   }
+  //   this.props.navigation.navigate('Details')
+  // }
 
-  render() {
+
     return (
       <View style={styles.container}>
        
@@ -45,19 +44,19 @@ export default class HomeScreen extends React.Component {
         <TextInput 
           style = {styles.inputStyle}
           placeholder='用户名'
-          value = {this.state.username}
-          onChangeText = {(val) => this.setState({username:val})}
+          value = {username}
+          onChangeText = {(val) => setUername(val)}
         />
 
         <TextInput 
           style = {styles.inputStyle}
           placeholder='密码'
-          value = {this.state.pwdFirst}
+          value = {pwd}
           // 隐藏输入
           secureTextEntry = {true}
           // 调用数字键盘
           //keyboardAppearance='number-pad'
-          onChangeText = {(val) => this.setState({pwdFirst:val})}
+          onChangeText = {(val) => setPwd(val)}
           // 允许多行文本输入
           // multiline = {true}
           // numberOfLines={10}
@@ -69,12 +68,12 @@ export default class HomeScreen extends React.Component {
           // style = {styles.buttonStyle}
           title='登 录'
           color='#dcdcdc'
-          onPress={() => Alert.alert('Simple Button pressed')}
+          onPress={() => onLogin()}
         />
 
         <Text style={[styles.Contentfont]}>
           还没有账号？请先
-          <a onClick={() => this.props.navigation.navigate('注册')}>注册</a>
+          <a onClick={() => props.navigation.navigate('注册')}>注册</a>
         </Text> 
         
 
@@ -82,7 +81,7 @@ export default class HomeScreen extends React.Component {
 
     );
   }
-}
+
 
 const styles = StyleSheet.create({
   container: {
@@ -109,3 +108,5 @@ const styles = StyleSheet.create({
     borderColor: '#dcdcdc',
   }
 })
+
+export default Login

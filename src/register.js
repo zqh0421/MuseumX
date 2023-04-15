@@ -1,28 +1,25 @@
-import {Platform, StyleSheet, Text, View, TextInput, Button, Alert, Fetch, Dimensions, } from 'react-native';
-import React from 'react';
+import {Platform, StyleSheet, Text, View, TextInput, Button, Alert, Fetch, Dimensions} from 'react-native';
+import React,{useState} from 'react';
 
-export default class HomeScreen extends React.Component{
+const register=(props)=>{
+  const [username,setUsername]=useState('')
+  const [pwd,setPwd]=useState('')
+  const [pwdSecond,setPwdSecond]=useState('')
+  const [isDisable,setIsDisable]=useState(true)
+
+const onregister=()=>{ //点击注册按钮打印用户名和密码
+  console.log(username);
+  console.log(pwd);
+}
   
-  //构造函数
-  constructor(props){
-    super(props);
-    //初始化数据
-    this.state={
-        username:'',
-        pwdFirst:'',
-        pwdSecond:'',
-        isDisable:true,
-  }
-  }
   //方法 提交
-  Submit = () => {
-    const   { username, pwdFirst,pwdSecond} = this.state;
+  const submit = () => {
     if (!username || !username.trim()) {
       Alert.alert('请输入用户名');
       return;
     }
 
-    if (!pwdFirst || !pwdFirst.trim()) {
+    if (!pwd || !pwd.trim()) {
       Alert.alert('请输入密码');
       return;
     } 
@@ -30,15 +27,15 @@ export default class HomeScreen extends React.Component{
       Alert.alert('请输入密码');
       return;
     }
-    if(!(pwdFirst==pwdSecond)){
+    if(!(pwd==pwdSecond)){
       Alert.alert('请确认输入密码是否一致');
       return; 
     } 
-    this.props. navigation.navigate('Details')
+    props.navigation.navigate('Details')
 
   }
 
-  render() {
+
     return (
       <View style={styles.container}>
         
@@ -46,19 +43,19 @@ export default class HomeScreen extends React.Component{
         <TextInput 
           style = {styles.inputStyle}
           placeholder='用户名'
-          value = {this.state.username}
-          onChangeText = {(val) => this.setState({username:val})}
+          value = {username}
+          onChangeText = {(val) => setUsername(val)}
         />
 
         <TextInput 
           style = {styles.inputStyle}
           placeholder='密码'
-          value = {this.state.pwdFirst}
+          value = {pwd}
           // 隐藏输入
           secureTextEntry = {true}
           // 调用数字键盘
           //keyboardAppearance='number-pad'
-          onChangeText = {(val) => this.setState({pwdFirst:val})}
+          onChangeText = {(val) => setPwd(val)}
           // 允许多行文本输入
           // multiline = {true}
           // numberOfLines={10}
@@ -69,23 +66,23 @@ export default class HomeScreen extends React.Component{
         <TextInput 
           style = {styles.inputStyle}
           placeholder='请再次输入密码'
-          value = {this.state.pwdSecond}
+          value = {pwdSecond}
           secureTextEntry = {true}
-          onChangeText = {(val) => this.setState({pwdSecond:val})}
+          onChangeText = {(val) => setPwdSecond(val)}
         />
       
         <Button 
-          style = {styles.buttonStyle}
+          // style = {styles.buttonStyle}
           title='注 册'
           color='#dcdcdc'
-          onPress={() => Alert.alert('Simple Button pressed')}
+          onPress={() => onregister()}
         />
 
         <Text style={[styles.Contentfont]}>已有账号？登录</Text>
       </View>
     );
-  }
-}
+  
+    }
 
 const styles = StyleSheet.create({
   container: {
@@ -110,3 +107,5 @@ const styles = StyleSheet.create({
   borderColor: '#dcdcdc',
 }
 })
+
+export default register
