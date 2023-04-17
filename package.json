@@ -6,7 +6,10 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "prettier": "prettier --config .prettierrc --write .",
+    "eslint:check": "eslint src/**/*.js --fix",
+    "pre-commit": "lint-staged"
   },
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
@@ -14,6 +17,7 @@
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
+    "eslint-plugin-react": "^7.32.2",
     "expo": "^48.0.11",
     "expo-image-picker": "~14.1.1",
     "expo-sensors": "~12.1.1",
@@ -30,9 +34,20 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@react-navigation/material-bottom-tabs": "^6.2.15",
+    "eslint": "^8.38.0",
     "expo-linear-gradient": "^12.1.2",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.1",
+    "prettier": "^2.8.7",
     "react-native-paper": "^5.6.0",
     "react-native-vector-icons": "^9.2.0"
   },
-  "private": true
+  "private": true,
+  "lint-staged": {
+    "*.{js,json,md}": [
+      "prettier --write",
+      "eslint --fix",
+      "git add"
+    ] 
+  }
 }

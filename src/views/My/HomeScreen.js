@@ -1,17 +1,16 @@
-import { useState } from 'react';
-import { Button,StyleSheet, Text, View, TextInput} from 'react-native';
+// import { useState } from 'react'
+import { Text, View } from 'react-native'
 
-const HomeScreen=({navigation})=>{
-    const[userinfo,setuserinfo]=useState();
- 
-return(
-    <View style={styles.container}>
-       
-       <Text style={[styles.Titlefont]}>
+const HomeScreen = () => {
+  // const [userinfo, setuserinfo] = useState()
+
+  return (
+    <View>
+      <Text>
         这里是[页面名](eg.首页/社区/个人/...).欢迎
-        </Text>
+      </Text>
     </View>
-)
-
-
+  )
 }
+
+export default HomeScreen

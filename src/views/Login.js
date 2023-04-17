@@ -1,16 +1,23 @@
-import { Platform, StyleSheet, Text, View, TextInput, Button, Alert, Fetch, Dimensions, Pressable } from "react-native";
-import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Button,
+  Dimensions
+} from 'react-native'
+import React, { useState } from 'react'
 
 const Login = (props) => {
-  const [username, setUername] = useState("");
-  const [pwd, setPwd] = useState("");
-  const [isDisable, setIsDisable] = useState(true);
+  const [username, setUername] = useState('')
+  const [pwd, setPwd] = useState('')
+  // const [isDisable, setIsDisable] = useState(true)
 
   const onLogin = () => {
     //点击登录按钮打印用户名和密码
-    console.log(username);
-    console.log(pwd);
-  };
+    console.log(username)
+    console.log(pwd)
+  }
   //方法 提交
   // Submit = () => {
   //   const   { username, pwdFirst,pwdSecond} = this.state;
@@ -73,36 +80,36 @@ const Login = (props) => {
 
       <Text style={[styles.Contentfont]}>
         还没有账号？请先
-        <a onClick={() => props.navigation.navigate("Register")}>注册</a>
+        <a onClick={() => props.navigation.navigate('Register')}>注册</a>
       </Text>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#696969",
-    alignItems: "center",
+    backgroundColor: '#696969',
+    alignItems: 'center',
     flex: 1, // 布局
   },
   Titlefont: {
     fontSize: 30,
-    color: "#fffaf0",
-    fontFamily: "SIMYOU",
+    color: '#fffaf0',
+    fontFamily: 'SIMYOU',
   },
   inputStyle: {
-    color: "#f0f8ff",
-    width: Dimensions.get("window").width - 1000,
+    color: '#f0f8ff',
+    width: Dimensions.get('window').width - 1000,
     margin: 10,
     borderWidth: 1,
-    borderColor: "#dcdcdc",
+    borderColor: '#dcdcdc',
     borderRadius: 5,
-    height: "10%",
+    height: '10%',
   },
   buttonStyle: {
     borderRadius: 10,
-    borderColor: "#dcdcdc",
+    borderColor: '#dcdcdc',
   },
-});
+})
 
-export default Login;
+export default Login

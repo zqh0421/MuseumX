@@ -1,39 +1,46 @@
-import { Platform, StyleSheet, Text, View, TextInput, Button, Alert, Fetch, Dimensions } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Button,
+  Dimensions,
+} from 'react-native'
 import React, { useState } from 'react'
 
 const Register = (props) => {
-  const [username, setUsername] = useState("");
-  const [pwd, setPwd] = useState("");
-  const [pwdSecond, setPwdSecond] = useState("");
-  const [isDisable, setIsDisable] = useState(true);
+  const [username, setUsername] = useState('')
+  const [pwd, setPwd] = useState('')
+  const [pwdSecond, setPwdSecond] = useState('')
+  // const [isDisable, setIsDisable] = useState(true)
 
   const onRegister = () => {
     //点击注册按钮打印用户名和密码
-    console.log(username);
-    console.log(pwd);
-  };
+    console.log(username)
+    console.log(pwd)
+  }
 
   // 方法 提交
-  const submit = () => {
-    if (!username || !username.trim()) {
-      Alert.alert("请输入用户名");
-      return;
-    }
+  // const submit = () => {
+  //   if (!username || !username.trim()) {
+  //     Alert.alert('请输入用户名')
+  //     return
+  //   }
 
-    if (!pwd || !pwd.trim()) {
-      Alert.alert("请输入密码");
-      return;
-    }
-    if (!pwdSecond || !pwdSecond.trim()) {
-      Alert.alert("请输入密码");
-      return;
-    }
-    if (!(pwd == pwdSecond)) {
-      Alert.alert("请确认输入密码是否一致");
-      return;
-    }
-    props.navigation.navigate("Details");
-  };
+  //   if (!pwd || !pwd.trim()) {
+  //     Alert.alert('请输入密码')
+  //     return
+  //   }
+  //   if (!pwdSecond || !pwdSecond.trim()) {
+  //     Alert.alert('请输入密码')
+  //     return
+  //   }
+  //   if (!(pwd == pwdSecond)) {
+  //     Alert.alert('请确认输入密码是否一致')
+  //     return
+  //   }
+  //   props.navigation.navigate('Details')
+  // }
 
   return (
     <View style={styles.container}>
@@ -81,31 +88,31 @@ const Register = (props) => {
 
       <Text style={[styles.Contentfont]}>已有账号？登录</Text>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#696969",
-    alignItems: "center",
+    backgroundColor: '#696969',
+    alignItems: 'center',
   },
   Titlefont: {
     fontSize: 60,
-    color: "#fffaf0",
+    color: '#fffaf0',
   },
   inputStyle: {
-    color: "#f0f8ff",
-    width: Dimensions.get("window").width - 1000,
+    color: '#f0f8ff',
+    width: Dimensions.get('window').width - 1000,
     margin: 10,
     borderWidth: 1,
-    borderColor: "#dcdcdc",
+    borderColor: '#dcdcdc',
     borderRadius: 5,
-    height: "10%",
+    height: '10%',
   },
   buttonStyle: {
     borderRadius: 10,
-    borderColor: "#dcdcdc",
+    borderColor: '#dcdcdc',
   },
-});
+})
 
-export default Register;
+export default Register
