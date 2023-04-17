@@ -1,8 +1,10 @@
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import Page2 from './views/Page2'
-import Page1 from './views/Page1';
-import Page3 from './views/Page3';
-import Page4 from './views/Page4';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
+
+import Page1 from '../views/Page1'
+import Page2 from '../views/Page2'
+import Page3 from '../views/Page3'
+import Page4 from '../views/Page4'
+
 const Tab = createMaterialBottomTabNavigator();
 
 const TabBar = () => {
