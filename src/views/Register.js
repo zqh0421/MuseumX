@@ -4,7 +4,7 @@ import {
   View,
   TextInput,
   Button,
-  Dimensions,
+  Dimensions
 } from 'react-native'
 import React, { useState } from 'react'
 
@@ -94,11 +94,11 @@ const Register = (props) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#696969',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   Titlefont: {
     fontSize: 60,
-    color: '#fffaf0',
+    color: '#fffaf0'
   },
   inputStyle: {
     color: '#f0f8ff',
@@ -107,12 +107,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#dcdcdc',
     borderRadius: 5,
-    height: '10%',
+    height: '10%'
   },
   buttonStyle: {
     borderRadius: 10,
-    borderColor: '#dcdcdc',
-  },
+    borderColor: '#dcdcdc'
+  }
 })
 
 export default Register

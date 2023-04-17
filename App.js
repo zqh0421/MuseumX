@@ -1,12 +1,12 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from 'react';
-import Login from './src/views/Login';
-import Register from './src/views/Register';
-import TabBar from './src/components/TabBar';
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import React from 'react'
+import Login from './src/views/Login'
+import Register from './src/views/Register'
+import TabBar from './src/components/TabBar'
 // import LoginScreen from './src/views/My/HomeScreen'
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator()
 
 const App = () => {
   return (
@@ -26,7 +26,7 @@ const App = () => {
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
-  );
-};
+  )
+}
 
-export default App;
+export default App

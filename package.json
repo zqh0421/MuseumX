@@ -45,9 +45,8 @@
   "private": true,
   "lint-staged": {
     "*.{js,json,md}": [
-      "prettier --write",
-      "eslint --fix",
-      "git add"
-    ] 
+      "prettier --config .prettierrc --write .",
+      "eslint src/**/*.js --fix"
+    ]
   }
 }

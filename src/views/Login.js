@@ -90,12 +90,12 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#696969',
     alignItems: 'center',
-    flex: 1, // 布局
+    flex: 1 // 布局
   },
   Titlefont: {
     fontSize: 30,
     color: '#fffaf0',
-    fontFamily: 'SIMYOU',
+    fontFamily: 'SIMYOU'
   },
   inputStyle: {
     color: '#f0f8ff',
@@ -104,12 +104,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#dcdcdc',
     borderRadius: 5,
-    height: '10%',
+    height: '10%'
   },
   buttonStyle: {
     borderRadius: 10,
-    borderColor: '#dcdcdc',
-  },
+    borderColor: '#dcdcdc'
+  }
 })
 
 export default Login

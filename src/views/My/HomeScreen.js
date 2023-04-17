@@ -6,9 +6,7 @@ const HomeScreen = () => {
 
   return (
     <View>
-      <Text>
-        这里是[页面名](eg.首页/社区/个人/...).欢迎
-      </Text>
+      <Text>这里是[页面名](eg.首页/社区/个人/...).欢迎</Text>
     </View>
   )
 }
