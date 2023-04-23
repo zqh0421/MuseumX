@@ -19,7 +19,7 @@ const App = () => {
           {/* 普通跳转，包括下方导航栏 */}
           <Stack.Screen name="TabBar" component={TabBar} />
         </Stack.Group>
-        <Stack.Group screenOptions={{ presentation: 'modal' }}>
+        <Stack.Group screenOptions={{ presentation: 'modal' }} mode="modal">
           {/* 向上滑入跳转，登录和注册 */}
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Register" component={Register} />

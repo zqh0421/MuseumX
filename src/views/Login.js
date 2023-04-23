@@ -43,11 +43,7 @@ const Login = (props) => {
 
   return (
     <View style={styles.container}>
-      <Text>
-        <a onClick={() => props.navigation.goBack()}>
-          <Text>关闭</Text>
-        </a>
-      </Text>
+      <Text onPress={() => props.navigation.goBack()}>关闭</Text>
       <Text style={[styles.Titlefont]}>登 录</Text>
 
       <TextInput
@@ -82,9 +78,7 @@ const Login = (props) => {
 
       <Text style={[styles.Contentfont]}>
         还没有账号？请先
-        <a onClick={() => props.navigation.navigate('Register')}>
-          <Text>注册</Text>
-        </a>
+        <Text onPress={() => props.navigation.navigate('Register')}>注册</Text>
       </Text>
     </View>
   )
