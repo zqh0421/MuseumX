@@ -1,5 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+// import { CardStyleInterpolators } from '@react-navigation/stack'
 import React from 'react'
 import Login from './src/views/Login'
 import Register from './src/views/Register'
@@ -19,7 +20,12 @@ const App = () => {
           {/* 普通跳转，包括下方导航栏 */}
           <Stack.Screen name="TabBar" component={TabBar} />
         </Stack.Group>
-        <Stack.Group screenOptions={{ presentation: 'modal' }}>
+        <Stack.Group
+          screenOptions={{
+            presentation: 'modal',
+            animation: 'slide_from_bottom'
+          }}
+        >
           {/* 向上滑入跳转，登录和注册 */}
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Register" component={Register} />

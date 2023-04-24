@@ -44,9 +44,7 @@ const Register = (props) => {
 
   return (
     <View style={styles.container}>
-      <Text>
-        <a onClick={() => props.navigation.goBack()}>关闭</a>
-      </Text>
+      <Text onPress={() => props.navigation.goBack()}>关闭</Text>
       <Text style={[styles.Titlefont]}>注 册</Text>
       <TextInput
         style={styles.inputStyle}

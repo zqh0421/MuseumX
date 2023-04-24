@@ -1,10 +1,10 @@
 import { View, Text } from 'react-native'
-const Page3 = () => {
+const Discover = () => {
   return (
     <View>
-      <Text>Page3</Text>
+      <Text>Discover</Text>
     </View>
   )
 }
 
-export default Page3
+export default Discover
