@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const Page1 = (props) => {
+const Home = (props) => {
   return (
     <View>
       <Text onPress={() => props.navigation.navigate('Login')}>
@@ -11,4 +11,4 @@ const Page1 = (props) => {
   )
 }
 
-export default Page1
+export default Home
