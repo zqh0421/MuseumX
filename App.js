@@ -1,24 +1,39 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React, { useState,Component } from 'react'
-import { Text, StyleSheet, View, Button } from 'react-native'
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+// import { CardStyleInterpolators } from '@react-navigation/stack'
+import React from 'react'
+import Login from './src/views/Login'
+import Register from './src/views/Register'
+import TabBar from './src/components/TabBar'
+// import LoginScreen from './src/views/My/HomeScreen'
+// import { Provider as PaperProvider } from 'react-native-paper'
 
-import Login from './src/login'
-import Register from './src/register'
-import LoginScreen from './src/views/My/HomeScreen'
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator()
 
-export default class App extends Component {
-  render() {
-    return (
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName= "登录" headerShown={false}>
-        <Stack.Screen name="登录" component={Login} />
-        <Stack.Screen name="注册" component={Register} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    )
-  }
+const App = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="TabBar"
+        screenOptions={{ headerShown: false }}
+      >
+        <Stack.Group>
+          {/* 普通跳转，包括下方导航栏 */}
+          <Stack.Screen name="TabBar" component={TabBar} />
+        </Stack.Group>
+        <Stack.Group
+          screenOptions={{
+            presentation: 'modal',
+            animation: 'slide_from_bottom'
+          }}
+        >
+          {/* 向上滑入跳转，登录和注册 */}
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Register" component={Register} />
+        </Stack.Group>
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
 }
 
-const styles = StyleSheet.create({})
+export default App

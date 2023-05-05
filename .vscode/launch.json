@@ -1,0 +1,10 @@
+{
+  "configurations": [
+    {
+      "type": "chrome",
+      "name": "http://101.200.148.39:3458/api/controller/adminUser/login",
+      "request": "launch",
+      "url": "http://101.200.148.39:3458/api/controller/adminUser/login"
+    }
+  ]
+}
