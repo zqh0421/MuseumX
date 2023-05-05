@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, AppRegistry } from 'react-native'
+import { View, Text, StyleSheet, AppRegistry,Dimensions } from 'react-native'
 import React, { useState } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Appbar, List, MD3Colors,TextInput} from 'react-native-paper';
@@ -15,36 +15,34 @@ const EditDescription= (props) => {
     }
   };
   return (
-      <View style={styles.container}>
-         <LinearGradient  
-           colors = {['#3A3A3A','#525161']}
-          style={styles.background}>
-          <Text style={styles.back} onPress={() => props.navigation.goBack()}>Cancel</Text>
-          <Text style={styles.Name}> EditDescription</Text>
-          <Text style={styles.save} onPress={onPressSave}>Save</Text> 
-            
-           <Text style={styles.lab}> You can only change your description once in seven days</Text>
-           <View style={styles.input}>
-           <TextInput
-              value={title}
-              multiline={true}
-              textAlignVertical="top"
-              onChangeText={handleonChangeTex}
-              maxLength={100}
-           />
-           <Text style={styles.length}> {title.length}/100 </Text>
-           </View>
-
-         </LinearGradient>
+    <View style={styles.container}>
+       
+        <Text style={styles.back} onPress={() => props.navigation.goBack()}>Cancel</Text>
+        <Text style={styles.Name}> Edit description </Text>
+        <Text style={styles.save} onPress={onPressSave}>Save</Text> 
           
-      </View>
-  )
-}
+         <Text style={styles.lab}> You can only change your description once in seven days</Text>
+         <TextInput
+            style={styles.input}
+            value={title}
+            multiline={true}
+            textAlignVertical="top"
+            onChangeText={handleonChangeTex}
+            maxLength={100}
+         />
+         <Text style={styles.length}> {title.length}/100 </Text>
+        
+    </View>
+) }
 
 const styles = StyleSheet.create({
   container: {
-      backgroundColor: '#696969',
-      // alignItems: 'center',
+    backgroundColor: '#fff',
+    // alignItems: 'center',
+    justifyContent:'center',
+    // alignContent:'center',
+    alignItems:'center',
+    flex:1
   }  ,
   background: {
       justifyContent:'center',
@@ -80,18 +78,17 @@ const styles = StyleSheet.create({
       color: '#696969'
     },
     input: {
-     
-      top: 70,
-      width: '90%',
-      marginTop: 60,
-      color: '#fff',
-
+      top: 60,
+      width: Dimensions.get('window').width -20,
+      margin: 10,
+      borderColor: 'red',
+      flex:1,
+      paddingHorizontal: 5
     },
     length: {
-      top: 10,
-      position: 'absolute',
-      right: 10
-
+      flex:1,
+      top:50,
+      left:150,
     }
 })
 export default EditDescription;
