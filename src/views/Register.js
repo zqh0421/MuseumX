@@ -7,6 +7,9 @@ import {
   Dimensions
 } from 'react-native'
 import React, { useState } from 'react'
+import { LinearGradient } from 'expo-linear-gradient'
+import { Formik } from 'formik';
+import { validate } from 'react-native-web/dist/cjs/exports/StyleSheet/validate';
 
 const Register = (props) => {
   const [username, setUsername] = useState('')
@@ -19,6 +22,7 @@ const Register = (props) => {
     console.log(username)
     console.log(pwd)
   }
+  
 
   // 方法 提交
   // const submit = () => {
@@ -44,6 +48,11 @@ const Register = (props) => {
 
   return (
     <View style={styles.container}>
+      
+      <LinearGradient 
+      colors = {['#3A3A3A','#525161']}
+      style={styles.backgroud}>
+
       <Text onPress={() => props.navigation.goBack()}>关闭</Text>
       <Text style={[styles.Titlefont]}>注 册</Text>
       <TextInput
@@ -61,7 +70,9 @@ const Register = (props) => {
         secureTextEntry={true}
         // 调用数字键盘
         //keyboardAppearance='number-pad'
+
         onChangeText={(val) => setPwd(val)}
+        
         // 允许多行文本输入
         // multiline = {true}
         // numberOfLines={10}
@@ -75,6 +86,7 @@ const Register = (props) => {
         value={pwdSecond}
         secureTextEntry={true}
         onChangeText={(val) => setPwdSecond(val)}
+        
       />
 
       <Button
@@ -84,7 +96,12 @@ const Register = (props) => {
         onPress={() => onRegister()}
       />
 
-      <Text style={[styles.Contentfont]}>已有账号？登录</Text>
+      {/* <Text style={[styles.Contentfont]}>已有账号？登录</Text> */}
+      <Text style={[styles.Contentfont]}>
+        已有账号？
+        <Text onPress={() => props.navigation.navigate('Login')}>登录</Text>
+      </Text>
+      </LinearGradient>
     </View>
   )
 }
@@ -92,20 +109,31 @@ const Register = (props) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#696969',
-    alignItems: 'center'
+    // alignItems: 'center',
+    flex: 1 // 布局
+  },
+  backgroud:{
+    justifyContent:'center',
+    // alignContent:'center',
+    alignItems:'center',
+    flex:1
   },
   Titlefont: {
-    fontSize: 60,
-    color: '#fffaf0'
+    fontSize: 30,
+    color: '#fffaf0',
+    fontFamily: 'SIMYOU'
   },
   inputStyle: {
     color: '#f0f8ff',
-    width: Dimensions.get('window').width - 1000,
+    // width: Dimensions.get('window').width -1000,
+    width: Dimensions.get('window').width -150,
     margin: 10,
+    paddingLeft: 10,
     borderWidth: 1,
     borderColor: '#dcdcdc',
     borderRadius: 5,
-    height: '10%'
+    // height: '10%'
+    height: '7%'
   },
   buttonStyle: {
     borderRadius: 10,

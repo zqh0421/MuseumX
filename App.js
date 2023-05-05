@@ -6,6 +6,7 @@ import Login from './src/views/Login'
 import Register from './src/views/Register'
 import TabBar from './src/components/TabBar'
 // import LoginScreen from './src/views/My/HomeScreen'
+// import { Provider as PaperProvider } from 'react-native-paper'
 
 const Stack = createNativeStackNavigator()
 

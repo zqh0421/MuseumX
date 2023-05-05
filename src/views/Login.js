@@ -7,6 +7,7 @@ import {
   Dimensions
 } from 'react-native'
 import React, { useState } from 'react'
+import { LinearGradient } from 'expo-linear-gradient'
 
 const Login = (props) => {
   const [username, setUername] = useState('')
@@ -43,6 +44,11 @@ const Login = (props) => {
 
   return (
     <View style={styles.container}>
+
+      <LinearGradient 
+      colors={['#3A3A3A','#525161']} 
+      style={styles.backgroud}>
+
       <Text onPress={() => props.navigation.goBack()}>关闭</Text>
       <Text style={[styles.Titlefont]}>登 录</Text>
 
@@ -61,6 +67,7 @@ const Login = (props) => {
         secureTextEntry={true}
         // 调用数字键盘
         //keyboardAppearance='number-pad'
+        
         onChangeText={(val) => setPwd(val)}
         // 允许多行文本输入
         // multiline = {true}
@@ -80,6 +87,7 @@ const Login = (props) => {
         还没有账号？请先
         <Text onPress={() => props.navigation.navigate('Register')}>注册</Text>
       </Text>
+    </LinearGradient>
     </View>
   )
 }
@@ -87,8 +95,14 @@ const Login = (props) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#696969',
-    alignItems: 'center',
+    // alignItems: 'center',
     flex: 1 // 布局
+  },
+  backgroud:{
+    justifyContent:'center',
+    // alignContent:'center',
+    alignItems:'center',
+    flex:1
   },
   Titlefont: {
     fontSize: 30,
@@ -97,12 +111,14 @@ const styles = StyleSheet.create({
   },
   inputStyle: {
     color: '#f0f8ff',
-    width: Dimensions.get('window').width - 1000,
+    // width: Dimensions.get('window').width -1000,
+    width: Dimensions.get('window').width -150,
     margin: 10,
     borderWidth: 1,
     borderColor: '#dcdcdc',
     borderRadius: 5,
-    height: '10%'
+    // height: '10%'
+    height: '7%'
   },
   buttonStyle: {
     borderRadius: 10,
