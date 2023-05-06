@@ -1,10 +1,9 @@
-import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, Pressable} from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useEffect, useState } from 'react'
 import FlowListItem from '../components/FlowListItem'
 
 const Discover = () => {
-  
   const [ toggleNew, setToggleNew ] = useState(false)
   const [ toggleStyle, setToggleStyle ] = useState(styles.toggleSelected)
 
@@ -83,9 +82,8 @@ const Discover = () => {
   }
 
   return (
-    
     <View style={styles.container}>
-      <LinearGradient 
+      <LinearGradient
         colors = {['#727480','#454653']}
         style={styles.backgroud}>
         <Text style={styles.title}>发现</Text>
