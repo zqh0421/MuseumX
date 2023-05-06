@@ -26,6 +26,7 @@ const Login = (props) => {
           await AsyncStorage.setItem('userData', jsonValue)
           console.log('userData')
           console.log(await AsyncStorage.getItem('userData'))
+          props.navigation.goBack()
         } catch (e) {
           // saving error
         }
