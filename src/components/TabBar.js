@@ -1,6 +1,5 @@
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-
+import { AntDesign, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons'
 import Home from '../views/Home'
 import Search from '../views/Search'
 import Discover from '../views/Discover'
@@ -19,14 +18,43 @@ const TabBar = () => {
         name="Home"
         component={Home}
         options={{
-          tabBarIcon: ({ color }) => {
-            <MaterialCommunityIcons name="home" color={color} size={26} />
-          }
+          tabBarLabel: 'Home',
+          tabBarIcon: ({ color }) => (
+            <MaterialIcons name="museum" color={color} size={26} />
+          ),
         }}
       />
-      <Tab.Screen name="Search" component={Search} />
-      <Tab.Screen name="Discover" component={Discover} />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen
+        name="Search"
+        component={Search}
+        options={{
+          tabBarLabel: 'Search',
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="text-search" color={color} size={26} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Discover"
+        component={Discover}
+        options={{
+          tabBarLabel: 'Discover',
+          tabBarIcon: ({ color }) => (
+            <AntDesign name="find" color={color} size={26} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarLabel: 'Profile',
+          tabBarColor: '#fff',
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="account" color={color} size={26} />
+          ),
+        }}
+      />
     </Tab.Navigator>
   )
 }
