@@ -25,6 +25,7 @@ export async function login(username, password) {
     }
     const data = await response.json()
     console.log(data)
+    return data
   } catch (err) {
     console.log(err)
   }
@@ -56,6 +57,7 @@ export async function register(checkpassword, username, password) {
     }
     const data = await response.json()
     console.log(data)
+    return data
   } catch (err) {
     console.log(err)
   }

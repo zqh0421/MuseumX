@@ -8,7 +8,8 @@ import {
 } from 'react-native'
 import React, { useState } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
-
+import { login } from '../api/L_RInterface'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 const Login = (props) => {
   const [username, setUername] = useState('')
   const [pwd, setPwd] = useState('')
@@ -18,6 +19,20 @@ const Login = (props) => {
     //点击登录按钮打印用户名和密码
     console.log(username)
     console.log(pwd)
+    login(username, pwd).then(async res => {
+      if (res.message === 'ok') { // TODO: 判断登录成功的条件根据实际接口修改！
+        try {
+          const jsonValue = JSON.stringify(res)
+          await AsyncStorage.setItem('userData', jsonValue)
+          console.log('userData')
+          console.log(await AsyncStorage.getItem('userData'))
+        } catch (e) {
+          // saving error
+        }
+      }
+    }).catch(err => {
+      alert(err)
+    })
   }
   //方法 提交
   // Submit = () => {
@@ -45,49 +60,49 @@ const Login = (props) => {
   return (
     <View style={styles.container}>
 
-      <LinearGradient 
-      colors={['#3A3A3A','#525161']} 
-      style={styles.backgroud}>
+      <LinearGradient
+        colors={['#3A3A3A','#525161']}
+        style={styles.backgroud}>
 
-      <Text onPress={() => props.navigation.goBack()}>关闭</Text>
-      <Text style={[styles.Titlefont]}>登 录</Text>
+        <Text onPress={() => props.navigation.goBack()}>关闭</Text>
+        <Text style={[styles.Titlefont]}>登 录</Text>
 
-      <TextInput
-        style={styles.inputStyle}
-        placeholder="用户名"
-        value={username}
-        onChangeText={(val) => setUername(val)}
-      />
+        <TextInput
+          style={styles.inputStyle}
+          placeholder="用户名"
+          value={username}
+          onChangeText={(val) => setUername(val)}
+        />
 
-      <TextInput
-        style={styles.inputStyle}
-        placeholder="密码"
-        value={pwd}
-        // 隐藏输入
-        secureTextEntry={true}
-        // 调用数字键盘
-        //keyboardAppearance='number-pad'
-        
-        onChangeText={(val) => setPwd(val)}
+        <TextInput
+          style={styles.inputStyle}
+          placeholder="密码"
+          value={pwd}
+          // 隐藏输入
+          secureTextEntry={true}
+          // 调用数字键盘
+          //keyboardAppearance='number-pad'
+
+          onChangeText={(val) => setPwd(val)}
         // 允许多行文本输入
         // multiline = {true}
         // numberOfLines={10}
         //控制占位符在上方,Android和ios显示保持一致
         //textAlignVertical='top'
-      />
+        />
 
-      <Button
+        <Button
         // style = {styles.buttonStyle}
-        title="登 录"
-        color="#dcdcdc"
-        onPress={() => onLogin()}
-      />
+          title="登 录"
+          color="#dcdcdc"
+          onPress={() => onLogin()}
+        />
 
-      <Text style={[styles.Contentfont]}>
+        <Text style={[styles.Contentfont]}>
         还没有账号？请先
-        <Text onPress={() => props.navigation.navigate('Register')}>注册</Text>
-      </Text>
-    </LinearGradient>
+          <Text onPress={() => props.navigation.navigate('Register')}>注册</Text>
+        </Text>
+      </LinearGradient>
     </View>
   )
 }
