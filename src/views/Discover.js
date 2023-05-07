@@ -1,65 +1,77 @@
-import { View, Text, StyleSheet, Pressable} from 'react-native'
+import { View, Text, StyleSheet, Pressable, Dimensions, TouchableOpacity} from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useEffect, useState } from 'react'
+import { TabActions } from '@react-navigation/native'
 import FlowListItem from '../components/FlowListItem'
-
-const Discover = () => {
+import WaterfallFlow from 'react-native-waterfall-flow'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { AntDesign } from '@expo/vector-icons'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+const Discover = (props) => {
   const [ toggleNew, setToggleNew ] = useState(false)
   const [ toggleStyle, setToggleStyle ] = useState(styles.toggleSelected)
-
+  const [listData, setListData] = useState([]) // 存储当前显示的数据列表
+  const [isRefreshing, setIsRefreshing] = useState(false) // 正在加载数据
+  const [isError, setIsError] = useState(true) // 数据加载错误
   const arr = [
     {
-      title: 'title1',
-      username: 'user11111111123123132111111',
-      time: '2023-05-04',
+      title: '（一）博物馆博物馆博物馆博物馆博物馆博物馆',
+      username: 'user123456',
       likes: 25,
     },
     {
       title: 'title2',
       username: 'user2',
-      time: '2023-05-03',
-      likes: 2,
+      likes: 255,
     },
     {
       title: 'title3',
       username: 'user3',
-      time: '2023-04-04',
       likes: 255,
     },
     {
       title: 'title1',
-      username: 'user11111111123123132111111',
-      time: '2023-05-04',
+      username: 'user1',
       likes: 25,
     },
     {
       title: 'title2',
       username: 'user2',
-      time: '2023-05-03',
-      likes: 2,
+      likes: 255,
     },
     {
       title: 'title3',
       username: 'user3',
-      time: '2023-04-04',
       likes: 255,
     },
     {
       title: 'title1',
-      username: 'user11111111123123132111111',
-      time: '2023-05-04',
+      username: 'user1',
       likes: 25,
     },
     {
       title: 'title2',
       username: 'user2',
-      time: '2023-05-03',
       likes: 2,
     },
     {
       title: 'title3',
       username: 'user3',
-      time: '2023-04-04',
+      likes: 255,
+    },
+    {
+      title: 'title1',
+      username: 'user1',
+      likes: 25,
+    },
+    {
+      title: 'title2',
+      username: 'user2',
+      likes: 2,
+    },
+    {
+      title: 'title3',
+      username: 'user3',
       likes: 255,
     },
 
@@ -73,6 +85,11 @@ const Discover = () => {
     }
   }, [toggleNew])
 
+
+  useEffect(() => {
+    loadData()  
+  }, [])
+  
   const onPressToggle = () => { // 点击 “热门/最新” 按钮触发事件。
     setToggleNew(!toggleNew)
   }
@@ -81,42 +98,136 @@ const Discover = () => {
     alert('发布！')
   }
 
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('userData')
+      return jsonValue !== null ? JSON.parse(jsonValue) : null
+    } catch(e) {
+      // error reading value
+    }
+  }
+
+  const loadData = () => {
+    setIsError(false)
+    setIsRefreshing(true)
+    setTimeout(() => {
+      // 加载成功
+    setListData(arr)
+    setIsRefreshing(false)
+      //  加载失败
+      // setIsError(true)
+      // setIsRefreshing(false)
+      // setListData([])
+    }, 800)
+  }
+
+  const onPressRefresh = () => {
+    loadData()
+  }
+
+  const EmptyContent = () => {
+    return (
+      <View
+        style={{
+          alignItems: 'center',
+          transform: [{ translateY: Dimensions.get('window').height / 2}]
+        }}
+      >
+        <AntDesign name='frowno' color='white' size={50}/>
+        <Text style={{ color: 'white', marginTop: 15 }}>暂无内容~</Text>
+      </View>
+    )
+  }
+
+  const RefreshingContent = () => {
+    return (
+      <View
+        style={{
+          alignItems: 'center',
+          transform: [{ translateY: Dimensions.get('window').height / 2}]
+        }}
+      >
+        <Text style={{ color: 'white' }}>加载中...</Text>
+      </View>
+    )
+  }
+
+  const ErrorContent = () => {
+    return (
+      <View
+        style={{
+          alignItems: 'center',
+          transform: [{ translateY: Dimensions.get('window').height / 2}]
+        }}
+      >
+        <Pressable
+          onPress={onPressRefresh}
+          style={{
+            width: 150,
+            height: 50,
+            borderRadius: 25,
+            borderWidth: 1,
+            borderColor: 'yellow',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Text
+            style={{
+              color: 'yellow',
+              fontSize: 18,
+            }}
+          >刷新重试</Text>
+        </Pressable>
+        <Text style={{ color: 'white', marginTop: 15 }}>加载失败，请刷新重试~</Text>
+      </View>
+    )
+  }
+
   return (
     <View style={styles.container}>
       <LinearGradient
         colors = {['#727480','#454653']}
-        style={styles.backgroud}>
+        style={styles.background}>
         <Text style={styles.title}>发现</Text>
         <Pressable style={styles.toggle} onPress={onPressToggle}>
           <View style={toggleStyle}></View>
-          <Text>热门</Text>
-          <Text>最新</Text>
+          <Text style={{ color: '#333'}}>热门</Text>
+          <Text style={{ color: '#ccc'}}>最新</Text>
         </Pressable>
-        <View>
-          <View style={styles.list}>
-            {
-              arr.map((item, index) => {
-                if(index % 2 === 0)
-                  return (
-                    <FlowListItem title={item.title} time={item.time} username={item.username} likes={item.likes} />
-                  )
-              })
+        {
+          !isError && !isRefreshing && listData.length > 0 &&
+          <WaterfallFlow
+            style={{
+              transform: [{ translateY: 75 }],
+              maxHeight: Dimensions.get('window').height - 155,
+            }}
+            contentContainerStyle={{
+              justifyContent: 'space-evenly',
+              paddingLeft: '2%',
+              paddingRight: '2%'
+            }}
+            data={listData}
+            numColumns={2}
+            renderItem={({ item, index, columnIndex }) =>
+              <FlowListItem
+                title={item.title}
+                time={item.time}
+                username={item.username}
+                likes={item.likes}
+              />
             }
-          </View>
-          <View style={styles.list2}>
-            {
-              arr.map((item, index) => {
-                if(index % 2 === 1)
-                  return (
-                    <FlowListItem title={item.title} time={item.time} username={item.username} likes={item.likes} />
-                  )
-              })
-            }
-          </View>
-        </View>
-        <Pressable style={styles.publish} onPress={onPressPublish}>
-          <Text>+</Text>
-        </Pressable>
+          />
+        }
+        { !isError && isRefreshing && <RefreshingContent/> }
+        { !isError && !isRefreshing && listData.length <= 0 && <EmptyContent/> }
+        { isError && <ErrorContent/> }
+        <TouchableOpacity
+          style={styles.publish}
+          onPress={onPressPublish}
+        >
+          <Text style={{ fontSize: 24, color: '#3A3A3A'}}>+</Text>
+        </TouchableOpacity>
       </LinearGradient>
     </View>
   )
@@ -128,7 +239,7 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     flex: 1 // 布局
   },
-  backgroud:{
+  background:{
     // justifyContent:'center',
     // alignContent:'center',
     // alignItems:'center',
@@ -143,7 +254,7 @@ const styles = StyleSheet.create({
   },
   toggle: {
     flexDirection: 'row',
-    backgroundColor: '#CCCCCC',
+    backgroundColor: '#3a3a3a',
     position: 'absolute',
     top: 35,
     right: 20,
@@ -176,19 +287,7 @@ const styles = StyleSheet.create({
     bottom: 20,
     right: 20,
   },
-  list: {
-    position: 'absolute',
-    top: 75,
-    left: 0,
-    width: '48%',
-    flexWrap: 'wrap',
-  },
-  list2: {
-    position: 'absolute',
-    top: 75,
-    right: 0,
-    width: '48%',
-    flexWrap: 'wrap',
+  publishPressed: {
   }
 })
 
