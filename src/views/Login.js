@@ -2,12 +2,13 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
-  Button,
-  Dimensions
+  Dimensions,
+  KeyboardAvoidingView,
+  TouchableOpacity,
 } from 'react-native'
 import React, { useState } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
+import { TextInput,Button, } from 'react-native-paper'
 
 const Login = (props) => {
   const [username, setUername] = useState('')
@@ -18,29 +19,17 @@ const Login = (props) => {
     //点击登录按钮打印用户名和密码
     console.log(username)
     console.log(pwd)
-  }
-  //方法 提交
-  // Submit = () => {
-  //   const   { username, pwdFirst,pwdSecond} = this.state;
-  //   if (!username || !username.trim()) {
-  //     Alert.alert('请输入用户名');
-  //     return;
-  //   }
+    
+    if (!username || !username.trim()) {
+      Alert.alert('用户名不能为空')
+      return
+    }
 
-  //   if (!pwdFirst || !pwdFirst.trim()) {
-  //     Alert.alert('请输入密码');
-  //     return;
-  //   }
-  //   if (!pwdSecond || !pwdSecond.trim()) {
-  //     Alert.alert('请输入密码');
-  //     return;
-  //   }
-  //   if(!(pwdFirst==pwdSecond)){
-  //     Alert.alert('请确认输入密码是否一致');
-  //     return;
-  //   }
-  //   this.props.navigation.navigate('Details')
-  // }
+    if (!pwd || !pwd.trim()) {
+      Alert.alert('密码不能为空')
+      return
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -49,43 +38,62 @@ const Login = (props) => {
       colors={['#3A3A3A','#525161']} 
       style={styles.backgroud}>
 
-      <Text onPress={() => props.navigation.goBack()}>关闭</Text>
-      <Text style={[styles.Titlefont]}>登 录</Text>
+      {/* <Text onPress={() => props.navigation.goBack()}>关闭</Text> */}
+      <Text style={[styles.Titlefont]}>登  录</Text>
+
+      {/* <KeyboardAvoidingView
+        style={{flex:1}}
+        behavior="padding"/> */}
+        <TextInput
+          mode='outlined'
+          style={styles.inputStyle}
+          placeholder="用户名"
+          placeholderTextColor={'#808080'}
+          textColor='#CCCCCC'
+          outlineStyle={{borderRadius:7}}
+          contentStyle={{paddingLeft:15}}
+          outlineColor={'#CCCCCC'}
+          activeOutlineColor={'#CCCCCC'}
+          value={username}
+          onChangeText={(val) => setUername(val)}
+        />
+      {/* </KeyboardAvoidingView> */}
 
       <TextInput
-        style={styles.inputStyle}
-        placeholder="用户名"
-        value={username}
-        onChangeText={(val) => setUername(val)}
-      />
-
-      <TextInput
+        mode='outlined'
+        // right={<TextInput.Affix text="/100" />}
+        // right={<TextInput.Icon icon="eye" />}
         style={styles.inputStyle}
         placeholder="密码"
+        placeholderTextColor={'#808080'}
+        textColor='#CCCCCC'
+        outlineStyle={{borderRadius:7}}
+        contentStyle={{paddingLeft:15}}
+        outlineColor={'#CCCCCC'}
+        activeOutlineColor={'#CCCCCC'}
         value={pwd}
-        // 隐藏输入
-        secureTextEntry={true}
-        // 调用数字键盘
-        //keyboardAppearance='number-pad'
-        
+        secureTextEntry={true}   // 隐藏输入
         onChangeText={(val) => setPwd(val)}
-        // 允许多行文本输入
-        // multiline = {true}
-        // numberOfLines={10}
-        //控制占位符在上方,Android和ios显示保持一致
-        //textAlignVertical='top'
       />
 
       <Button
         // style = {styles.buttonStyle}
-        title="登 录"
-        color="#dcdcdc"
-        onPress={() => onLogin()}
-      />
+        mode='contained'
+        buttonColor='#808080'
+        style={styles.buttonStyle}
+        onPress={() => onLogin()}>
+        <Text style={styles.buttonTxt}>登    录</Text>
+      </Button>
 
-      <Text style={[styles.Contentfont]}>
+      {/* <TouchableOpacity style={styles.button}>
+        <LinearGradient colors={['#727480','#d9d9d9']} style={styles.buttonbg}>
+          <Text style={styles.buttontext}登录></Text>
+        </LinearGradient>
+      </TouchableOpacity> */}
+
+      <Text style={{color:'#808080'}}>
         还没有账号？请先
-        <Text onPress={() => props.navigation.navigate('Register')}>注册</Text>
+        <Text style={styles.contentStyle} onPress={() => props.navigation.navigate('Register')}> 注 册</Text>
       </Text>
     </LinearGradient>
     </View>
@@ -94,36 +102,43 @@ const Login = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#696969',
-    // alignItems: 'center',
     flex: 1 // 布局
   },
   backgroud:{
     justifyContent:'center',
-    // alignContent:'center',
     alignItems:'center',
     flex:1
   },
   Titlefont: {
     fontSize: 30,
     color: '#fffaf0',
-    fontFamily: 'SIMYOU'
+    fontFamily:'SIMYOU',
+    height:50
   },
   inputStyle: {
-    color: '#f0f8ff',
-    // width: Dimensions.get('window').width -1000,
-    width: Dimensions.get('window').width -150,
-    margin: 10,
-    borderWidth: 1,
-    borderColor: '#dcdcdc',
-    borderRadius: 5,
-    // height: '10%'
-    height: '7%'
+    backgroundColor:'#696969',
+    width: 300,
+    marginTop: 15,
+    marginBottom:20,
   },
   buttonStyle: {
-    borderRadius: 10,
-    borderColor: '#dcdcdc'
-  }
+    height:50,
+    width:200,
+    justifyContent:'center',
+    marginBottom:30,
+    marginTop:20,
+    borderRadius: 7,
+    
+  },
+  buttonTxt:{
+    textAlign: 'center',
+    color:'#fffaf0',
+		fontSize:18,
+  },
+  contentStyle:{
+    textDecorationLine:'underline',
+    color:'#fffaf0',
+  },
 })
 
 export default Login
