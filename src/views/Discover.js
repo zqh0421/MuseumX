@@ -1,15 +1,15 @@
 import { View, Text, StyleSheet, Pressable, Dimensions, TouchableOpacity} from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useEffect, useState } from 'react'
-import { TabActions } from '@react-navigation/native'
-import FlowListItem from '../components/FlowListItem'
 import WaterfallFlow from 'react-native-waterfall-flow'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { AntDesign } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import FlowListItem from '../components/FlowListItem'
 const Discover = (props) => {
   const [ toggleNew, setToggleNew ] = useState(false)
   const [ toggleStyle, setToggleStyle ] = useState(styles.toggleSelected)
+  const [ toggleHotColor, setToggleHotColor] = useState({ color: '#333'})
+  const [ toggleNewColor, setToggleNewColor] = useState({ color: '#ccc'})
   const [listData, setListData] = useState([]) // 存储当前显示的数据列表
   const [isRefreshing, setIsRefreshing] = useState(false) // 正在加载数据
   const [isError, setIsError] = useState(true) // 数据加载错误
@@ -80,18 +80,23 @@ const Discover = (props) => {
     // alert(toggleNew)
     if (toggleNew) {
       setToggleStyle([styles.toggleSelected, styles.toggleNew])
+      setToggleNewColor({ color: '#333'})
+      setToggleHotColor({ color: '#ccc'})
     } else {
       setToggleStyle(styles.toggleSelected)
+      setToggleNewColor({ color: '#ccc'})
+      setToggleHotColor({ color: '#333'})
     }
   }, [toggleNew])
 
 
   useEffect(() => {
-    loadData()  
+    loadData()
   }, [])
-  
+
   const onPressToggle = () => { // 点击 “热门/最新” 按钮触发事件。
     setToggleNew(!toggleNew)
+    loadData()
   }
 
   const onPressPublish = () => {
@@ -112,8 +117,8 @@ const Discover = (props) => {
     setIsRefreshing(true)
     setTimeout(() => {
       // 加载成功
-    setListData(arr)
-    setIsRefreshing(false)
+      setListData(arr)
+      setIsRefreshing(false)
       //  加载失败
       // setIsError(true)
       // setIsRefreshing(false)
@@ -167,14 +172,14 @@ const Discover = (props) => {
             height: 50,
             borderRadius: 25,
             borderWidth: 1,
-            borderColor: 'yellow',
+            borderColor: '#ffdcb2',
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
           <Text
             style={{
-              color: 'yellow',
+              color: '#ffdcb2',
               fontSize: 18,
             }}
           >刷新重试</Text>
@@ -192,15 +197,15 @@ const Discover = (props) => {
         <Text style={styles.title}>发现</Text>
         <Pressable style={styles.toggle} onPress={onPressToggle}>
           <View style={toggleStyle}></View>
-          <Text style={{ color: '#333'}}>热门</Text>
-          <Text style={{ color: '#ccc'}}>最新</Text>
+          <Text style={toggleHotColor}>热门</Text>
+          <Text style={toggleNewColor}>最新</Text>
         </Pressable>
         {
           !isError && !isRefreshing && listData.length > 0 &&
           <WaterfallFlow
             style={{
               transform: [{ translateY: 75 }],
-              maxHeight: Dimensions.get('window').height - 155,
+              maxHeight: Dimensions.get('window').height - 175,
             }}
             contentContainerStyle={{
               justifyContent: 'space-evenly',
@@ -267,7 +272,7 @@ const styles = StyleSheet.create({
   toggleSelected: {
     width: 50,
     height: 23,
-    backgroundColor: '#fff',
+    backgroundColor: '#f1ecfb',
     position: 'absolute',
     top: 1,
     left: 1,
@@ -282,12 +287,10 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#f1ecfb',
     position: 'absolute',
     bottom: 20,
     right: 20,
-  },
-  publishPressed: {
   }
 })
 

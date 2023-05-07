@@ -244,14 +244,14 @@ const Profile = (props) => {
             height: 50,
             borderRadius: 25,
             borderWidth: 1,
-            borderColor: 'yellow',
+            borderColor: '#ffdcb2',
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
           <Text
             style={{
-              color: 'yellow',
+              color: '#ffdcb2',
               fontSize: 18,
             }}
           >刷新重试</Text>

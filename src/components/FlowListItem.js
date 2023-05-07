@@ -5,15 +5,15 @@ import Pic from '../../assets/pic.png'
 
 
 const FlowListItem = (props) => {
-  const [color, setColor] = useState(props.isLoved ? MD3Colors.error60 : MD3Colors.error100)
+  const [color, setColor] = useState(props.isLoved ? MD3Colors.error60 : '#ccc')
   useEffect(() => {
     // 获取后端数据
     // setList
   }, [])
   const onPressLove = () => {
     // 1. 点赞按钮样式变化
-    if (color === MD3Colors.error60) setColor(MD3Colors.error100)
-    else if (color === MD3Colors.error100) setColor(MD3Colors.error60)
+    if (color === MD3Colors.error60) setColor('#ccc')
+    else if (color === '#ccc') setColor(MD3Colors.error60)
     // 2. 向后端发送请求，修改
   }
   return (
@@ -23,18 +23,29 @@ const FlowListItem = (props) => {
         <Image source={Pic} style={styles.image}/>
       </View>
       <Text style={styles.itemTitle} >{props.title}</Text>
-      <Text style={styles.HeadSculpture}></Text>
-      <Text style={styles.itemUsername}>{props.username}</Text>
-      
-      <View style={styles.button}>
+      <View
+        style={{
+          flexDirection: 'row',
+          width: '100%',
+          alignItems: 'center',
+          marginTop: 10,
+          marginBottom: -12,
+          justifyContent: 'space-between'
+        }}>
+        <View style={{ flexDirection: 'row'}}>
+          <Text style={styles.HeadSculpture}></Text>
+          <Text style={styles.itemUsername}>{props.username}</Text>
+        </View>
+        <View style={{ flexDirection: 'row', alignItems: 'center'}}>
           <IconButton
             icon="heart"
             iconColor={color}
             size={17}
             onPress={onPressLove}
           />
+          <Text style={styles.LoveNumber}>{props.likes}</Text>
+        </View>
       </View>
-      <Text style={styles.LoveNumber}>{props.likes}</Text>
     </View>
   )
 }
@@ -70,7 +81,7 @@ const styles = StyleSheet.create({
   },
   itemTitle: {
     top:5,
-    fontSize: 12,
+    fontSize: 13,
     margin:2,
     letterSpacing:1,
     lineHeight:18,
@@ -78,9 +89,9 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   itemUsername: {
-    top:16,
-    right:-28,
-    fontSize: 13,
+    paddingLeft: 5,
+    fontSize: 12,
+    lineHeight: 24,
     color: '#ccc'
   },
   HeadSculpture: {
@@ -89,24 +100,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1,
     borderColor: '#FFF',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#AAA',
-    position: 'absolute',
-    bottom: 8,
-    left: 10,
-  },
-  button: {
-    right:-94,
-    height:0,
-    width:5,
-    top:-13.5,
+    backgroundColor: '#AAA'
   },
   LoveNumber: {
-    right:-128,
     fontSize: 12,
-    top:0,
-    color: '#ccc'
+    color: '#ccc',
+    left: -8,
+    lineHeight: 24
   }
 })
 
