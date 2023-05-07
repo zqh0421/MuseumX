@@ -17,75 +17,63 @@ const Profile = (props) => {
   const [isError, setIsError] = useState(true) // 数据加载错误
   const arr = [
     {
-      title: 'title1',
-      username: 'user11111111123123132111111',
-      time: '2023-05-04',
+      title: '（一）博物馆博物馆博物馆博物馆博物馆博物馆',
+      username: 'user123456',
       likes: 25,
     },
     {
       title: 'title2',
       username: 'user2',
-      time: '2023-05-03',
-      likes: 2,
+      likes: 255,
     },
     {
       title: 'title3',
       username: 'user3',
-      time: '2023-04-04',
       likes: 255,
     },
     {
       title: 'title1',
-      username: 'user11111111123123132111111',
-      time: '2023-05-04',
+      username: 'user1',
       likes: 25,
     },
     {
       title: 'title2',
       username: 'user2',
-      time: '2023-05-03',
-      likes: 2,
+      likes: 255,
     },
     {
       title: 'title3',
       username: 'user3',
-      time: '2023-04-04',
       likes: 255,
     },
     {
       title: 'title1',
-      username: 'user11111111123123132111111',
-      time: '2023-05-04',
+      username: 'user1',
       likes: 25,
     },
     {
       title: 'title2',
       username: 'user2',
-      time: '2023-05-03',
       likes: 2,
     },
     {
       title: 'title3',
       username: 'user3',
-      time: '2023-04-04',
       likes: 255,
     },
     {
       title: 'title1',
-      username: 'user11111111123123132111111',
-      time: '2023-05-04',
+      username: 'user1',
       likes: 25,
     },
     {
       title: 'title2',
       username: 'user2',
-      time: '2023-05-03',
       likes: 2,
     },
     {
       title: 'title3',
       username: 'user3',
-      time: '2023-04-04',
       likes: 255,
     },
 
@@ -119,11 +107,12 @@ const Profile = (props) => {
     setIsRefreshing(true)
     setTimeout(() => {
       // 加载成功
-
+    setListData(arr)
+    setIsRefreshing(false)
       //  加载失败
-      setIsError(true)
-      setIsRefreshing(false)
-      setListData([])
+      // setIsError(true)
+      // setIsRefreshing(false)
+      // setListData([])
     }, 800)
   }
 
