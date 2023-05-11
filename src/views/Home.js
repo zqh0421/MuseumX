@@ -79,6 +79,9 @@ const Home = (props) => {
       <Text onPress={() => props.navigation.navigate('Login')}>
         点击弹出登录页面
       </Text>
+      <Text onPress={() => props.navigation.navigate('Heritage_Details')}>
+        点击弹出文物详情页面
+      </Text>
       <ScrollView>
         {
           arr.map(item => {

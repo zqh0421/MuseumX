@@ -10,6 +10,9 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { Formik } from 'formik';
 import { validate } from 'react-native-web/dist/cjs/exports/StyleSheet/validate';
 import { TextInput,Button, } from 'react-native-paper'
+import { register } from '../api/L_RInterface'
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
+
 
 const Register = (props) => {
   const [username, setUsername] = useState('')
@@ -21,23 +24,40 @@ const Register = (props) => {
     //点击注册按钮打印用户名和密码
     console.log(username)
     console.log(pwd)
-    console.log(pwdSecond)
 
-    if (!username || !username.trim()) {
-      Alert.alert('用户名不能为空')
-      return
-    }
-
-    if (!pwd || !pwd.trim()) {
-      Alert.alert('密码不能为空')
-      return
-    }
-
-    if (!pwdSecond || !pwdSecond.trim()) {
-      Alert.alert('请再次输入密码')
-      return
-    }    
+    register(pwdSecond, username, pwd).then(async res => {
+      if (res.message === 'ok') { // TODO: 判断登录成功的条件根据实际接口修改！
+        try {
+          const jsonValue = JSON.stringify(res)
+          await AsyncStorage.setItem('userData', jsonValue)
+          console.log('userData')
+          console.log(await AsyncStorage.getItem('userData'))
+          props.navigation.goBack()
+        } catch (e) {
+          // saving error
+        }
+      }
+    }).catch(err => {
+      alert(err)
+    })
   }
+    
+
+    // if (!username || !username.trim()) {
+    //   Alert.alert('用户名不能为空')
+    //   return
+    // }
+
+    // if (!pwd || !pwd.trim()) {
+    //   Alert.alert('密码不能为空')
+    //   return
+    // }
+
+    // if (!pwdSecond || !pwdSecond.trim()) {
+    //   Alert.alert('请再次输入密码')
+    //   return
+    // }    
+    //}
 
   return (
     <View style={styles.container}>
@@ -45,7 +65,17 @@ const Register = (props) => {
       <LinearGradient 
       colors = {['#3A3A3A','#525161']}
       style={styles.backgroud}>
-
+      <MaterialCommunityIcons
+          onPress={() => props.navigation.goBack()}
+          name='close'
+          size={26}
+          color={'white'}
+          style={{
+            position: 'absolute',
+            top: 20,
+            left: 20
+          }}
+        />
       {/* <Text onPress={() => props.navigation.goBack()}>关闭</Text> */}
       <Text style={[styles.Titlefont]}>注 册</Text>
       

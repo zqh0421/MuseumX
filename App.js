@@ -17,7 +17,7 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="TabBar"
-        screenOptions={{ headerShown: true }}
+        screenOptions={{ headerShown: false }}
       >
         <Stack.Group>
           {/* 普通跳转，包括下方导航栏 */}
