@@ -8,8 +8,8 @@ import {
 } from 'react-native'
 import React, { useState } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
-import { login } from '../api/L_RInterface'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+// import { login } from '../api/L_RInterface'
+// import AsyncStorage from '@react-native-async-storage/async-storage'
 const Login = (props) => {
   const [username, setUername] = useState('')
   const [pwd, setPwd] = useState('')
@@ -19,21 +19,21 @@ const Login = (props) => {
     //点击登录按钮打印用户名和密码
     console.log(username)
     console.log(pwd)
-    login(username, pwd).then(async res => {
-      if (res.message === 'ok') { // TODO: 判断登录成功的条件根据实际接口修改！
-        try {
-          const jsonValue = JSON.stringify(res)
-          await AsyncStorage.setItem('userData', jsonValue)
-          console.log('userData')
-          console.log(await AsyncStorage.getItem('userData'))
-          props.navigation.goBack()
-        } catch (e) {
-          // saving error
-        }
-      }
-    }).catch(err => {
-      alert(err)
-    })
+    // login(username, pwd).then(async res => {
+    //   if (res.message === 'ok') { // TODO: 判断登录成功的条件根据实际接口修改！
+    //     try {
+    //       const jsonValue = JSON.stringify(res)
+    //       await AsyncStorage.setItem('userData', jsonValue)
+    //       console.log('userData')
+    //       console.log(await AsyncStorage.getItem('userData'))
+    //       props.navigation.goBack()
+    //     } catch (e) {
+    //       // saving error
+    //     }
+    //   }
+    // }).catch(err => {
+    //   alert(err)
+    // })
   }
   //方法 提交
   // Submit = () => {

@@ -107,8 +107,8 @@ const Profile = (props) => {
     setIsRefreshing(true)
     setTimeout(() => {
       // 加载成功
-    setListData(arr)
-    setIsRefreshing(false)
+      setListData(arr)
+      setIsRefreshing(false)
       //  加载失败
       // setIsError(true)
       // setIsRefreshing(false)

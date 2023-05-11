@@ -8,8 +8,8 @@ import {
 } from 'react-native'
 import React, { useState } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
-import { Formik } from 'formik';
-import { validate } from 'react-native-web/dist/cjs/exports/StyleSheet/validate';
+import { Formik } from 'formik'
+import { validate } from 'react-native-web/dist/cjs/exports/StyleSheet/validate'
 
 const Register = (props) => {
   const [username, setUsername] = useState('')
@@ -22,7 +22,6 @@ const Register = (props) => {
     console.log(username)
     console.log(pwd)
   }
-  
 
   // 方法 提交
   // const submit = () => {
@@ -48,59 +47,56 @@ const Register = (props) => {
 
   return (
     <View style={styles.container}>
-      
-      <LinearGradient 
-      colors = {['#3A3A3A','#525161']}
-      style={styles.backgroud}>
+      <LinearGradient
+        colors = {['#3A3A3A','#525161']}
+        style={styles.backgroud}>
 
-      <Text onPress={() => props.navigation.goBack()}>关闭</Text>
-      <Text style={[styles.Titlefont]}>注 册</Text>
-      <TextInput
-        style={styles.inputStyle}
-        placeholder="用户名"
-        value={username}
-        onChangeText={(val) => setUsername(val)}
-      />
+        <Text onPress={() => props.navigation.goBack()}>关闭</Text>
+        <Text style={[styles.Titlefont]}>注 册</Text>
+        <TextInput
+          style={styles.inputStyle}
+          placeholder="用户名"
+          value={username}
+          onChangeText={(val) => setUsername(val)}
+        />
 
-      <TextInput
-        style={styles.inputStyle}
-        placeholder="密码"
-        value={pwd}
-        // 隐藏输入
-        secureTextEntry={true}
-        // 调用数字键盘
-        //keyboardAppearance='number-pad'
+        <TextInput
+          style={styles.inputStyle}
+          placeholder="密码"
+          value={pwd}
+          // 隐藏输入
+          secureTextEntry={true}
+          // 调用数字键盘
+          //keyboardAppearance='number-pad'
 
-        onChangeText={(val) => setPwd(val)}
-        
+          onChangeText={(val) => setPwd(val)}
         // 允许多行文本输入
         // multiline = {true}
         // numberOfLines={10}
         //控制占位符在上方,Android和ios显示保持一致
         //textAlignVertical='top'
-      />
+        />
 
-      <TextInput
-        style={styles.inputStyle}
-        placeholder="请再次输入密码"
-        value={pwdSecond}
-        secureTextEntry={true}
-        onChangeText={(val) => setPwdSecond(val)}
-        
-      />
+        <TextInput
+          style={styles.inputStyle}
+          placeholder="请再次输入密码"
+          value={pwdSecond}
+          secureTextEntry={true}
+          onChangeText={(val) => setPwdSecond(val)}
+        />
 
-      <Button
+        <Button
         // style = {styles.buttonStyle}
-        title="注 册"
-        color="#dcdcdc"
-        onPress={() => onRegister()}
-      />
+          title="注 册"
+          color="#dcdcdc"
+          onPress={() => onRegister()}
+        />
 
-      {/* <Text style={[styles.Contentfont]}>已有账号？登录</Text> */}
-      <Text style={[styles.Contentfont]}>
-        已有账号？
-        <Text onPress={() => props.navigation.navigate('Login')}>登录</Text>
-      </Text>
+        {/* <Text style={[styles.Contentfont]}>已有账号？登录</Text> */}
+        <Text style={[styles.Contentfont]}>
+          已有账号？
+          <Text onPress={() => props.navigation.navigate('Login')}>登录</Text>
+        </Text>
       </LinearGradient>
     </View>
   )
