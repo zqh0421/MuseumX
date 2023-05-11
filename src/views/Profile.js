@@ -1,12 +1,50 @@
-import { View, Text ,StyleSheet, Pressable, Dimensions } from 'react-native'
+import { View, Text ,StyleSheet, Pressable, Dimensions, ScrollView, Image} from 'react-native'
 import { useEffect, useState } from 'react'
 import { TabActions } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
+import { Surface,IconButton,MD3Colors} from 'react-native-paper'
 import FlowListItem from '../components/FlowListItem'
 import WaterfallFlow from 'react-native-waterfall-flow'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { AntDesign } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import Home from '../views/Home'
+const ListItem = (props) => {
+  const [color, setColor] = useState(props.isCollected ? MD3Colors.error60 : MD3Colors.error0)
+  const [list, setList] = useState([]) // 列表数据初始状态
+  useEffect(() => {
+    // 获取后端数据
+    // setList
+  }, [])
+  const onPressCollect = () => {
+    // 1. 收藏按钮样式变化
+    if (color === MD3Colors.error60) setColor(MD3Colors.error0)
+    else if (color === MD3Colors.error0) setColor(MD3Colors.error60)
+    // 2. 向后端发送请求，修改
+  }
+
+  const onPressItem = () => {
+    props.navigation.navigate('Login')
+  }
+  return (
+    <Pressable onPress={onPressItem}>
+      <Surface style={styles.surface} elevation={4}>
+        <Image style={styles.image1} source={{ uri: 'https://picsum.photos/700' }}/>
+        <Text style={styles.text}>{props.name}</Text>
+        <Text style={styles.text_2}>文物描述</Text>
+        <View style={styles.button}>
+          <IconButton
+            icon="star"
+            iconColor={color}
+            size={20}
+            onPress={onPressCollect}
+          />
+        </View>
+        <Text style={styles.num}>num</Text>
+      </Surface>
+    </Pressable>
+  )
+}
 const Profile = (props) => {
   const [toggleSelected, setToggleSelected] = useState('0')
   const [toggleBar0Style, setToggleBar0Style] = useState(styles.toggleBar)
@@ -78,6 +116,38 @@ const Profile = (props) => {
     },
 
   ]
+  const arr2 = [
+    {
+      name: 'title',
+      desc: 'description',
+      url: 'https://picsum.photos/700',
+      collect: 123
+    },
+    {
+      name: 'title',
+      desc: 'description',
+      url: 'https://picsum.photos/700',
+      collect: 123
+    },
+    {
+      name: 'title',
+      desc: 'description',
+      url: 'https://picsum.photos/700',
+      collect: 123
+    },
+    {
+      name: 'title',
+      desc: 'description',
+      url: 'https://picsum.photos/700',
+      collect: 123
+    },
+    {
+      name: 'title',
+      desc: 'description',
+      url: 'https://picsum.photos/700',
+      collect: 123
+    },
+  ]
   const onPressEdit = () => {
     alert('编辑资料！')
     logOut()
@@ -101,14 +171,18 @@ const Profile = (props) => {
     }
   }
 
-  const loadData = () => {
+  const loadData = (selected) => {
     // 已登录，加载数据
     setIsError(false)
     setIsRefreshing(true)
     setTimeout(() => {
       // 加载成功
-    setListData(arr)
-    setIsRefreshing(false)
+      if (selected === '0' || selected === '2') {
+        setListData(arr)
+      } else {
+        setListData(arr2)
+      }
+      setIsRefreshing(false)
       //  加载失败
       // setIsError(true)
       // setIsRefreshing(false)
@@ -129,7 +203,7 @@ const Profile = (props) => {
         props.navigation.navigate('Login') // 跳转登录页面
       } else {
         // 已登录，加载数据
-        loadData()
+        loadData('0')
       }
     }).catch(err => {
       // error
@@ -152,7 +226,7 @@ const Profile = (props) => {
           const jumpToAction = TabActions.jumpTo('Profile')
           props.navigation.dispatch(jumpToAction)
           // 已登录，加载数据
-          loadData()
+          loadData('0')
         }
       }).catch(err => {
         // error
@@ -185,21 +259,21 @@ const Profile = (props) => {
 
   const onPressLike = () => {
     setToggleSelected('0')
-    loadData()
+    loadData('0')
   }
 
   const onPressCollect = () => {
     setToggleSelected('1')
-    loadData()
+    loadData('1')
   }
 
   const onPressActivity = () => {
     setToggleSelected('2')
-    loadData()
+    loadData('2')
   }
 
   const onPressRefresh = () => {
-    loadData()
+    loadData(toggleSelected)
   }
 
   const EmptyContent = () => {
@@ -207,7 +281,7 @@ const Profile = (props) => {
       <View
         style={{
           alignItems: 'center',
-          transform: [{ translateY: Dimensions.get('window').height / 2}]
+          transform: [{ translateY: Dimensions.get('window').height / 4}]
         }}
       >
         <AntDesign name='frowno' color='white' size={50}/>
@@ -221,7 +295,7 @@ const Profile = (props) => {
       <View
         style={{
           alignItems: 'center',
-          transform: [{ translateY: Dimensions.get('window').height / 2}]
+          transform: [{ translateY: Dimensions.get('window').height / 4}]
         }}
       >
         <Text style={{ color: 'white' }}>加载中...</Text>
@@ -234,7 +308,7 @@ const Profile = (props) => {
       <View
         style={{
           alignItems: 'center',
-          transform: [{ translateY: Dimensions.get('window').height / 2}]
+          transform: [{ translateY: Dimensions.get('window').height / 4}]
         }}
       >
         <Pressable
@@ -264,13 +338,19 @@ const Profile = (props) => {
     <View style={styles.container}>
       <LinearGradient
         colors = {['#727480','#454653']}
-        style={styles.backgroud}>
-        <Text style={styles.image}></Text>
-        <Text style={styles.nickname}>昵称</Text>
-        <Text style={styles.userid}>ID: zheshiid</Text>
-        <Pressable style={styles.edit} onPress={onPressEdit}>
+        style={styles.background}>
+        <View style={{ flexDirection: 'row', marginTop: 50, marginLeft: '8%', marginRight: '8%', marginBottom: 30, justifyContent: 'space-between' }}>
+          <View style={{ flexDirection: 'row'}}>
+            <Text style={styles.image}></Text>
+            <View style={{ marginLeft: 20, justifyContent: 'center' }}>
+              <Text style={styles.nickname}>昵称</Text>
+              <Text style={styles.userid}>ID: zheshiid</Text>
+            </View>
+          </View>          
+        <Pressable style={[styles.edit, { alignSelf: 'center' }]} onPress={onPressEdit}>
           <MaterialCommunityIcons name="account-edit" color="white" size={20} />
         </Pressable>
+        </View>
         <View style={styles.toggle}>
           <Pressable onPress={onPressLike} style={styles.toggleItem}>
             <Text style={styles.toggleNumber}>3</Text>
@@ -289,18 +369,17 @@ const Profile = (props) => {
           </Pressable>
         </View>
         {
-          !isError && !isRefreshing && listData.length > 0 &&
+          !isError && !isRefreshing && listData.length > 0 && (toggleSelected ==='0' || toggleSelected === '2') &&
           <WaterfallFlow
             style={{
-              transform: [{ translateY: 250 }],
-              maxHeight: Dimensions.get('window').height - 350,
+              maxHeight: Dimensions.get('window').height - 305,
             }}
             contentContainerStyle={{
               justifyContent: 'space-evenly',
               paddingLeft: '2%',
               paddingRight: '2%'
             }}
-            data={listData}
+            data={arr}
             numColumns={2}
             renderItem={({ item, index, columnIndex }) =>
               <FlowListItem
@@ -309,8 +388,27 @@ const Profile = (props) => {
                 username={item.username}
                 likes={item.likes}
               />
+              // <Text>123</Text>
             }
-          />
+          /> 
+        }
+        {
+          !isError && !isRefreshing && listData.length > 0 && toggleSelected ==='1' &&
+          <ScrollView style={{
+            height: Dimensions.get('window').height - 305,
+            paddingLeft: '2%',
+            paddingRight: '2%',
+          }}
+          >
+            {
+              listData.map(item => {
+                return (
+                  // eslint-disable-next-line react/jsx-key
+                  <ListItem name={item.name} navigation={props.navigation} />
+                )
+              })
+            }
+          </ScrollView>
         }
         { !isError && isRefreshing && <RefreshingContent/> }
         { !isError && !isRefreshing && listData.length <= 0 && <EmptyContent/> }
@@ -326,10 +424,11 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     flex: 1 // 布局
   },
-  backgroud:{
+  background:{
     // justifyContent:'center',
     // alignContent:'center',
     // alignItems:'center',
+    
     flex:1
   },
   image: {
@@ -341,23 +440,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#CCCCCC',
-    position: 'absolute',
-    top: 70,
-    left: 35,
+    // position: 'absolute',
+    // top: 70,
+    // left: 35,
   },
   nickname:{
     fontSize: 23,
     color: '#fff',
-    position: 'absolute',
-    top: 85,
-    left: 135,
+    // position: 'absolute',
+    // top: 85,
+    // left: 135,
   },
   userid: {
     fontSize: 16,
     color: '#fff',
-    position: 'absolute',
-    top: 120,
-    left: 135,
+    // position: 'absolute',
+    // top: 120,
+    // left: 135,
   },
   edit: {
     width: 40,
@@ -366,9 +465,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#454653',
-    position: 'absolute',
-    top: 85,
-    right: '8%',
+    // position: 'absolute',
+    // top: 85,
+    // right: '8%',
     borderWidth: 1,
     borderColor: 'white',
 
@@ -376,8 +475,6 @@ const styles = StyleSheet.create({
   toggle: {
     flexDirection: 'row',
     backgroundColor: '#454653',
-    position: 'absolute',
-    top: 170,
     width: '100%',
     height: 65,
     paddingTop: 5,
@@ -414,13 +511,6 @@ const styles = StyleSheet.create({
     // width: '48%',
     // flexWrap: 'wrap',
   },
-  list2: {
-    position: 'absolute',
-    top: 250,
-    right: 0,
-    width: '48%',
-    flexWrap: 'wrap',
-  },
   toggleBar: {
     width: 35,
     height: 5,
@@ -431,6 +521,40 @@ const styles = StyleSheet.create({
     // top: 225,
     // left: '20%',
   },
+  surface: {
+    padding: 10,
+    height: 170,
+    width: 350,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  image1:{
+    width:140,
+    height:140,
+    right:100,
+    top:60
+  },
+  text:{
+    right:-30,
+    top:-80,
+    fontWeight: 'black',
+    fontSize:20,
+  },
+  text_2:{
+    top:-80,
+    right:-20
+  },
+  button:{
+    right:-100,
+    hight:20,
+    width:5,
+    top:-25,
+  },
+  num:{
+    top:-60,
+    right:-180,
+    width:100,
+  }
   // toggleBar1: {
   //   left: '47%',
   // },

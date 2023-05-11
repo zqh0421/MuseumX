@@ -5,6 +5,7 @@ import WaterfallFlow from 'react-native-waterfall-flow'
 import { AntDesign } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import FlowListItem from '../components/FlowListItem'
+
 const Discover = (props) => {
   const [ toggleNew, setToggleNew ] = useState(false)
   const [ toggleStyle, setToggleStyle ] = useState(styles.toggleSelected)
@@ -17,7 +18,7 @@ const Discover = (props) => {
     {
       title: '（一）博物馆博物馆博物馆博物馆博物馆博物馆',
       username: 'user123456',
-      likes: 25,
+      likes: 0,
     },
     {
       title: 'title2',
@@ -103,18 +104,21 @@ const Discover = (props) => {
     alert('发布！')
   }
 
-  const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('userData')
-      return jsonValue !== null ? JSON.parse(jsonValue) : null
-    } catch(e) {
-      // error reading value
-    }
-  }
-
   const loadData = () => {
     setIsError(false)
     setIsRefreshing(true)
+    // discover(1, 10).then(res => {
+    //   if (res.message === 'ok') {
+    //     setListData(arr)
+    //     setIsRefreshing(false)
+    //   } else {
+    //     setIsError(true)
+    //     setIsRefreshing(false)
+    //     setListData([])
+    //   }
+    // }).catch(err => {
+    //   alert(err)
+    // })
     setTimeout(() => {
       // 加载成功
       setListData(arr)

@@ -2,7 +2,7 @@ import { View, Text, StyleSheet,Image } from 'react-native'
 import { Surface,IconButton,MD3Colors} from 'react-native-paper'
 import { useEffect, useState } from 'react'
 import Pic from '../../assets/pic.png'
-
+import { like } from '../api/likeInterface'
 
 const FlowListItem = (props) => {
   const [color, setColor] = useState(props.isLoved ? MD3Colors.error60 : '#ccc')
@@ -12,9 +12,21 @@ const FlowListItem = (props) => {
   }, [])
   const onPressLove = () => {
     // 1. 点赞按钮样式变化
-    if (color === MD3Colors.error60) setColor('#ccc')
-    else if (color === '#ccc') setColor(MD3Colors.error60)
+    if (color === MD3Colors.error60) {
+      setColor('#ccc')
+      props.likes--
+    }
+    else if (color === '#ccc'){
+      setColor(MD3Colors.error60)
+      props.likes++
+    } 
+    
     // 2. 向后端发送请求，修改
+    like(1).then(res => {
+      console.log(res)
+    }).catch(res => {
+
+    })
   }
   return (
     <View style={styles.itemContainer}>
