@@ -13,7 +13,7 @@ import {
   } from 'react-native'
 import React, { useState, useRef, Component, useEffect } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
-import { List, MD3Colors, SegmentedButtons, TextInput, IconButton, }  from 'react-native-paper';
+import { List, MD3Colors, SegmentedButtons, TextInput, IconButton, Surface}  from 'react-native-paper';
 import { render } from 'react-dom';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { collect_number } from '../api/CollectNumber'
@@ -25,39 +25,41 @@ import { publishComment } from '../api/PublishComment';
 
 const ListItem = (props) => {
     const [value, setValue] = useState('')
-    const [artifactID, setArtifactID] = useState(1)
+    const [artifactID, setArtifactID] = useState(16)
     const [artifactName, setArtifactname] = useState('')
     const [author, setAuthor] = useState('')
     const [relicTime, setRelicTime] = useState('')
-    const [iamgeUrl, setImageUrl] = useState('')
+    const [imageUrl,setImageUrl] = useState('')
     const [description, setDescription] = useState('')
     const [collectNum, setCollectNum] = useState(50)
     const [color, setColor] = useState(props.isCollected ? MD3Colors.error60 : MD3Colors.neutral100)
-    const [commentInfo, setCommentList] = useState([])
-    const [userList, setuserList] = useState([])
-    const [comment, setComment] =useState('')
+    
+    const [comments, setComments] = useState([])
+
     useEffect(() => {
         // 获取当前文物信息，请求参数：id
-        artifact(1).then(async res => { 
+        artifact(artifactID).then(async res => { 
             if (res.message === 'ok') { // TODO: 判断登录成功的条件根据实际接口修改！
-                setArtifactID(res.data.records.id)
-                setArtifactname(res.data.records.artifactName)
-                setAuthor(res.data.records.author)
-                setRelicTime(res.data.records.relicTime)
-                setDescription(res.data.records.description)
-                setImageUrl(res.data.records.iamgeUrl)
-                setCollectNum(res.data.records.collectNum)
+                setArtifactID(res.data.id)
+                setArtifactname(res.data.artifactName)
+                setAuthor(res.data.author)
+                setRelicTime(res.data.relicTime)
+                setDescription(res.data.description)
+                setImageUrl(res.data.imageUrl)
+                setCollectNum(res.data.collectNum)
+            } else {
+                alert("wrong")
             }
           }).catch(err => {
             alert(err)
           })
         
-        // 获取当前文物所有评论和发表评论的用户信息,请求参数：id, 修改
-        // 评论的呈现方式：头像和文本
-        artifactComment(artifactID).then(async res => {
+        // 获取当前文物所有评论和发表评论的用户信息,请求参数：id,
+        // 评论的呈现方式：userID和content
+        artifactComment(artifactID).then(res => {
+            // console.log(res.data.data)
             if(res.message === 'ok'){
-                setCommentList(res.data.records.comment)
-                setuserList(res.data.records.comment)
+                setComments(res.data.data)
             }
         })   
     }, [])
@@ -81,34 +83,29 @@ const ListItem = (props) => {
         collect(artifactID).then(async res => { 
             if (res.message === 'ok') { // TODO: 判断登录成功的条件根据实际接口修改！
                 console.log("PressedCollect")
+                //setComment
             }
           }).catch(err => {
             alert(err)
-        })
-        
+        })   
     }
 
-    // 发表评论
-    const publishComment = () => {
-        console.log(comment)
+    // // 发表评论
+    // const publishComment = () => {
+    //     console.log(comment)
 
-        // 向后端发送请求
-        publishComment(artifactID, comment).then(async res => {
-            if (res.message === 'ok') { // TODO: 判断登录成功的条件根据实际接口修改！
-                console.log("PressedCollect")
-            }
-          }).catch(err => {
-            alert(err)
-        })
+    //     // 向后端发送请求
+    //     publishComment(artifactID, comment).then(async res => {
+    //         if (res.message === 'ok') { // TODO: 判断登录成功的条件根据实际接口修改！
+    //             console.log("PressedCollect")
+    //         }
+    //       }).catch(err => {
+    //         alert(err)
+    //     })
 
-    }
+    // }
 
-    // 用户头像，用户名和评论
-    const arr = [
-        {
-            
-        }
-    ]
+    
 
     return (
         <SafeAreaView style={styles.container}>
@@ -118,9 +115,8 @@ const ListItem = (props) => {
                 colors={['#727480','#454653']}> 
                 
                 {/* 文物图片 */}
-                <Image source={require('../../assets/2.jpg')} style={styles.imageStyle}/>
-                {/* <Image source={iamgeUrl} style={styles.imageStyle}/> */}
-                 
+                <Image source={{ uri: imageUrl }} style={styles.imageStyle}/>
+
                 {/* 跳转按钮 */}
                 <SegmentedButtons
                     value={value}
@@ -143,43 +139,26 @@ const ListItem = (props) => {
                 />  
                 
                 {/* 文字显示 */}
-                <Text style={styles.Titlefont}>
-                    汝窑天青釉盘
-                    {/* {artifactName} */}
+                <Text style={styles.Titlefont}> 
+                    {artifactName}
                     <Text style={styles.textStyle}>
-                        {'\r\n\n'}北宋(公元960—1127年)
-                        汝窑窑址在今河南宝丰清凉寺，以烧造青釉瓷器著称，是继定窑之后又一为宫廷烧造贡瓷的窑场。
-                        其产品胎体细洁如香灰色，多为“裹足支烧”。釉色主要为天青色，釉层薄而莹润，釉泡大而稀疏，
-                        有“寥若晨星”之称。釉面有细小的开片纹，称为“冰裂纹”。
-                        {/* {author}
-                        {relicTime} */}
+                        {'\r\n\n'}Author : {author}
+                        {'\r\n\n'}Dynasty : {relicTime}
                     </Text>
                 </Text>
 
                 <Text style={styles.Titlefont}>
-                    讲解
+                    Description
                     <Text style={styles.textStyle}>
-                        {'\r\n\n'}北宋(公元960—1127年)
-                        汝窑窑址在今河南宝丰清凉寺，以烧造青釉瓷器著称，是继定窑之后又一为宫廷烧造贡瓷的窑场。
-                        其产品胎体细洁如香灰色，多为“裹足支烧”。釉色主要为天青色，釉层薄而莹润，釉泡大而稀疏，
-                        有“寥若晨星”之称。釉面有细小的开片纹，称为“冰裂纹”。
-                        {/* [description] */}
+                        {'\r\n\n'}{description}
                     </Text>
                 </Text>
 
-                <Text style={styles.Titlefont}>
-                    留言
-                    <Text style={styles.textStyle}>
-
-                        {'\r\n\n'}北宋(公元960—1127年)
-                        汝窑窑址在今河南宝丰清凉寺，以烧造青釉瓷器著称，是继定窑之后又一为宫廷烧造贡瓷的窑场。
-                        其产品胎体细洁如香灰色，多为“裹足支烧”。釉色主要为天青色，釉层薄而莹润，釉泡大而稀疏，
-                        有“寥若晨星”之称。釉面有细小的开片纹，称为“冰裂纹”。
-                        
-                        
-
-                    </Text>
-                </Text>
+                {/* <Text style={styles.Titlefont}>
+                    Comments
+                    <Text style={styles.textStyle}>{userID} </Text>
+                    <Text style={styles.textStyle}>{comment}</Text>
+                </Text> */}
                 <View style={{ backgroundColor: '#3a3a3a', height: 80}}></View>
                 </LinearGradient>
                 </ScrollView>
@@ -195,7 +174,7 @@ const ListItem = (props) => {
                     contentStyle={{color:'#fffaf0'}}
                     outlineColor={'#CCCCCC'}
                     activeOutlineColor={'#CCCCCC'}
-                    value = {comment}
+                    value = {commentContent}
                     onChangeText={(comment) => publishComment(comment)}
                 />
                 {/* 收藏 */}
@@ -287,6 +266,13 @@ const styles = StyleSheet.create({
         fontSize:12,
         borderRadius:5,
         top: -10        
+    },
+    surface: {
+        padding: 8,
+        height: 80,
+        width: 80,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 })
   
