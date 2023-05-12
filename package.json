@@ -27,17 +27,21 @@
     "expo-splash-screen": "~0.18.1",
     "expo-status-bar": "~1.4.4",
     "formik": "^2.2.9",
-    "react": "18.2.0",
+    "react": "^18.2.0",
     "react-dom": "18.2.0",
+<<<<<<< HEAD
     "react-native": "^0.71.6",
     "react-native-checkbox-form": "^1.1.5",
     "react-native-modal-dropdown": "^1.0.2",
+=======
+    "react-native": "^0.71.8",
+>>>>>>> 478a09490de1273b1fe79eed34c8380920bdc50a
     "react-native-paper": "^5.7.0",
     "react-native-root-toast": "^3.4.1",
     "react-native-safe-area-context": "^4.5.0",
     "react-native-screens": "~3.20.0",
     "react-native-shadow": "^1.2.2",
-    "react-native-svg": "X.X.X",
+    "react-native-svg": "^13.9.0",
     "react-native-waterfall-flow": "^1.1.4",
     "react-native-web": "~0.18.10",
     "toidentifier": "^1.0.1"
