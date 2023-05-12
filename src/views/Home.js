@@ -13,6 +13,19 @@ const Home = (props) => {
       <Text onPress={() => props.navigation.navigate('Publish') }>
         点击弹出发表动态页面
       </Text>
+      <Text onPress={() => props.navigation.navigate('Heritage_Details')}>
+        点击弹出文物详情页面
+      </Text>
+      <ScrollView>
+        {
+          arr.map(item => {
+            return (
+              // eslint-disable-next-line react/jsx-key
+              <ListItem name={item.name} navigation={props.navigation} />
+            )
+          })
+        }
+      </ScrollView>
     </View>
   )
 }
