@@ -12,7 +12,7 @@ import {
   Platform
 } from 'react-native'
 import React, { useState, useRef, Component, useEffect } from 'react'
-// import { LinearGradient } from 'expo-linear-gradient'
+import { LinearGradient } from 'expo-linear-gradient'
 import {
   List,
   MD3Colors,
@@ -22,11 +22,11 @@ import {
 } from 'react-native-paper'
 import { render } from 'react-dom'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { collect_number } from '../api/CollectNumber'
-import { collect } from '../api/Collect'
-import { artifact } from '../api/ArtifactInfo'
-import { artifactComment } from '../api/ArtifactComment'
-import { publishComment } from '../api/PublishComment'
+// import { collect_number } from '../api/CollectNumber'
+// import { collect } from '../api/Collect'
+// import { artifact } from '../api/ArtifactInfo'
+// import { artifactComment } from '../api/ArtifactComment'
+// import { publishComment } from '../api/PublishComment'
 
 const ListItem = (props) => {
   const [value, setValue] = useState('')
@@ -122,15 +122,15 @@ const ListItem = (props) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        {/* <LinearGradient
+        <LinearGradient
           style={styles.backgroud}
           colors={['#727480', '#454653']}
-        > */}
+        >
           {/* 文物图片 */}
-          <Image
-            source={require('../../assets/2.jpg')}
+          {/* <Image
+            source={require('../../assets/pic.jpg')}
             style={styles.imageStyle}
-          />
+          /> */}
           {/* <Image source={iamgeUrl} style={styles.imageStyle}/> */}
 
           {/* 跳转按钮 */}
@@ -189,7 +189,7 @@ const ListItem = (props) => {
             </Text>
           </Text>
           <View style={{ backgroundColor: '#3a3a3a', height: 80 }}></View>
-        {/* </LinearGradient> */}
+        </LinearGradient>
       </ScrollView>
 
       {/* 评论输入框 */}
@@ -222,7 +222,7 @@ const ListItem = (props) => {
   )
 }
 
-const Heritage_Details = (props) => {
+const HeritageDetails = (props) => {
   return (
     <View>
       <ListItem />
@@ -230,7 +230,7 @@ const Heritage_Details = (props) => {
   )
 }
 
-export default Heritage_Details
+export default HeritageDetails
 
 const styles = StyleSheet.create({
   container: {

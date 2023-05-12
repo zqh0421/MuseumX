@@ -4,60 +4,24 @@ import { Surface,IconButton,MD3Colors} from 'react-native-paper'
 import { Collect, Show, getMore } from '../api/HomeInterface'
 import { LinearGradient } from 'expo-linear-gradient'
 import { AntDesign } from '@expo/vector-icons'
-
-
-const ListItem = (props) => {
-  const [color, setColor] = useState(props.isCollected ? MD3Colors.error60 : MD3Colors.error0)
-  const onPressCollect = () => {
-    // 1. 收藏按钮样式变化
-    if (color === MD3Colors.error60) setColor(MD3Colors.error0)
-    else if (color === MD3Colors.error0) setColor(MD3Colors.error60)
-    // 2. 向后端发送请求，修改
-    try{
-      Collect(props.id)
-    }catch(error){
-      console.log(error)
-    }
-  }
-
-  const onPressItem = () => {
-    //props.navigation.navigate('Heritage_Details',{props})
-    props.navigation.navigate('Login')
-  }
-  return (
-    <Pressable onPress={onPressItem}>
-      <Surface style={styles.surface} elevation={4}>
-        <Image style={styles.image} source={{ uri: props.url}}/>
-        <Text style={styles.text}>{props.name}</Text>
-        <Text style={styles.text_2}>{props.desc}</Text>
-        <View style={styles.button}>
-          <IconButton
-            icon="star"
-            iconColor={color}
-            size={20}
-            onPress={onPressCollect}
-          />
-        </View>
-        <Text style={styles.num}>{props.num}</Text>
-      </Surface>
-    </Pressable>
-  )
-}
+import HomeListItem from '../components/HomeListItem'
 
 const Home = (props) => {
-  const [page,setpage]=useState(1)
-  const [size,setsize]=useState(15)
+  const [page, setpage]=useState(1)
+  const [size, setsize]=useState(15)
   const [isRefreshing, setIsRefreshing] = useState(false) // 正在加载数据
   const [isError, setIsError] = useState(true) // 数据加载错误
   const [list, setList] = useState([]) // 列表数据初始状态
   const[arr,setArr]=useState([])
+
 
   const RefreshingContent = () => {
     return (
       <View
         style={{
           alignItems: 'center',
-          transform: [{ translateY: Dimensions.get('window').height / 2 }]
+          justifyContent: 'center',
+          flex: 1
         }}
       >
         <Text style={{ color: 'white' }}>加载中...</Text>
@@ -70,7 +34,8 @@ const Home = (props) => {
       <View
         style={{
           alignItems: 'center',
-          transform: [{ translateY: Dimensions.get('window').height / 2 }]
+          justifyContent: 'center',
+          flex: 1
         }}
       >
         <AntDesign name="frowno" color="white" size={50} />
@@ -101,7 +66,8 @@ const Home = (props) => {
       <View
         style={{
           alignItems: 'center',
-          transform: [{ translateY: Dimensions.get('window').height / 2 }]
+          justifyContent: 'center',
+          flex: 1,
         }}
       >
         <Pressable
@@ -146,23 +112,26 @@ const Home = (props) => {
   }, [])
   return (
     <View style={styles.container}>
-      <Text onPress={() => props.navigation.navigate('Login')}>
-            点击弹出登录页面
-      </Text>
-      {!isError && !isRefreshing && list.length > 0 && (
-        <ScrollView>
-          {
-            list.map(item => {
-              return (
-                // eslint-disable-next-line react/jsx-key
-                <ListItem id={item.id} name={item.artifactName} navigation={props.navigation} desc={item.description} num={item.collectNum} url={item.imageUrl}/>
-              )
-            })
-          }
-        </ScrollView>)}
-      {!isError && isRefreshing && <RefreshingContent />}
-      {!isError && !isRefreshing && list.length <= 0 && <EmptyContent />}
-      {isError && <ErrorContent />}
+      <LinearGradient
+        style={styles.background}
+        colors={['#727480', '#454653']}
+      >
+        <Text style={styles.pageTitle}>发现</Text>
+        {!isError && !isRefreshing && list.length > 0 && (
+          <ScrollView style={{ marginTop: 30}}>
+            {
+              list.map(item => {
+                return (
+                  // eslint-disable-next-line react/jsx-key
+                  <HomeListItem id={item.id} name={item.artifactName} navigation={props.navigation} desc={item.description} num={item.collectNum} url={item.imageUrl}/>
+                )
+              })
+            }
+          </ScrollView>)}
+        {!isError && isRefreshing && <RefreshingContent />}
+        {!isError && !isRefreshing && list.length <= 0 && <EmptyContent />}
+        {isError && <ErrorContent />}
+      </LinearGradient>
     </View>
   )
 }
@@ -170,6 +139,20 @@ const Home = (props) => {
 export default Home
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#696969',
+    flex: 1
+  },
+  background: {
+    flex: 1
+  },
+  pageTitle: {
+    fontSize: 28,
+    color: '#fff',
+    position: 'absolute',
+    top: 20,
+    left: 20
+  },
   surface: {
     padding: 10,
     height: 170,
@@ -215,17 +198,6 @@ const styles = StyleSheet.create({
     top:-60,
     right:-180,
     width:100,
-  },
-  container: {
-    backgroundColor: '#696969',
-    // alignItems: 'center',
-    flex: 1 // 布局
-  },
-  background:{
-    // justifyContent:'center',
-    // alignContent:'center',
-    // alignItems:'center',
-    flex:1
   },
   toggle: {
     flexDirection: 'row',

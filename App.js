@@ -5,6 +5,7 @@ import React from 'react'
 import Login from './src/views/Login'
 import Register from './src/views/Register'
 import TabBar from './src/components/TabBar'
+import HeritageDetails from './src/views/HeritageDetails'
 // import LoginScreen from './src/views/My/HomeScreen'
 // import { Provider as PaperProvider } from 'react-native-paper'
 
@@ -20,6 +21,7 @@ const App = () => {
         <Stack.Group>
           {/* 普通跳转，包括下方导航栏 */}
           <Stack.Screen name="TabBar" component={TabBar} />
+          <Stack.Screen name="HeritageDetails" component={HeritageDetails} />
         </Stack.Group>
         <Stack.Group
           screenOptions={{
