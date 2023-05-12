@@ -5,12 +5,14 @@ import WaterfallFlow from 'react-native-waterfall-flow'
 import { AntDesign } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import FlowListItem from '../components/FlowListItem'
-
+import { like } from '../api/discover/likeInterface'
+import { allNew } from '../api/discover/newInterface'
+import { allPopular } from '../api/discover/popularInterface'
 const Discover = (props) => {
-  const [ toggleNew, setToggleNew ] = useState(false)
-  const [ toggleStyle, setToggleStyle ] = useState(styles.toggleSelected)
-  const [ toggleHotColor, setToggleHotColor] = useState({ color: '#333'})
-  const [ toggleNewColor, setToggleNewColor] = useState({ color: '#ccc'})
+  const [toggleNew, setToggleNew] = useState(false)
+  const [toggleStyle, setToggleStyle] = useState(styles.toggleSelected)
+  const [toggleHotColor, setToggleHotColor] = useState({ color: '#333'})
+  const [toggleNewColor, setToggleNewColor] = useState({ color: '#ccc'})
   const [listData, setListData] = useState([]) // 存储当前显示的数据列表
   const [isRefreshing, setIsRefreshing] = useState(false) // 正在加载数据
   const [isError, setIsError] = useState(true) // 数据加载错误
@@ -75,63 +77,83 @@ const Discover = (props) => {
       username: 'user3',
       likes: 255,
     },
-
   ]
+  
   useEffect(() => { // 当toggleNew为false，显示“热门”内容；否则显示“最新”内容。
-    // alert(toggleNew)
     if (toggleNew) {
+      loadDataNew()
       setToggleStyle([styles.toggleSelected, styles.toggleNew])
       setToggleNewColor({ color: '#333'})
       setToggleHotColor({ color: '#ccc'})
     } else {
+      loadDataPopular()
       setToggleStyle(styles.toggleSelected)
       setToggleNewColor({ color: '#ccc'})
       setToggleHotColor({ color: '#333'})
     }
   }, [toggleNew])
 
+  const loadDataNew = () => {
+    setIsError(false)
+    setIsRefreshing(true)
+    allNew(1, 10).then(res => {
+      if (res.code === 0) { // 数据获取成功
+        console.log("discover-res:")
+        console.log(res.data.data)
+        setListData(res.data.data.records)
+        setIsRefreshing(false)
+      } else { // 获取失败
+        setIsError(true)
+        setIsRefreshing(false)
+        setListData([])
+      }
+    }).catch(err => {
+      setIsError(true)
+      setIsRefreshing(false)
+      setListData([])
+      alert(err)
+    })
+  }
 
-  useEffect(() => {
-    loadData()
+  const loadDataPopular = () => {
+    setIsError(false)
+    setIsRefreshing(true)
+    allPopular(1, 10).then(res => {
+      if (res.code === 0) { // 数据获取成功
+        console.log("discover-res:")
+        console.log(res.data.data)
+        setListData(res.data.data.records)
+        setIsRefreshing(false)
+      } else { // 获取失败
+        setIsError(true)
+        setIsRefreshing(false)
+        setListData([])
+      }
+    }).catch(err => {
+      setIsError(true)
+      setIsRefreshing(false)
+      setListData([])
+      alert(err)
+    })
+  } 
+  useEffect(() => { // 页面初始化
+    loadDataPopular()
   }, [])
 
   const onPressToggle = () => { // 点击 “热门/最新” 按钮触发事件。
     setToggleNew(!toggleNew)
-    loadData()
   }
 
   const onPressPublish = () => {
     alert('发布！')
   }
 
-  const loadData = () => {
-    setIsError(false)
-    setIsRefreshing(true)
-    // discover(1, 10).then(res => {
-    //   if (res.message === 'ok') {
-    //     setListData(arr)
-    //     setIsRefreshing(false)
-    //   } else {
-    //     setIsError(true)
-    //     setIsRefreshing(false)
-    //     setListData([])
-    //   }
-    // }).catch(err => {
-    //   alert(err)
-    // })
-    setTimeout(() => {
-      // 加载成功
-      setListData(arr)
-      setIsRefreshing(false)
-      //  加载失败
-      // setIsError(true)
-      // setIsRefreshing(false)
-      // setListData([])
-    }, 800)
-  }
-
   const onPressRefresh = () => {
-    loadData()
+    if (toggleNew) {
+      loadDataNew()
+    } else {
+      loadDataPopular()
+    }
   }
 
   const EmptyContent = () => {
@@ -221,9 +243,10 @@ const Discover = (props) => {
             renderItem={({ item, index, columnIndex }) =>
               <FlowListItem
                 title={item.title}
-                time={item.time}
-                username={item.username}
-                likes={item.likes}
+                time={item.moodTime}
+                userId={item.userId}
+                likeNum={item.likeNum}
+                imgUrl={item.imgUrl}
               />
             }
           />

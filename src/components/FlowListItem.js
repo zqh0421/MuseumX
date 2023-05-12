@@ -1,24 +1,29 @@
-import { View, Text, StyleSheet,Image } from 'react-native'
+import { View, Text, StyleSheet,Image, Dimensions } from 'react-native'
 import { Surface,IconButton,MD3Colors} from 'react-native-paper'
 import { useEffect, useState } from 'react'
 import Pic from '../../assets/pic.png'
-import { like } from '../api/likeInterface'
-
+import { like } from '../api/discover/likeInterface'
 const FlowListItem = (props) => {
   const [color, setColor] = useState(props.isLoved ? MD3Colors.error60 : '#ccc')
-  useEffect(() => {
-    // 获取后端数据
-    // setList
-  }, [])
+  const [height, setHeight] = useState(80)
+  // useEffect(() => {
+  //   Image.getSize(props.imgUrl, (w, h) => {
+  //     setHeight(h / w * 0.93 * 0.45 * Dimensions.get('window').width)   
+  //   },
+  //     (failure) => { console.log('failure', failure) }
+  //   );
+  // }, [])
+
+  
   const onPressLove = () => {
     // 1. 点赞按钮样式变化
     if (color === MD3Colors.error60) {
       setColor('#ccc')
-      props.likes--
+      props.likeNum--
     }
     else if (color === '#ccc'){
       setColor(MD3Colors.error60)
-      props.likes++
+      props.likeNum++
     } 
     
     // 2. 向后端发送请求，修改
@@ -32,7 +37,10 @@ const FlowListItem = (props) => {
     <View style={styles.itemContainer}>
       <View style={styles.bg} ></View>
       <View style={styles.itemPic}>
-        <Image source={Pic} style={styles.image}/>
+        <Image
+          source={{uri: props.imgUrl} || Pic}
+          style={[styles.image, { width: Dimensions.get('screen').width * 0.93 * 0.45, height: height}]}
+        />
       </View>
       <Text style={styles.itemTitle} >{props.title}</Text>
       <View
@@ -46,7 +54,7 @@ const FlowListItem = (props) => {
         }}>
         <View style={{ flexDirection: 'row'}}>
           <Text style={styles.HeadSculpture}></Text>
-          <Text style={styles.itemUsername}>{props.username}</Text>
+          <Text style={styles.itemUsername}>{props.userId}</Text>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center'}}>
           <IconButton
@@ -55,7 +63,7 @@ const FlowListItem = (props) => {
             size={17}
             onPress={onPressLove}
           />
-          <Text style={styles.LoveNumber}>{props.likes}</Text>
+          <Text style={styles.LoveNumber}>{props.likeNum}</Text>
         </View>
       </View>
     </View>
@@ -87,8 +95,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   image: {
-    height:80,
-    width:'100%',
     borderRadius: 5,
   },
   itemTitle: {

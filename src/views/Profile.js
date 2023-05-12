@@ -8,6 +8,7 @@ import WaterfallFlow from 'react-native-waterfall-flow'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { AntDesign } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { mylike } from '../api/mylike'
 import Home from '../views/Home'
 const ListItem = (props) => {
   const [color, setColor] = useState(props.isCollected ? MD3Colors.error60 : MD3Colors.error0)
@@ -170,7 +171,27 @@ const Profile = (props) => {
       // remove error
     }
   }
-
+  const loadDataMylike = () => {
+    setIsError(false)
+    setIsRefreshing(true)
+    mylike().then(res => {
+      if (res.code === 0) { // 数据获取成功
+        console.log("profile-res:")
+        console.log(res.data.data)
+        setListData(res.data.data.records)
+        setIsRefreshing(false)
+      } else { // 获取失败
+        setIsError(true)
+        setIsRefreshing(false)
+        setListData([])
+      }
+    }).catch(err => {
+      setIsError(true)
+      setIsRefreshing(false)
+      setListData([])
+      alert(err)
+    })
+  }
   const loadData = (selected) => {
     // 已登录，加载数据
     setIsError(false)
@@ -273,9 +294,14 @@ const Profile = (props) => {
   }
 
   const onPressRefresh = () => {
-    loadData(toggleSelected)
-  }
+    if (selected === '0') {
+      loadDataMylike()
+    } else if(selected === '1') {
+      
+    } else{
 
+    }
+  }
   const EmptyContent = () => {
     return (
       <View
