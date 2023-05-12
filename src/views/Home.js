@@ -198,17 +198,5 @@ const styles = StyleSheet.create({
     top:-60,
     right:-180,
     width:100,
-  },
-  toggle: {
-    flexDirection: 'row',
-    backgroundColor: '#3a3a3a',
-    position: 'absolute',
-    top: 35,
-    right: 20,
-    width: 100,
-    height: 25,
-    justifyContent: 'space-around',
-    borderRadius: 25,
-    alignItems: 'center',
-  },
+  }
 })

@@ -9,10 +9,12 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { AntDesign } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { mylike } from '../api/mylike'
+import { allNew } from '../api/discover/newInterface'
+import { myrelease } from '../api/myreleaseInterface'
 import Home from '../views/Home'
+import { current } from '../api/currentUserInterface'
 const ListItem = (props) => {
   const [color, setColor] = useState(props.isCollected ? MD3Colors.error60 : MD3Colors.error0)
-  const [list, setList] = useState([]) // 列表数据初始状态
   useEffect(() => {
     // 获取后端数据
     // setList
@@ -176,6 +178,7 @@ const Profile = (props) => {
       // remove error
     }
   }
+  
   const loadDataMylike = () => {
     setIsError(false)
     setIsRefreshing(true)
@@ -183,7 +186,7 @@ const Profile = (props) => {
       if (res.code === 0) { // 数据获取成功
         console.log("profile-res:")
         console.log(res.data.data)
-        setListData(res.data.data.records)
+        setListData(res.data.data)
         setIsRefreshing(false)
       } else { // 获取失败
         setIsError(true)
@@ -197,24 +200,55 @@ const Profile = (props) => {
       alert(err)
     })
   }
-  const loadData = (selected) => {
-    // 已登录，加载数据
+
+  // listData.map(item=>{
+  //   allNew(item.id).then(res=>{
+  //     num=res.data.data.records.likeNum
+  //   })
+  // })
+  const loadDataMyrelease = () => {
     setIsError(false)
     setIsRefreshing(true)
-    setTimeout(() => {
-      // 加载成功
-      if (selected === '0' || selected === '2') {
-        setListData(arr)
-      } else {
-        setListData(arr2)
+    myrelease().then(res => {
+      if (res.code === 0) { // 数据获取成功
+        console.log("profile-res:")
+        console.log(res.data.data)
+        setListData(res.data.data)
+        setIsRefreshing(false)
+      } else { // 获取失败
+        setIsError(true)
+        setIsRefreshing(false)
+        setListData([])
       }
+    }).catch(err => {
+      setIsError(true)
       setIsRefreshing(false)
-      //  加载失败
-      // setIsError(true)
-      // setIsRefreshing(false)
-      // setListData([])
-    }, 800)
+      setListData([])
+      alert(err)
+    })
   }
+
+  const current = () => {
+
+  }
+  // const loadData = (selected) => {
+  //   // 已登录，加载数据
+  //   setIsError(false)
+  //   setIsRefreshing(true)
+  //   setTimeout(() => {
+  //     // 加载成功
+  //     if (selected === '0' || selected === '2') {
+  //       setListData(arr)
+  //     } else {
+  //       setListData(arr2)
+  //     }
+  //     setIsRefreshing(false)
+  //     //  加载失败
+  //     // setIsError(true)
+  //     // setIsRefreshing(false)
+  //     // setListData([])
+  //   }, 800)
+  // }
 
   useEffect(() => {
     // 打开应用后首次进入该页面时，执行如下操作
@@ -229,7 +263,7 @@ const Profile = (props) => {
         props.navigation.navigate('Login') // 跳转登录页面
       } else {
         // 已登录，加载数据
-        loadData('0')
+        loadDataMylike()
       }
     }).catch(err => {
       // error
@@ -252,7 +286,7 @@ const Profile = (props) => {
           const jumpToAction = TabActions.jumpTo('Profile')
           props.navigation.dispatch(jumpToAction)
           // 已登录，加载数据
-          loadData('0')
+          loadDataMylike()
         }
       }).catch(err => {
         // error
@@ -285,7 +319,7 @@ const Profile = (props) => {
 
   const onPressLike = () => {
     setToggleSelected('0')
-    loadData('0')
+    loadDataMylike()
   }
 
   const onPressCollect = () => {
@@ -295,16 +329,16 @@ const Profile = (props) => {
 
   const onPressActivity = () => {
     setToggleSelected('2')
-    loadData('2')
+    loadDataMyrelease()
   }
 
   const onPressRefresh = () => {
-    if (selected === '0') {
+    if (toggleSelected==='0') {
       loadDataMylike()
     } else if(selected === '1') {
       
     } else{
-
+        loadDataMyrelease()
     }
   }
   const EmptyContent = () => {
@@ -376,10 +410,10 @@ const Profile = (props) => {
         style={styles.background}>
         <View style={{ flexDirection: 'row', marginTop: 50, marginLeft: '8%', marginRight: '8%', marginBottom: 30, justifyContent: 'space-between' }}>
           <View style={{ flexDirection: 'row'}}>
-            <Text style={styles.image}></Text>
+            <Text style={styles.image}>{props.avatarUrl}</Text>
             <View style={{ marginLeft: 20, justifyContent: 'center' }}>
-              <Text style={styles.nickname}>昵称</Text>
-              <Text style={styles.userid}>ID: zheshiid</Text>
+              <Text style={styles.nickname}>{props.username}</Text>
+              <Text style={styles.userid}>ID: {props.id}</Text>
             </View>
           </View>          
         <Pressable style={[styles.edit, { alignSelf: 'center' }]} onPress={onPressEdit}>
@@ -414,14 +448,16 @@ const Profile = (props) => {
               paddingLeft: '2%',
               paddingRight: '2%'
             }}
-            data={arr}
+            data={listData}
             numColumns={2}
             renderItem={({ item, index, columnIndex }) => (
               <FlowListItem
                 title={item.title}
-                time={item.time}
                 username={item.username}
-                likes={item.likes}
+                likeNum={item.likeNum}
+                time={item.moodTime}
+                userId={item.userId}
+                imgUrl={item.imgUrl}
               />
               // <Text>123</Text>
             }
