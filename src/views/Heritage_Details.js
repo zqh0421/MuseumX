@@ -2,7 +2,6 @@ import {
     StyleSheet,
     Text,
     View,
-    Button,
     Dimensions,
     KeyboardAvoidingView,
     ScrollView,
@@ -13,7 +12,7 @@ import {
   } from 'react-native'
 import React, { useState, useRef, Component, useEffect } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
-import { List, MD3Colors, SegmentedButtons, TextInput, IconButton, Surface}  from 'react-native-paper';
+import { List, MD3Colors, SegmentedButtons, TextInput, IconButton, Surface, Button}  from 'react-native-paper';
 import { render } from 'react-dom';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { collect_number } from '../api/CollectNumber'
@@ -35,6 +34,8 @@ const ListItem = (props) => {
     const [color, setColor] = useState(props.isCollected ? MD3Colors.error60 : MD3Colors.neutral100)
     
     const [comments, setComments] = useState([])
+    const [comment, setComment] = useState('')
+
 
     useEffect(() => {
         // 获取当前文物信息，请求参数：id
@@ -58,9 +59,11 @@ const ListItem = (props) => {
         // 评论的呈现方式：userID和content
         artifactComment(artifactID).then(res => {
             // console.log(res.data.data)
-            if(res.message === 'ok'){
+            if(res.message === 'ok' && res.data.data){
+                console.log(res)
                 setComments(res.data.data)
             }
+            console.log(comments[0])            
         })   
     }, [])
 
@@ -90,22 +93,18 @@ const ListItem = (props) => {
         })   
     }
 
-    // // 发表评论
-    // const publishComment = () => {
-    //     console.log(comment)
+    // 发表评论
+    const onPublish = () => {
+        // 向后端发送请求
+        publishComment(artifactID, comment).then(async res => {
+            if (res.message === 'ok') { // TODO: 判断登录成功的条件根据实际接口修改！
+                console.log("PublishComment")
+            }
+          }).catch(err => {
+            alert(err)
+        })
 
-    //     // 向后端发送请求
-    //     publishComment(artifactID, comment).then(async res => {
-    //         if (res.message === 'ok') { // TODO: 判断登录成功的条件根据实际接口修改！
-    //             console.log("PressedCollect")
-    //         }
-    //       }).catch(err => {
-    //         alert(err)
-    //     })
-
-    // }
-
-    
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -154,11 +153,23 @@ const ListItem = (props) => {
                     </Text>
                 </Text>
 
-                {/* <Text style={styles.Titlefont}>
+                <Text style={styles.Titlefont}>
                     Comments
-                    <Text style={styles.textStyle}>{userID} </Text>
-                    <Text style={styles.textStyle}>{comment}</Text>
-                </Text> */}
+                </Text>
+                
+                {/* <Text style={styles.textStyle}>{comments[0].userId}</Text>
+                <Text style={styles.textStyle}>{comments[0].content}</Text> */} 
+                
+                <View>{
+                    comments.map(item => {
+                        return(
+                            <Text>123</Text>
+                        )
+                    })
+                }              
+                </View> 
+            
+
                 <View style={{ backgroundColor: '#3a3a3a', height: 80}}></View>
                 </LinearGradient>
                 </ScrollView>
@@ -174,9 +185,12 @@ const ListItem = (props) => {
                     contentStyle={{color:'#fffaf0'}}
                     outlineColor={'#CCCCCC'}
                     activeOutlineColor={'#CCCCCC'}
-                    value = {commentContent}
-                    onChangeText={(comment) => publishComment(comment)}
+                    value = {comment}
+                    onChangeText={(val) => setComment(val)}
                 />
+
+                <Button mode="contained" color={'#3a3a3a'} style={{marginLeft:10,top:-5}} onPress={()=>onPublish()}>Send</Button>
+
                 {/* 收藏 */}
                 <IconButton
                     icon="star-outline"
@@ -191,6 +205,10 @@ const ListItem = (props) => {
                 <Text style={{color:'#EEEEEE', top: -8}}>
                     {collectNum}
                 </Text>  
+
+                
+
+                
             </View>
 
             
@@ -208,7 +226,6 @@ const Heritage_Details = (props) => {
     )
     
 }
-
 export default Heritage_Details
 
   
@@ -233,7 +250,7 @@ const styles = StyleSheet.create({
     },
     buttonsStyle: {
         marginTop:80,
-        marginLeft:65,
+        marginLeft: '8%',
         marginRight:65,
     },
     Titlefont: {
@@ -246,7 +263,8 @@ const styles = StyleSheet.create({
     },
     textStyle: {
         fontSize:12,
-        color:'#d3d3d3',
+        color:'#d3d3d3',   
+        // marginTop: 30,
     },
     bottombar:{
         position: 'absolute',
@@ -255,7 +273,7 @@ const styles = StyleSheet.create({
         height:80,
         backgroundColor:'#3A3A3A',
         flexDirection:'row',      //子组件水平排列，默认水平居中
-        justifyContent:'center',  
+        // justifyContent:'center',  
         alignItems:'center'   
     },
     inputStyle: {  //这里指的是输入内容的样式
@@ -265,14 +283,22 @@ const styles = StyleSheet.create({
         height:35,   //height设置过小导致文字显示不全，添加paddingVertical=0也无效,改小字体大小
         fontSize:12,
         borderRadius:5,
-        top: -10        
+        top: -10,
+        marginLeft:20,    
     },
-    surface: {
-        padding: 8,
-        height: 80,
-        width: 80,
-        alignItems: 'center',
-        justifyContent: 'center',
+    buttonStyle2: {
+        height:30,
+        width:30,
+        justifyContent:'center',
+        marginBottom:30,
+        marginTop:20,
+        marginLeft:30,
+        borderRadius: 7,
+    },
+    buttonTxt:{
+        textAlign: 'center',
+        color:'#d3d3d3',
+        fontSize:20,
     },
 })
   
