@@ -9,10 +9,7 @@ import Person from './src/views/Person'
 import EditUsername from './src/views/EditUsername'
 import EditDescription from'./src/views/EditDescription'
 import TabBar from './src/components/TabBar'
-import Heritage_Details from './src/views/Heritage_Details'
-import Heritage_Discover from './src/views/Heritage_Discover'
-
-
+import HeritageDetails from './src/views/HeritageDetails'
 // import LoginScreen from './src/views/My/HomeScreen'
 // import { Provider as PaperProvider } from 'react-native-paper'
 
@@ -32,6 +29,7 @@ const App = () => {
           <Stack.Screen name="EditUsername" component={EditUsername} />
           <Stack.Screen name="EditDescription" component={EditDescription} />
           <Stack.Screen name="Publish" component={Publish} />
+          <Stack.Screen name="HeritageDetails" component={HeritageDetails} />
         </Stack.Group>
         <Stack.Group
           screenOptions={{

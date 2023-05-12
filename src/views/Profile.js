@@ -49,8 +49,14 @@ const ListItem = (props) => {
 const Profile = (props) => {
   const [toggleSelected, setToggleSelected] = useState('0')
   const [toggleBar0Style, setToggleBar0Style] = useState(styles.toggleBar)
-  const [toggleBar1Style, setToggleBar1Style] = useState([styles.toggleBar, { opacity: 0 }])
-  const [toggleBar2Style, setToggleBar2Style] = useState([styles.toggleBar, { opacity: 0 }])
+  const [toggleBar1Style, setToggleBar1Style] = useState([
+    styles.toggleBar,
+    { opacity: 0 }
+  ])
+  const [toggleBar2Style, setToggleBar2Style] = useState([
+    styles.toggleBar,
+    { opacity: 0 }
+  ])
   const [listData, setListData] = useState([]) // 存储当前显示的数据列表
   const [isRefreshing, setIsRefreshing] = useState(false) // 正在加载数据
   const [isError, setIsError] = useState(true) // 数据加载错误
@@ -58,64 +64,63 @@ const Profile = (props) => {
     {
       title: '（一）博物馆博物馆博物馆博物馆博物馆博物馆',
       username: 'user123456',
-      likes: 25,
+      likes: 25
     },
     {
       title: 'title2',
       username: 'user2',
-      likes: 255,
+      likes: 255
     },
     {
       title: 'title3',
       username: 'user3',
-      likes: 255,
+      likes: 255
     },
     {
       title: 'title1',
       username: 'user1',
-      likes: 25,
+      likes: 25
     },
     {
       title: 'title2',
       username: 'user2',
-      likes: 255,
+      likes: 255
     },
     {
       title: 'title3',
       username: 'user3',
-      likes: 255,
+      likes: 255
     },
     {
       title: 'title1',
       username: 'user1',
-      likes: 25,
+      likes: 25
     },
     {
       title: 'title2',
       username: 'user2',
-      likes: 2,
+      likes: 2
     },
     {
       title: 'title3',
       username: 'user3',
-      likes: 255,
+      likes: 255
     },
     {
       title: 'title1',
       username: 'user1',
-      likes: 25,
+      likes: 25
     },
     {
       title: 'title2',
       username: 'user2',
-      likes: 2,
+      likes: 2
     },
     {
       title: 'title3',
       username: 'user3',
-      likes: 255,
-    },
-
+      likes: 255
+    }
   ]
   const arr2 = [
     {
@@ -158,7 +163,7 @@ const Profile = (props) => {
     try {
       const jsonValue = await AsyncStorage.getItem('userData')
       return jsonValue !== null ? JSON.parse(jsonValue) : null
-    } catch(e) {
+    } catch (e) {
       // error reading value
     }
   }
@@ -167,7 +172,7 @@ const Profile = (props) => {
     try {
       await AsyncStorage.removeItem('userData')
       props.navigation.navigate('Home')
-    } catch(e) {
+    } catch (e) {
       // remove error
     }
   }
@@ -310,7 +315,7 @@ const Profile = (props) => {
           transform: [{ translateY: Dimensions.get('window').height / 4}]
         }}
       >
-        <AntDesign name='frowno' color='white' size={50}/>
+        <AntDesign name="frowno" color="white" size={50} />
         <Text style={{ color: 'white', marginTop: 15 }}>暂无内容~</Text>
       </View>
     )
@@ -346,17 +351,21 @@ const Profile = (props) => {
             borderWidth: 1,
             borderColor: '#ffdcb2',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'center'
           }}
         >
           <Text
             style={{
               color: '#ffdcb2',
-              fontSize: 18,
+              fontSize: 18
             }}
-          >刷新重试</Text>
+          >
+            刷新重试
+          </Text>
         </Pressable>
-        <Text style={{ color: 'white', marginTop: 15 }}>加载失败，请刷新重试~</Text>
+        <Text style={{ color: 'white', marginTop: 15 }}>
+          加载失败，请刷新重试~
+        </Text>
       </View>
     )
   }
@@ -380,17 +389,17 @@ const Profile = (props) => {
         <View style={styles.toggle}>
           <Pressable onPress={onPressLike} style={styles.toggleItem}>
             <Text style={styles.toggleNumber}>3</Text>
-            <Text style={styles.toggleTitle}>喜  欢</Text>
+            <Text style={styles.toggleTitle}>喜 欢</Text>
             <View style={toggleBar0Style}></View>
           </Pressable>
           <Pressable onPress={onPressCollect} style={styles.toggleItem}>
             <Text style={styles.toggleNumber}>123</Text>
-            <Text style={styles.toggleTitle}>收  藏</Text>
+            <Text style={styles.toggleTitle}>收 藏</Text>
             <View style={toggleBar1Style}></View>
           </Pressable>
           <Pressable onPress={onPressActivity} style={styles.toggleItem}>
             <Text style={styles.toggleNumber}>123</Text>
-            <Text style={styles.toggleTitle}>动  态</Text>
+            <Text style={styles.toggleTitle}>动 态</Text>
             <View style={toggleBar2Style}></View>
           </Pressable>
         </View>
@@ -407,7 +416,7 @@ const Profile = (props) => {
             }}
             data={arr}
             numColumns={2}
-            renderItem={({ item, index, columnIndex }) =>
+            renderItem={({ item, index, columnIndex }) => (
               <FlowListItem
                 title={item.title}
                 time={item.time}
@@ -461,8 +470,8 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 100,
-    borderWidth:2,
-    borderColor:'white',
+    borderWidth: 2,
+    borderColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#CCCCCC',
@@ -470,7 +479,7 @@ const styles = StyleSheet.create({
     // top: 70,
     // left: 35,
   },
-  nickname:{
+  nickname: {
     fontSize: 23,
     color: '#fff',
     // position: 'absolute',
@@ -495,8 +504,7 @@ const styles = StyleSheet.create({
     // top: 85,
     // right: '8%',
     borderWidth: 1,
-    borderColor: 'white',
-
+    borderColor: 'white'
   },
   toggle: {
     flexDirection: 'row',
@@ -510,21 +518,21 @@ const styles = StyleSheet.create({
     borderTopStartRadius: 25,
     borderTopEndRadius: 25,
     borderBottomColor: '#eee',
-    borderBottomWidth: 1,
+    borderBottomWidth: 1
   },
   toggleItem: {
     width: 60,
     alignItems: 'center',
     justifyContent: 'center',
-    alignContent:'center',
+    alignContent: 'center'
   },
-  toggleTitle:{
+  toggleTitle: {
     width: '100%',
     fontSize: 10,
     color: '#fff',
     textAlign: 'center'
   },
-  toggleNumber:{
+  toggleNumber: {
     width: '100%',
     fontSize: 18,
     color: '#fff',
@@ -542,7 +550,7 @@ const styles = StyleSheet.create({
     height: 5,
     marginTop: 2,
     backgroundColor: '#CC6666',
-    borderRadius: 5,
+    borderRadius: 5
     // position: 'absolute',
     // top: 225,
     // left: '20%',

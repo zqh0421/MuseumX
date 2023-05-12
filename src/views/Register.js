@@ -7,8 +7,6 @@ import {
 } from 'react-native'
 import React, { useState } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
-import { Formik } from 'formik';
-import { validate } from 'react-native-web/dist/cjs/exports/StyleSheet/validate';
 import { TextInput,Button, } from 'react-native-paper'
 import { register } from '../api/L_RInterface'
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
@@ -41,8 +39,7 @@ const Register = (props) => {
       alert(err)
     })
   }
-    
-
+  
     // if (!username || !username.trim()) {
     //   Alert.alert('用户名不能为空')
     //   return
@@ -127,20 +124,20 @@ const Register = (props) => {
         onChangeText={(val) => setPwdSecond(val)}
       />
 
-      <Button
-        // style = {styles.buttonStyle}
-        mode='contained'
-        buttonColor='#808080'
+        <Button
+          // style = {styles.buttonStyle}
+          mode='contained'
+          buttonColor='#808080'
         style={styles.buttonStyle}
-        onPress={() => onRegister()}>
+          onPress={() => onRegister()}>
         <Text style={styles.buttonTxt}>注    册</Text>
-      </Button>
+        </Button>
 
-      {/* <Text style={[styles.Contentfont]}>已有账号？登录</Text> */}
-      <Text style={{color:'#808080'}}>
-        已有账号？
-        <Text style={styles.contentStyle} onPress={() => props.navigation.navigate('Login')}>登 录</Text>
-      </Text>
+        {/* <Text style={[styles.Contentfont]}>已有账号？登录</Text> */}
+        <Text style={{color:'#808080'}}>
+          已有账号？
+          <Text style={styles.contentStyle} onPress={() => props.navigation.navigate('Login')}>登 录</Text>
+        </Text>
       </LinearGradient>
     </View>
   )
@@ -150,10 +147,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1 // 布局
   },
-  backgroud:{
-    justifyContent:'center',
-    alignItems:'center',
-    flex:1
+  backgroud: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1
   },
   Titlefont: {
     fontSize: 30,

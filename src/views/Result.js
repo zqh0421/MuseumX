@@ -1,43 +1,38 @@
-import { View, Text, Image, Surface, IconButton, Pressable } from 'react-native'
-import React from 'react'
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Pressable,
+  ScrollView
+} from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Surface, IconButton, MD3Colors } from 'react-native-paper'
+import { Collect, getMore } from '../api/HomeInterface'
 
-const ItemBar = (props) => {
+const ListItem = (props) => {
   const [color, setColor] = useState(
     props.isCollected ? MD3Colors.error60 : MD3Colors.error0
   )
-  const [list, setList] = useState([]) // 列表数据初始状态
-  useEffect(() => {
-    // 获取后端数据
-    //setList(Show(page,size))
-    Show(page, size).then(async (res) => {
-      if (res.message === 'ok') {
-        try {
-          // setList?
-          setList(res.data)
-        } catch (error) {
-          console.log(error)
-        }
-      }
-    })
-  }, [])
   const onPressCollect = () => {
     // 1. 收藏按钮样式变化
     if (color === MD3Colors.error60) setColor(MD3Colors.error0)
     else if (color === MD3Colors.error0) setColor(MD3Colors.error60)
     // 2. 向后端发送请求，修改
-    //Collect(id) //id?
+    Collect(props.id) //id?
   }
 
   // const onPressItem = () => {
   //   props.navigation.navigate('Login')
   // }
-  //跳转到详情页？
   return (
     <Pressable
       onPress={getMore().then(async (res) => {
         if (res.message === 'ok') {
           try {
-            navigation.navigate('xiangqing', {})
+            //跳转到详情页
+            navigation.navigate('Heritage_Details', {
+            })
           } catch (error) {
             console.log(error)
           }
@@ -61,6 +56,30 @@ const ItemBar = (props) => {
     </Pressable>
   )
 }
+
+const Result = (props) => {
+  const [list, setList] = useState([]) // 列表数据初始状态
+  useEffect(() => {
+    // 获取后端数据
+    // setList?
+    setList(props)
+  }, [])
+  return (
+    <View>
+      <Text>查询结果：</Text>
+      <ScrollView>
+        {list.map((item) => {
+          return (
+            // eslint-disable-next-line react/jsx-key
+            <ListItem id={item.id} name={item.artifactName} navigation={item.navigation} desc={item.description} num={item.collectNum} url={item.imageUrl} />
+          )
+        })}
+      </ScrollView>
+    </View>
+  )
+}
+
+export default Result
 
 const styles = StyleSheet.create({
   surface: {
