@@ -8,20 +8,20 @@ import { LinearGradient } from 'expo-linear-gradient'
 
 const ListItem = (props) => {
   const [color, setColor] = useState(props.isCollected ? MD3Colors.error60 : MD3Colors.error0)
+  // const [size,setsize]=useState(15)
+
   // const [list, setList] = useState([]) // 列表数据初始状态
   // useEffect(() => {
-  //   // 获取后端数据
-  //   //setList(Show(page,size))
-  //   Show(1,15).then(async res=>{
-  //     if(res.message==='ok'){
-  //       try{
-  //         // setList?
-  //         setList(res.data)
-  //       }catch(error){
-  //         console.log(error)
+  //   try{
+  //     //show(1,15)
+  //     Show(page,size).then(async res=>{
+  //       if(res.message==='ok'){
+  //         setList(res.data.records)
   //       }
-  //     }
-  //   })
+  //     })
+  //   }catch(error){
+  //     console.log(error)
+  //   }
   // }, [])
   const onPressCollect = () => {
     // 1. 收藏按钮样式变化
@@ -77,7 +77,7 @@ const Home = (props) => {
       //show(1,15)
       Show(page,size).then(async res=>{
         if(res.message==='ok'){
-          setList(res.data)
+          setList(res.data.records)
         }
       })
     }catch(error){
@@ -94,7 +94,7 @@ const Home = (props) => {
           list.map(item => {
             return (
               // eslint-disable-next-line react/jsx-key
-              <ListItem name={item.artifactName}  description={item.description} num={item.collectnum} url={item.imageUrl}/>
+              <ListItem id={item.id} name={item.artifactName}  desc={item.description} num={item.collectNum} url={item.imageUrl}/>
             )
           })
         }
