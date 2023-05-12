@@ -153,7 +153,6 @@ const styles = StyleSheet.create({
     marginBottom:30,
     marginTop:20,
     borderRadius: 7,
-    
   },
   buttonTxt:{
     textAlign: 'center',
