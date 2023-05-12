@@ -9,6 +9,9 @@ import Person from './src/views/Person'
 import EditUsername from './src/views/EditUsername'
 import EditDescription from'./src/views/EditDescription'
 import TabBar from './src/components/TabBar'
+import Heritage_Details from './src/views/Heritage_Details'
+import Heritage_Discover from './src/views/Heritage_Discover'
+
 
 // import LoginScreen from './src/views/My/HomeScreen'
 // import { Provider as PaperProvider } from 'react-native-paper'
@@ -39,6 +42,8 @@ const App = () => {
           {/* 向上滑入跳转，登录和注册 */}
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen name="Heritage_Details" component={Heritage_Details} />
+          <Stack.Screen name="Heritage_Discover" component={Heritage_Discover} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

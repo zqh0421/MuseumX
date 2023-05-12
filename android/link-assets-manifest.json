@@ -1,0 +1,13 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/SIMYOU.otf",
+      "sha1": "3d94e616b00d85302cff0a02f5f32c74e796835c"
+    },
+    {
+      "path": "assets/fonts/STSONG.TTF",
+      "sha1": "675ac1c7f78ad40fa0397dc65d5993790df22a23"
+    }
+  ]
+}

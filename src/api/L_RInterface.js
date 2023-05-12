@@ -6,20 +6,21 @@ export async function login(username, password) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-      userAccount: username,
-      userPassword: password
+      'userAccount': username,
+      'userPassword': password
      })
     }
   
     try {
        const response = await fetch(
-      'http://101.200.148.39:3458/api/controller/adminUser/login',
+      'http://101.200.148.39:3599/api/controller/all/user/login',
+      //'http://101.200.148.39:3599/api/all/user/login',
        options
       )
        if (response.ok) {
           console.log('Request successful')
        } else {
-      if (response.err === '1') console.log('wrong username')
+      if (response.status === '1') console.log('wrong username')
           else if (response.err === '2') console.log('wrong password')
           else console.log('Request failed')
        }
@@ -46,8 +47,9 @@ export async function login(username, password) {
   
      try {
        const response = await fetch(
-      'http://101.200.148.39:3458/api/controller/adminUser/register',
-          options
+      // 'http://101.200.148.39:3458/api/controller/adminUser/register',
+          'http://101.200.148.39:3599/api/controller/all/user/register',
+      options
        )
        if (response.ok) {
           console.log('Request successful')
