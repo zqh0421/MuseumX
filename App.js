@@ -12,6 +12,7 @@ import TabBar from './src/components/TabBar'
 import Heritage_Details from './src/views/Heritage_Details'
 import Heritage_Discover from './src/views/Heritage_Discover'
 
+
 // import LoginScreen from './src/views/My/HomeScreen'
 // import { Provider as PaperProvider } from 'react-native-paper'
 
