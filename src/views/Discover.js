@@ -243,7 +243,7 @@ const Discover = (props) => {
             renderItem={({ item, index, columnIndex }) =>
               <FlowListItem
                 title={item.title}
-                time={item.moodTime}
+                time={item.time}
                 userId={item.userId}
                 likeNum={item.likeNum}
                 imgUrl={item.imgUrl}
