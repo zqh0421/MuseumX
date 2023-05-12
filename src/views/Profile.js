@@ -178,7 +178,7 @@ const Profile = (props) => {
       // remove error
     }
   }
-  
+
   const loadDataMylike = () => {
     setIsError(false)
     setIsRefreshing(true)
@@ -336,7 +336,7 @@ const Profile = (props) => {
     if (toggleSelected==='0') {
       loadDataMylike()
     } else if(selected === '1') {
-      
+
     } else{
         loadDataMyrelease()
     }
@@ -415,7 +415,7 @@ const Profile = (props) => {
               <Text style={styles.nickname}>{props.username}</Text>
               <Text style={styles.userid}>ID: {props.id}</Text>
             </View>
-          </View>          
+          </View>
         <Pressable style={[styles.edit, { alignSelf: 'center' }]} onPress={onPressEdit}>
           <MaterialCommunityIcons name="account-edit" color="white" size={20} />
         </Pressable>
@@ -450,7 +450,7 @@ const Profile = (props) => {
             }}
             data={listData}
             numColumns={2}
-            renderItem={({ item, index, columnIndex }) => (
+            renderItem={({ item, index, columnIndex }) => {
               <FlowListItem
                 title={item.title}
                 username={item.username}
@@ -460,8 +460,9 @@ const Profile = (props) => {
                 imgUrl={item.imgUrl}
               />
               // <Text>123</Text>
+              }
             }
-          /> 
+          />
         }
         {
           !isError && !isRefreshing && listData.length > 0 && toggleSelected ==='1' &&
@@ -499,7 +500,7 @@ const styles = StyleSheet.create({
     // justifyContent:'center',
     // alignContent:'center',
     // alignItems:'center',
-    
+
     flex:1
   },
   image: {

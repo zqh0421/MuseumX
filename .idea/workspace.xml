@@ -11,8 +11,7 @@
       <change beforePath="$PROJECT_DIR$/src/api/Collect.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/Collect.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/api/CollectNumber.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/CollectNumber.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/api/PublishComment.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/PublishComment.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/Publish_Comment.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/Heritage_Details.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Heritage_Details.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/HeritageDetails.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/HeritageDetails.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

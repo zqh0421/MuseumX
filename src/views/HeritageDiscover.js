@@ -13,7 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { List, MD3Colors, SegmentedButtons,TextInput,IconButton, } from 'react-native-paper';
 import { render } from 'react-dom';
 
-const Heritage_Discover = (props) => {
+const HeritageDiscover = (props) => {
 
     // const myRef = useRef<HTMLDivElement>(null)
 
@@ -181,5 +181,5 @@ const Heritage_Discover = (props) => {
     }
   })
 
-  export default Heritage_Discover
+  export default HeritageDiscover
 

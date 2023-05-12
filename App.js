@@ -10,6 +10,7 @@ import EditUsername from './src/views/EditUsername'
 import EditDescription from'./src/views/EditDescription'
 import TabBar from './src/components/TabBar'
 import HeritageDetails from './src/views/HeritageDetails'
+import HeritageDiscover from './src/views/HeritageDiscover'
 // import LoginScreen from './src/views/My/HomeScreen'
 // import { Provider as PaperProvider } from 'react-native-paper'
 
@@ -29,7 +30,6 @@ const App = () => {
           <Stack.Screen name="EditUsername" component={EditUsername} />
           <Stack.Screen name="EditDescription" component={EditDescription} />
           <Stack.Screen name="Publish" component={Publish} />
-          <Stack.Screen name="HeritageDetails" component={HeritageDetails} />
         </Stack.Group>
         <Stack.Group
           screenOptions={{
@@ -40,8 +40,8 @@ const App = () => {
           {/* 向上滑入跳转，登录和注册 */}
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Register" component={Register} />
-          <Stack.Screen name="Heritage_Details" component={Heritage_Details} />
-          <Stack.Screen name="Heritage_Discover" component={Heritage_Discover} />
+          <Stack.Screen name="HeritageDetails" component={HeritageDetails} />
+          <Stack.Screen name="HeritageDiscover" component={HeritageDiscover} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

@@ -31,7 +31,7 @@ const ListItem = (props) => {
         if (res.message === 'ok') {
           try {
             //跳转到详情页
-            navigation.navigate('Heritage_Details', {
+            navigation.navigate('HeritageDetails', {
             })
           } catch (error) {
             console.log(error)
