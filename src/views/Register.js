@@ -8,8 +8,6 @@ import {
 } from 'react-native'
 import React, { useState } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
-import { Formik } from 'formik'
-import { validate } from 'react-native-web/dist/cjs/exports/StyleSheet/validate'
 
 const Register = (props) => {
   const [username, setUsername] = useState('')
@@ -47,10 +45,7 @@ const Register = (props) => {
 
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors = {['#3A3A3A','#525161']}
-        style={styles.backgroud}>
-
+      <LinearGradient colors={['#3A3A3A', '#525161']} style={styles.backgroud}>
         <Text onPress={() => props.navigation.goBack()}>关闭</Text>
         <Text style={[styles.Titlefont]}>注 册</Text>
         <TextInput
@@ -70,11 +65,11 @@ const Register = (props) => {
           //keyboardAppearance='number-pad'
 
           onChangeText={(val) => setPwd(val)}
-        // 允许多行文本输入
-        // multiline = {true}
-        // numberOfLines={10}
-        //控制占位符在上方,Android和ios显示保持一致
-        //textAlignVertical='top'
+          // 允许多行文本输入
+          // multiline = {true}
+          // numberOfLines={10}
+          //控制占位符在上方,Android和ios显示保持一致
+          //textAlignVertical='top'
         />
 
         <TextInput
@@ -86,7 +81,7 @@ const Register = (props) => {
         />
 
         <Button
-        // style = {styles.buttonStyle}
+          // style = {styles.buttonStyle}
           title="注 册"
           color="#dcdcdc"
           onPress={() => onRegister()}
@@ -108,11 +103,11 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     flex: 1 // 布局
   },
-  backgroud:{
-    justifyContent:'center',
+  backgroud: {
+    justifyContent: 'center',
     // alignContent:'center',
-    alignItems:'center',
-    flex:1
+    alignItems: 'center',
+    flex: 1
   },
   Titlefont: {
     fontSize: 30,
@@ -122,7 +117,7 @@ const styles = StyleSheet.create({
   inputStyle: {
     color: '#f0f8ff',
     // width: Dimensions.get('window').width -1000,
-    width: Dimensions.get('window').width -150,
+    width: Dimensions.get('window').width - 150,
     margin: 10,
     paddingLeft: 10,
     borderWidth: 1,

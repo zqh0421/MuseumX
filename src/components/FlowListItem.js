@@ -1,8 +1,7 @@
-import { View, Text, StyleSheet,Image } from 'react-native'
-import { Surface,IconButton,MD3Colors} from 'react-native-paper'
+import { View, Text, StyleSheet, Image } from 'react-native'
+import { Surface, IconButton, MD3Colors } from 'react-native-paper'
 import { useEffect, useState } from 'react'
 import Pic from '../../assets/pic.png'
-
 
 const FlowListItem = (props) => {
   const [color, setColor] = useState(props.isLoved ? MD3Colors.error60 : '#ccc')
@@ -18,11 +17,11 @@ const FlowListItem = (props) => {
   }
   return (
     <View style={styles.itemContainer}>
-      <View style={styles.bg} ></View>
+      <View style={styles.bg}></View>
       <View style={styles.itemPic}>
-        <Image source={Pic} style={styles.image}/>
+        <Image source={Pic} style={styles.image} />
       </View>
-      <Text style={styles.itemTitle} >{props.title}</Text>
+      <Text style={styles.itemTitle}>{props.title}</Text>
       <View
         style={{
           flexDirection: 'row',
@@ -31,12 +30,13 @@ const FlowListItem = (props) => {
           marginTop: 10,
           marginBottom: -12,
           justifyContent: 'space-between'
-        }}>
-        <View style={{ flexDirection: 'row'}}>
+        }}
+      >
+        <View style={{ flexDirection: 'row' }}>
           <Text style={styles.HeadSculpture}></Text>
           <Text style={styles.itemUsername}>{props.username}</Text>
         </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <IconButton
             icon="heart"
             iconColor={color}
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     width: '93%',
     borderRadius: 10,
     padding: '5%',
-    marginBottom: '5%',
+    marginBottom: '5%'
   },
   bg: {
     backgroundColor: '#000',
@@ -66,25 +66,25 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     left: 0,
-    right: 0,
+    right: 0
   },
   itemPic: {
-    flex:1,
+    flex: 1,
     width: '100%',
     backgroundColor: 'white',
-    borderRadius: 10,
+    borderRadius: 10
   },
   image: {
-    height:80,
-    width:'100%',
-    borderRadius: 5,
+    height: 80,
+    width: '100%',
+    borderRadius: 5
   },
   itemTitle: {
-    top:5,
+    top: 5,
     fontSize: 13,
-    margin:2,
-    letterSpacing:1,
-    lineHeight:18,
+    margin: 2,
+    letterSpacing: 1,
+    lineHeight: 18,
     fontWeight: 'bold',
     color: 'white'
   },

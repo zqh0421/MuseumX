@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, Pressable, Dimensions, TouchableOpacity} from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Dimensions,
+  TouchableOpacity
+} from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useEffect, useState } from 'react'
 import WaterfallFlow from 'react-native-waterfall-flow'
@@ -6,10 +13,10 @@ import { AntDesign } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import FlowListItem from '../components/FlowListItem'
 const Discover = (props) => {
-  const [ toggleNew, setToggleNew ] = useState(false)
-  const [ toggleStyle, setToggleStyle ] = useState(styles.toggleSelected)
-  const [ toggleHotColor, setToggleHotColor] = useState({ color: '#333'})
-  const [ toggleNewColor, setToggleNewColor] = useState({ color: '#ccc'})
+  const [toggleNew, setToggleNew] = useState(false)
+  const [toggleStyle, setToggleStyle] = useState(styles.toggleSelected)
+  const [toggleHotColor, setToggleHotColor] = useState({ color: '#333' })
+  const [toggleNewColor, setToggleNewColor] = useState({ color: '#ccc' })
   const [listData, setListData] = useState([]) // 存储当前显示的数据列表
   const [isRefreshing, setIsRefreshing] = useState(false) // 正在加载数据
   const [isError, setIsError] = useState(true) // 数据加载错误
@@ -17,84 +24,84 @@ const Discover = (props) => {
     {
       title: '（一）博物馆博物馆博物馆博物馆博物馆博物馆',
       username: 'user123456',
-      likes: 25,
+      likes: 25
     },
     {
       title: 'title2',
       username: 'user2',
-      likes: 255,
+      likes: 255
     },
     {
       title: 'title3',
       username: 'user3',
-      likes: 255,
+      likes: 255
     },
     {
       title: 'title1',
       username: 'user1',
-      likes: 25,
+      likes: 25
     },
     {
       title: 'title2',
       username: 'user2',
-      likes: 255,
+      likes: 255
     },
     {
       title: 'title3',
       username: 'user3',
-      likes: 255,
+      likes: 255
     },
     {
       title: 'title1',
       username: 'user1',
-      likes: 25,
+      likes: 25
     },
     {
       title: 'title2',
       username: 'user2',
-      likes: 2,
+      likes: 2
     },
     {
       title: 'title3',
       username: 'user3',
-      likes: 255,
+      likes: 255
     },
     {
       title: 'title1',
       username: 'user1',
-      likes: 25,
+      likes: 25
     },
     {
       title: 'title2',
       username: 'user2',
-      likes: 2,
+      likes: 2
     },
     {
       title: 'title3',
       username: 'user3',
-      likes: 255,
-    },
-
+      likes: 255
+    }
   ]
-  useEffect(() => { // 当toggleNew为false，显示“热门”内容；否则显示“最新”内容。
+  useEffect(() => {
+    // 当toggleNew为false，显示“热门”内容；否则显示“最新”内容。
     // alert(toggleNew)
     if (toggleNew) {
       setToggleStyle([styles.toggleSelected, styles.toggleNew])
-      setToggleNewColor({ color: '#333'})
-      setToggleHotColor({ color: '#ccc'})
+      setToggleNewColor({ color: '#333' })
+      setToggleHotColor({ color: '#ccc' })
     } else {
       setToggleStyle(styles.toggleSelected)
-      setToggleNewColor({ color: '#ccc'})
-      setToggleHotColor({ color: '#333'})
+      setToggleNewColor({ color: '#ccc' })
+      setToggleHotColor({ color: '#333' })
     }
   }, [toggleNew])
-
 
   useEffect(() => {
     loadData()
   }, [])
 
-  const onPressToggle = () => { // 点击 “热门/最新” 按钮触发事件。
+  const onPressToggle = () => {
+    // 点击 “热门/最新” 按钮触发事件。
     setToggleNew(!toggleNew)
     loadData()
   }
@@ -107,7 +114,7 @@ const Discover = (props) => {
     try {
       const jsonValue = await AsyncStorage.getItem('userData')
       return jsonValue !== null ? JSON.parse(jsonValue) : null
-    } catch(e) {
+    } catch (e) {
       // error reading value
     }
   }
@@ -122,7 +129,7 @@ const Discover = (props) => {
       //  加载失败
       // setIsError(true)
       // setIsRefreshing(false)
-      // setListData([])
+      //setListData([])
     }, 800)
   }
 
@@ -135,10 +142,10 @@ const Discover = (props) => {
       <View
         style={{
           alignItems: 'center',
-          transform: [{ translateY: Dimensions.get('window').height / 2}]
+          transform: [{ translateY: Dimensions.get('window').height / 2 }]
         }}
       >
-        <AntDesign name='frowno' color='white' size={50}/>
+        <AntDesign name="frowno" color="white" size={50} />
         <Text style={{ color: 'white', marginTop: 15 }}>暂无内容~</Text>
       </View>
     )
@@ -149,7 +156,7 @@ const Discover = (props) => {
       <View
         style={{
           alignItems: 'center',
-          transform: [{ translateY: Dimensions.get('window').height / 2}]
+          transform: [{ translateY: Dimensions.get('window').height / 2 }]
         }}
       >
         <Text style={{ color: 'white' }}>加载中...</Text>
@@ -162,7 +169,7 @@ const Discover = (props) => {
       <View
         style={{
           alignItems: 'center',
-          transform: [{ translateY: Dimensions.get('window').height / 2}]
+          transform: [{ translateY: Dimensions.get('window').height / 2 }]
         }}
       >
         <Pressable
@@ -174,38 +181,39 @@ const Discover = (props) => {
             borderWidth: 1,
             borderColor: '#ffdcb2',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'center'
           }}
         >
           <Text
             style={{
               color: '#ffdcb2',
-              fontSize: 18,
+              fontSize: 18
             }}
-          >刷新重试</Text>
+          >
+            刷新重试
+          </Text>
         </Pressable>
-        <Text style={{ color: 'white', marginTop: 15 }}>加载失败，请刷新重试~</Text>
+        <Text style={{ color: 'white', marginTop: 15 }}>
+          加载失败，请刷新重试~
+        </Text>
       </View>
     )
   }
 
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors = {['#727480','#454653']}
-        style={styles.background}>
+      <LinearGradient colors={['#727480', '#454653']} style={styles.background}>
         <Text style={styles.title}>发现</Text>
         <Pressable style={styles.toggle} onPress={onPressToggle}>
           <View style={toggleStyle}></View>
           <Text style={toggleHotColor}>热门</Text>
           <Text style={toggleNewColor}>最新</Text>
         </Pressable>
-        {
-          !isError && !isRefreshing && listData.length > 0 &&
+        {!isError && !isRefreshing && listData.length > 0 && (
           <WaterfallFlow
             style={{
               transform: [{ translateY: 75 }],
-              maxHeight: Dimensions.get('window').height - 175,
+              maxHeight: Dimensions.get('window').height - 175
             }}
             contentContainerStyle={{
               justifyContent: 'space-evenly',
@@ -214,24 +222,21 @@ const Discover = (props) => {
             }}
             data={listData}
             numColumns={2}
-            renderItem={({ item, index, columnIndex }) =>
+            renderItem={({ item, index, columnIndex }) => (
               <FlowListItem
                 title={item.title}
                 time={item.time}
                 username={item.username}
                 likes={item.likes}
               />
-            }
+            )}
           />
-        }
-        { !isError && isRefreshing && <RefreshingContent/> }
-        { !isError && !isRefreshing && listData.length <= 0 && <EmptyContent/> }
-        { isError && <ErrorContent/> }
-        <TouchableOpacity
-          style={styles.publish}
-          onPress={onPressPublish}
-        >
-          <Text style={{ fontSize: 24, color: '#3A3A3A'}}>+</Text>
+        )}
+        {!isError && isRefreshing && <RefreshingContent />}
+        {!isError && !isRefreshing && listData.length <= 0 && <EmptyContent />}
+        {isError && <ErrorContent />}
+        <TouchableOpacity style={styles.publish} onPress={onPressPublish}>
+          <Text style={{ fontSize: 24, color: '#3A3A3A' }}>+</Text>
         </TouchableOpacity>
       </LinearGradient>
     </View>
@@ -244,18 +249,18 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     flex: 1 // 布局
   },
-  background:{
+  background: {
     // justifyContent:'center',
     // alignContent:'center',
     // alignItems:'center',
-    flex:1
+    flex: 1
   },
   title: {
     fontSize: 28,
     color: '#fff',
     position: 'absolute',
     top: 20,
-    left: 20,
+    left: 20
   },
   toggle: {
     flexDirection: 'row',
@@ -267,7 +272,7 @@ const styles = StyleSheet.create({
     height: 25,
     justifyContent: 'space-around',
     borderRadius: 25,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   toggleSelected: {
     width: 50,
@@ -276,10 +281,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 1,
     left: 1,
-    borderRadius: 25,
+    borderRadius: 25
   },
   toggleNew: {
-    transform: [{translateX: 48}]
+    transform: [{ translateX: 48 }]
   },
   publish: {
     width: 50,
@@ -290,7 +295,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f1ecfb',
     position: 'absolute',
     bottom: 20,
-    right: 20,
+    right: 20
   }
 })
 

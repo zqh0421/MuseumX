@@ -1,4 +1,4 @@
-import { View, Text ,StyleSheet, Pressable, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, Pressable, Dimensions } from 'react-native'
 import { useEffect, useState } from 'react'
 import { TabActions } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -10,8 +10,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 const Profile = (props) => {
   const [toggleSelected, setToggleSelected] = useState('0')
   const [toggleBar0Style, setToggleBar0Style] = useState(styles.toggleBar)
-  const [toggleBar1Style, setToggleBar1Style] = useState([styles.toggleBar, { opacity: 0 }])
-  const [toggleBar2Style, setToggleBar2Style] = useState([styles.toggleBar, { opacity: 0 }])
+  const [toggleBar1Style, setToggleBar1Style] = useState([
+    styles.toggleBar,
+    { opacity: 0 }
+  ])
+  const [toggleBar2Style, setToggleBar2Style] = useState([
+    styles.toggleBar,
+    { opacity: 0 }
+  ])
   const [listData, setListData] = useState([]) // 存储当前显示的数据列表
   const [isRefreshing, setIsRefreshing] = useState(false) // 正在加载数据
   const [isError, setIsError] = useState(true) // 数据加载错误
@@ -19,64 +25,63 @@ const Profile = (props) => {
     {
       title: '（一）博物馆博物馆博物馆博物馆博物馆博物馆',
       username: 'user123456',
-      likes: 25,
+      likes: 25
     },
     {
       title: 'title2',
       username: 'user2',
-      likes: 255,
+      likes: 255
     },
     {
       title: 'title3',
       username: 'user3',
-      likes: 255,
+      likes: 255
     },
     {
       title: 'title1',
       username: 'user1',
-      likes: 25,
+      likes: 25
     },
     {
       title: 'title2',
       username: 'user2',
-      likes: 255,
+      likes: 255
     },
     {
       title: 'title3',
       username: 'user3',
-      likes: 255,
+      likes: 255
     },
     {
       title: 'title1',
       username: 'user1',
-      likes: 25,
+      likes: 25
     },
     {
       title: 'title2',
       username: 'user2',
-      likes: 2,
+      likes: 2
     },
     {
       title: 'title3',
       username: 'user3',
-      likes: 255,
+      likes: 255
     },
     {
       title: 'title1',
       username: 'user1',
-      likes: 25,
+      likes: 25
     },
     {
       title: 'title2',
       username: 'user2',
-      likes: 2,
+      likes: 2
     },
     {
       title: 'title3',
       username: 'user3',
-      likes: 255,
-    },
-
+      likes: 255
+    }
   ]
   const onPressEdit = () => {
     alert('编辑资料！')
@@ -87,7 +92,7 @@ const Profile = (props) => {
     try {
       const jsonValue = await AsyncStorage.getItem('userData')
       return jsonValue !== null ? JSON.parse(jsonValue) : null
-    } catch(e) {
+    } catch (e) {
       // error reading value
     }
   }
@@ -96,7 +101,7 @@ const Profile = (props) => {
     try {
       await AsyncStorage.removeItem('userData')
       props.navigation.navigate('Home')
-    } catch(e) {
+    } catch (e) {
       // remove error
     }
   }
@@ -119,44 +124,48 @@ const Profile = (props) => {
   useEffect(() => {
     // 打开应用后首次进入该页面时，执行如下操作
     // 添加这一段是因为后面包含unsubscribe的代码在第一次点击进入页面时，仅绑定事件，不生效
-    getData().then(res => {
-      console.log('res: ')
-      console.log(res)
-      if (res === undefined || res === null) {
-        // 没有登录
-        // alert('请先登录')
-        props.navigation.navigate('Home')
-        props.navigation.navigate('Login') // 跳转登录页面
-      } else {
-        // 已登录，加载数据
-        loadData()
-      }
-    }).catch(err => {
-      // error
-    })
+    getData()
+      .then((res) => {
+        console.log('res: ')
+        console.log(res)
+        if (res === undefined || res === null) {
+          // 没有登录
+          // alert('请先登录')
+          props.navigation.navigate('Home')
+          props.navigation.navigate('Login') // 跳转登录页面
+        } else {
+          // 已登录，加载数据
+          loadData()
+        }
+      })
+      .catch((err) => {
+        // error
+      })
   }, [])
 
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('tabPress', (e) => {
       // 试图通过点击下方导航栏进入本页面时，执行下面的语句
       e.preventDefault() // 阻止默认行为，在下方重新定义
-      getData().then(res => {
-        console.log('res: ')
-        console.log(res)
-        if (res === undefined || res === null) {
-          // 没有登录
-          // alert('请先登录')
-          props.navigation.navigate('Login') // 跳转登录页面
-        } else {
-          // 已登录，正常进入该页面
-          const jumpToAction = TabActions.jumpTo('Profile')
-          props.navigation.dispatch(jumpToAction)
-          // 已登录，加载数据
-          loadData()
-        }
-      }).catch(err => {
-        // error
-      })
+      getData()
+        .then((res) => {
+          console.log('res: ')
+          console.log(res)
+          if (res === undefined || res === null) {
+            // 没有登录
+            // alert('请先登录')
+            props.navigation.navigate('Login') // 跳转登录页面
+          } else {
+            // 已登录，正常进入该页面
+            const jumpToAction = TabActions.jumpTo('Profile')
+            props.navigation.dispatch(jumpToAction)
+            // 已登录，加载数据
+            loadData()
+          }
+        })
+        .catch((err) => {
+          // error
+        })
     })
     return unsubscribe
   }, [props.navigation])
@@ -207,10 +216,10 @@ const Profile = (props) => {
       <View
         style={{
           alignItems: 'center',
-          transform: [{ translateY: Dimensions.get('window').height / 2}]
+          transform: [{ translateY: Dimensions.get('window').height / 2 }]
         }}
       >
-        <AntDesign name='frowno' color='white' size={50}/>
+        <AntDesign name="frowno" color="white" size={50} />
         <Text style={{ color: 'white', marginTop: 15 }}>暂无内容~</Text>
       </View>
     )
@@ -221,7 +230,7 @@ const Profile = (props) => {
       <View
         style={{
           alignItems: 'center',
-          transform: [{ translateY: Dimensions.get('window').height / 2}]
+          transform: [{ translateY: Dimensions.get('window').height / 2 }]
         }}
       >
         <Text style={{ color: 'white' }}>加载中...</Text>
@@ -234,7 +243,7 @@ const Profile = (props) => {
       <View
         style={{
           alignItems: 'center',
-          transform: [{ translateY: Dimensions.get('window').height / 2}]
+          transform: [{ translateY: Dimensions.get('window').height / 2 }]
         }}
       >
         <Pressable
@@ -246,25 +255,27 @@ const Profile = (props) => {
             borderWidth: 1,
             borderColor: '#ffdcb2',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'center'
           }}
         >
           <Text
             style={{
               color: '#ffdcb2',
-              fontSize: 18,
+              fontSize: 18
             }}
-          >刷新重试</Text>
+          >
+            刷新重试
+          </Text>
         </Pressable>
-        <Text style={{ color: 'white', marginTop: 15 }}>加载失败，请刷新重试~</Text>
+        <Text style={{ color: 'white', marginTop: 15 }}>
+          加载失败，请刷新重试~
+        </Text>
       </View>
     )
   }
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors = {['#727480','#454653']}
-        style={styles.backgroud}>
+      <LinearGradient colors={['#727480', '#454653']} style={styles.backgroud}>
         <Text style={styles.image}></Text>
         <Text style={styles.nickname}>昵称</Text>
         <Text style={styles.userid}>ID: zheshiid</Text>
@@ -274,26 +285,25 @@ const Profile = (props) => {
         <View style={styles.toggle}>
           <Pressable onPress={onPressLike} style={styles.toggleItem}>
             <Text style={styles.toggleNumber}>3</Text>
-            <Text style={styles.toggleTitle}>喜  欢</Text>
+            <Text style={styles.toggleTitle}>喜 欢</Text>
             <View style={toggleBar0Style}></View>
           </Pressable>
           <Pressable onPress={onPressCollect} style={styles.toggleItem}>
             <Text style={styles.toggleNumber}>123</Text>
-            <Text style={styles.toggleTitle}>收  藏</Text>
+            <Text style={styles.toggleTitle}>收 藏</Text>
             <View style={toggleBar1Style}></View>
           </Pressable>
           <Pressable onPress={onPressActivity} style={styles.toggleItem}>
             <Text style={styles.toggleNumber}>123</Text>
-            <Text style={styles.toggleTitle}>动  态</Text>
+            <Text style={styles.toggleTitle}>动 态</Text>
             <View style={toggleBar2Style}></View>
           </Pressable>
         </View>
-        {
-          !isError && !isRefreshing && listData.length > 0 &&
+        {!isError && !isRefreshing && listData.length > 0 && (
           <WaterfallFlow
             style={{
               transform: [{ translateY: 250 }],
-              maxHeight: Dimensions.get('window').height - 350,
+              maxHeight: Dimensions.get('window').height - 350
             }}
             contentContainerStyle={{
               justifyContent: 'space-evenly',
@@ -302,19 +312,19 @@ const Profile = (props) => {
             }}
             data={listData}
             numColumns={2}
-            renderItem={({ item, index, columnIndex }) =>
+            renderItem={({ item, index, columnIndex }) => (
               <FlowListItem
                 title={item.title}
                 time={item.time}
                 username={item.username}
                 likes={item.likes}
               />
-            }
+            )}
           />
-        }
-        { !isError && isRefreshing && <RefreshingContent/> }
-        { !isError && !isRefreshing && listData.length <= 0 && <EmptyContent/> }
-        { isError && <ErrorContent/> }
+        )}
+        {!isError && isRefreshing && <RefreshingContent />}
+        {!isError && !isRefreshing && listData.length <= 0 && <EmptyContent />}
+        {isError && <ErrorContent />}
       </LinearGradient>
     </View>
   )
@@ -326,38 +336,38 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     flex: 1 // 布局
   },
-  backgroud:{
+  backgroud: {
     // justifyContent:'center',
     // alignContent:'center',
     // alignItems:'center',
-    flex:1
+    flex: 1
   },
   image: {
     width: 80,
     height: 80,
     borderRadius: 100,
-    borderWidth:2,
-    borderColor:'white',
+    borderWidth: 2,
+    borderColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#CCCCCC',
     position: 'absolute',
     top: 70,
-    left: 35,
+    left: 35
   },
-  nickname:{
+  nickname: {
     fontSize: 23,
     color: '#fff',
     position: 'absolute',
     top: 85,
-    left: 135,
+    left: 135
   },
   userid: {
     fontSize: 16,
     color: '#fff',
     position: 'absolute',
     top: 120,
-    left: 135,
+    left: 135
   },
   edit: {
     width: 40,
@@ -370,8 +380,7 @@ const styles = StyleSheet.create({
     top: 85,
     right: '8%',
     borderWidth: 1,
-    borderColor: 'white',
-
+    borderColor: 'white'
   },
   toggle: {
     flexDirection: 'row',
@@ -387,21 +396,21 @@ const styles = StyleSheet.create({
     borderTopStartRadius: 25,
     borderTopEndRadius: 25,
     borderBottomColor: '#eee',
-    borderBottomWidth: 1,
+    borderBottomWidth: 1
   },
   toggleItem: {
     width: 60,
     alignItems: 'center',
     justifyContent: 'center',
-    alignContent:'center',
+    alignContent: 'center'
   },
-  toggleTitle:{
+  toggleTitle: {
     width: '100%',
     fontSize: 10,
     color: '#fff',
     textAlign: 'center'
   },
-  toggleNumber:{
+  toggleNumber: {
     width: '100%',
     fontSize: 18,
     color: '#fff',
@@ -419,18 +428,18 @@ const styles = StyleSheet.create({
     top: 250,
     right: 0,
     width: '48%',
-    flexWrap: 'wrap',
+    flexWrap: 'wrap'
   },
   toggleBar: {
     width: 35,
     height: 5,
     marginTop: 2,
     backgroundColor: '#CC6666',
-    borderRadius: 5,
+    borderRadius: 5
     // position: 'absolute',
     // top: 225,
     // left: '20%',
-  },
+  }
   // toggleBar1: {
   //   left: '47%',
   // },
