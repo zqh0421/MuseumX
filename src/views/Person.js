@@ -4,11 +4,13 @@ import {
     View,
     Button,
     Dimensions,
-    Pressable
+    Pressable,
+    BackHandler
   } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Appbar, List, MD3Colors } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ListItem = (props) => {
 
@@ -47,6 +49,19 @@ const Person = (props) => {
     useEffect(() => {
         setCurrentUser(fakeUserInfo)
     }, [])
+    const handleLogout = useCallback(async () => {
+        try {
+          // 使用AsyncStorage清空本地存储的用户登录信息
+          await AsyncStorage.removeItem('userData');
+          console.log('User token has been cleared!');
+        } catch (error) {
+          // 如果清空本地存储的用户登录信息失败，打印错误信息
+          console.error(`Failed to remove user token: ${error}`);
+          return;
+        }
+        BackHandler.exitApp();
+      }, []);
+
     return (
         <View>
             <Appbar.Header> 
@@ -57,6 +72,9 @@ const Person = (props) => {
             <View style={styles.list}>
                 <ListItem title="用户名" content={fakeUserInfo.username} navigation={props.navigation} />
                 <ListItem title="描述" content={fakeUserInfo.userInfo} navigation={props.navigation} />
+            </View>
+            <View style = {styles.buttonStyle}>
+                <Button title="退出登录"  borderColor= '#dcdcdc' onPress={handleLogout} />
             </View>
         </View>
     )
@@ -81,6 +99,13 @@ const styles = StyleSheet.create({
     listItemRight: {
         flexDirection: 'row',
         justifyContent: 'space-between'
+    },
+    buttonStyle: {
+        top: 30,
+        width: '90%',
+        left: 20,
+        borderRadius: 10,
+       // borderColor: '#dcdcdc'
     }
 })
 
