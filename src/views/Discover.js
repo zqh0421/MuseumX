@@ -37,8 +37,8 @@ const Discover = (props) => {
       if (userData) {
         mylike(userData.data).then(res => {
           if (res.code === 0) { // 数据获取成功
-            console.log('profile-res:')
-            console.log(res.data.data)
+            // console.log('profile-res:')
+            // console.log(res.data.data)
             let temp = []
             res && res.data && res.data.data && res.data.data.forEach(item => {
               console.log(item.id)
@@ -66,12 +66,10 @@ const Discover = (props) => {
         })
       } else {
         if (toggleNew) {
-          loadDataNew()
           setToggleStyle([styles.toggleSelected, styles.toggleNew])
           setToggleNewColor({ color: '#333' })
           setToggleHotColor({ color: '#ccc' })
         } else {
-          loadDataPopular()
           setToggleStyle(styles.toggleSelected)
           setToggleNewColor({ color: '#ccc' })
           setToggleHotColor({ color: '#333' })
@@ -85,10 +83,10 @@ const Discover = (props) => {
   }, [toggleNew])
 
   const loadDataNew = () => {
-    allPopular(1, 15).then(res => { // TODO: Item频闪问题
+    allNew(1, 30).then(res => {
       if (res.code === 0) { // 数据获取成功
-        console.log('discover-res:')
-        console.log(res.data.data)
+        // console.log('discover-res:')
+        // console.log(res.data.data)
         setListData(res.data.data.records)
       } else { // 获取失败
         setIsError(true)
@@ -106,11 +104,12 @@ const Discover = (props) => {
   useEffect(() => {
     setIsRefreshing(false)
   },[listData])
+
   const loadDataPopular = () => {
-    allPopular(1, 15).then(res => {
+    allPopular(1, 30).then(res => {
       if (res.code === 0) { // 数据获取成功
-        console.log('discover-res:')
-        console.log(res.data.data)
+        // console.log('discover-res:')
+        // console.log(res.data.data)
         setListData(res.data.data.records)
       } else { // 获取失败
         setIsError(true)
@@ -138,15 +137,15 @@ const Discover = (props) => {
     setIsError(false)
     setIsRefreshing(true)
     getData().then(userData => {
-      console.log(userData.data, 'userData')
+      // console.log(userData.data, 'userData')
       if (userData) {
         mylike(userData.data).then(res => {
           if (res.code === 0) { // 数据获取成功
-            console.log('profile-res:')
-            console.log(res.data.data)
+            // console.log('profile-res:')
+            // console.log(res.data.data)
             let temp = []
             res && res.data && res.data.data && res.data.data.forEach(item => {
-              console.log(item.id)
+              // console.log(item.id)
               temp = [...temp, item.id]
             })
             setLikeSet(temp)
