@@ -1,4 +1,4 @@
-import { View, Text,StyleSheet,FlatList, Pressable, Dimensions, Linking, TouchableOpacity } from 'react-native'
+import { View, Text,StyleSheet,FlatList, Image, Pressable, Dimensions, Linking, TouchableOpacity } from 'react-native'
 import React , {useEffect, useState} from 'react'
 import { Searchbar,Button, MD3Colors } from 'react-native-paper'
 import { pickDocument, KeySearch } from '../api/SearchInterface'
@@ -9,6 +9,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import EmptyContent from '../components/EmptyContent'
 import ErrorContent from '../components/ErrorContent'
 import RefreshingContent from '../components/RefreshingContent'
+import * as ImagePicker from 'expo-image-picker'
 
 const HotItem = (props) => {
   return (
@@ -25,8 +26,7 @@ const HotItem = (props) => {
 const Search = (props) => {
   const[SearchQuery,setSearchQuery]=React.useState('')
   const[hotitem,setHotItem]=useState([]) //热门榜
-  const[currPage, setcurrPage]=useState(1)
-  const[pageSize, setpageSize]=useState(15)
+  const [pickedImage, setPickedImage] = useState();
   const [isRefreshing, setIsRefreshing] = useState(false) // 正在加载数据
   const [isError, setIsError] = useState(true) // 数据加载错误
   useEffect(() => {
@@ -52,6 +52,19 @@ const Search = (props) => {
         }
       }
     })
+  }
+  useEffect(() => {
+    console.log(pickedImage)
+  }, [pickedImage])
+
+  const takeImageHandler = async () => {
+    console.log('test')
+    const image = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [16, 9],
+      quality: 0.5
+    })
+    setPickedImage(image.assets[0].uri)
   }
 
   const loadData = () => {
@@ -95,14 +108,7 @@ const Search = (props) => {
             <Button
               icon="camera"
               mode="contained"
-              onPress={() => {
-                pickDocument().then(async res => {
-                  if(res.message==='ok') {
-                    navigation.navigate('Result', {res})
-                  }
-                })
-              }
-              }>以图搜图</Button>
+              onPress={takeImageHandler}>以图搜图</Button>
           </View>
         </View>
         {!isError && !isRefreshing && hotitem.length > 0 && (
