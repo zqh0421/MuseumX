@@ -7,7 +7,7 @@ const HomeListItem = (props) => {
   const { item } = props
   const [color, setColor] = useState(props.isCollected ? MD3Colors.error60 : MD3Colors.error0)
   // TODO: 用户是否收藏
-  // TODO：ScrollView
+  // TODO: 图片加载
 
   const onPressCollect = () => {
     // 1. 收藏按钮样式变化

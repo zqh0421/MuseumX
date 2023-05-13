@@ -3,16 +3,20 @@ import { useEffect, useState } from 'react'
 import { TabActions } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Surface,IconButton,MD3Colors} from 'react-native-paper'
-import FlowListItem from '../components/FlowListItem'
 import WaterfallFlow from 'react-native-waterfall-flow'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { AntDesign } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import ErrorContent from '../components/ErrorContent'
+import EmptyContent from '../components/EmptyContent'
+import RefreshingContent from '../components/RefreshingContent'
+import HomeListItem from '../components/HomeListItem'
+import FlowListItem from '../components/FlowListItem'
 import { mylike } from '../api/mylike'
 import { allNew } from '../api/discover/newInterface'
 import { myrelease } from '../api/myreleaseInterface'
-import Home from '../views/Home'
 import { current } from '../api/currentUserInterface'
+
 const ListItem = (props) => {
   const [color, setColor] = useState(props.isCollected ? MD3Colors.error60 : MD3Colors.error0)
   useEffect(() => {
@@ -62,100 +66,7 @@ const Profile = (props) => {
   const [listData, setListData] = useState([]) // 存储当前显示的数据列表
   const [isRefreshing, setIsRefreshing] = useState(false) // 正在加载数据
   const [isError, setIsError] = useState(true) // 数据加载错误
-  const arr = [
-    {
-      title: '（一）博物馆博物馆博物馆博物馆博物馆博物馆',
-      username: 'user123456',
-      likes: 25
-    },
-    {
-      title: 'title2',
-      username: 'user2',
-      likes: 255
-    },
-    {
-      title: 'title3',
-      username: 'user3',
-      likes: 255
-    },
-    {
-      title: 'title1',
-      username: 'user1',
-      likes: 25
-    },
-    {
-      title: 'title2',
-      username: 'user2',
-      likes: 255
-    },
-    {
-      title: 'title3',
-      username: 'user3',
-      likes: 255
-    },
-    {
-      title: 'title1',
-      username: 'user1',
-      likes: 25
-    },
-    {
-      title: 'title2',
-      username: 'user2',
-      likes: 2
-    },
-    {
-      title: 'title3',
-      username: 'user3',
-      likes: 255
-    },
-    {
-      title: 'title1',
-      username: 'user1',
-      likes: 25
-    },
-    {
-      title: 'title2',
-      username: 'user2',
-      likes: 2
-    },
-    {
-      title: 'title3',
-      username: 'user3',
-      likes: 255
-    }
-  ]
-  const arr2 = [
-    {
-      name: 'title',
-      desc: 'description',
-      url: 'https://picsum.photos/700',
-      collect: 123
-    },
-    {
-      name: 'title',
-      desc: 'description',
-      url: 'https://picsum.photos/700',
-      collect: 123
-    },
-    {
-      name: 'title',
-      desc: 'description',
-      url: 'https://picsum.photos/700',
-      collect: 123
-    },
-    {
-      name: 'title',
-      desc: 'description',
-      url: 'https://picsum.photos/700',
-      collect: 123
-    },
-    {
-      name: 'title',
-      desc: 'description',
-      url: 'https://picsum.photos/700',
-      collect: 123
-    },
-  ]
+
   const onPressEdit = () => {
     alert('编辑资料！')
     logOut()
@@ -179,76 +90,67 @@ const Profile = (props) => {
     }
   }
 
-  const loadDataMylike = () => {
+  const loadDataMylike = async () => {
     setIsError(false)
     setIsRefreshing(true)
-    mylike().then(res => {
-      if (res.code === 0) { // 数据获取成功
-        console.log("profile-res:")
-        console.log(res.data.data)
-        setListData(res.data.data)
-        setIsRefreshing(false)
-      } else { // 获取失败
-        setIsError(true)
-        setIsRefreshing(false)
-        setListData([])
+    try {
+      const userData = await AsyncStorage.getItem('userData')
+      if (userData) {
+        mylike(JSON.parse(userData).data).then(res => {
+          if (res.code === 0) { // 数据获取成功
+            console.log("profile-res:")
+            console.log(res.data.data)
+            setListData(res.data.data)
+            setIsRefreshing(false)
+          } else { // 获取失败
+            setIsError(true)
+            setIsRefreshing(false)
+            setListData([])
+          }
+        }).catch(err => {
+          setIsError(true)
+          setIsRefreshing(false)
+          setListData([])
+          alert(err)
+        })
+      } else {
+        props.navigation.navigate('Login')
       }
-    }).catch(err => {
-      setIsError(true)
-      setIsRefreshing(false)
-      setListData([])
-      alert(err)
-    })
+    } catch {
+      alert('err')
+    }
   }
 
-  // listData.map(item=>{
-  //   allNew(item.id).then(res=>{
-  //     num=res.data.data.records.likeNum
-  //   })
-  // })
-  const loadDataMyrelease = () => {
+  const loadDataMyrelease = async () => {
     setIsError(false)
     setIsRefreshing(true)
-    myrelease().then(res => {
-      if (res.code === 0) { // 数据获取成功
-        console.log("profile-res:")
-        console.log(res.data.data)
-        setListData(res.data.data)
-        setIsRefreshing(false)
-      } else { // 获取失败
-        setIsError(true)
-        setIsRefreshing(false)
-        setListData([])
+    try {
+      const userData = await AsyncStorage.getItem('userData')
+      if (userData) {
+        myrelease(JSON.parse(userData).data).then(res => {
+          if (res.code === 0) { // 数据获取成功
+            console.log("profile-res:")
+            console.log(res.data.data)
+            setListData(res.data.data)
+            setIsRefreshing(false)
+          } else { // 获取失败
+            setIsError(true)
+            setIsRefreshing(false)
+            setListData([])
+          }
+        }).catch(err => {
+          setIsError(true)
+          setIsRefreshing(false)
+          setListData([])
+          alert(err)
+        })
+      } else {
+        props.navigation.navigate('Login')
       }
-    }).catch(err => {
-      setIsError(true)
-      setIsRefreshing(false)
-      setListData([])
-      alert(err)
-    })
+    } catch {
+      alert('err')
+    }
   }
-
-  const current = () => {
-
-  }
-  // const loadData = (selected) => {
-  //   // 已登录，加载数据
-  //   setIsError(false)
-  //   setIsRefreshing(true)
-  //   setTimeout(() => {
-  //     // 加载成功
-  //     if (selected === '0' || selected === '2') {
-  //       setListData(arr)
-  //     } else {
-  //       setListData(arr2)
-  //     }
-  //     setIsRefreshing(false)
-  //     //  加载失败
-  //     // setIsError(true)
-  //     // setIsRefreshing(false)
-  //     // setListData([])
-  //   }, 800)
-  // }
 
   useEffect(() => {
     // 打开应用后首次进入该页面时，执行如下操作
@@ -263,6 +165,7 @@ const Profile = (props) => {
         props.navigation.navigate('Login') // 跳转登录页面
       } else {
         // 已登录，加载数据
+        // TODO: getCurrentUser()
         loadDataMylike()
       }
     }).catch(err => {
@@ -324,7 +227,7 @@ const Profile = (props) => {
 
   const onPressCollect = () => {
     setToggleSelected('1')
-    loadData('1')
+    loadDataMylike()
   }
 
   const onPressActivity = () => {
@@ -335,73 +238,11 @@ const Profile = (props) => {
   const onPressRefresh = () => {
     if (toggleSelected==='0') {
       loadDataMylike()
-    } else if(selected === '1') {
-
-    } else{
-        loadDataMyrelease()
+    } else if (toggleSelected==='1') {
+      loadDataMylike()
+    } else {
+      loadDataMyrelease()
     }
-  }
-  const EmptyContent = () => {
-    return (
-      <View
-        style={{
-          alignItems: 'center',
-          transform: [{ translateY: Dimensions.get('window').height / 4}]
-        }}
-      >
-        <AntDesign name="frowno" color="white" size={50} />
-        <Text style={{ color: 'white', marginTop: 15 }}>暂无内容~</Text>
-      </View>
-    )
-  }
-
-  const RefreshingContent = () => {
-    return (
-      <View
-        style={{
-          alignItems: 'center',
-          transform: [{ translateY: Dimensions.get('window').height / 4}]
-        }}
-      >
-        <Text style={{ color: 'white' }}>加载中...</Text>
-      </View>
-    )
-  }
-
-  const ErrorContent = () => {
-    return (
-      <View
-        style={{
-          alignItems: 'center',
-          transform: [{ translateY: Dimensions.get('window').height / 4}]
-        }}
-      >
-        <Pressable
-          onPress={onPressRefresh}
-          style={{
-            width: 150,
-            height: 50,
-            borderRadius: 25,
-            borderWidth: 1,
-            borderColor: '#ffdcb2',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <Text
-            style={{
-              color: '#ffdcb2',
-              fontSize: 18
-            }}
-          >
-            刷新重试
-          </Text>
-        </Pressable>
-        <Text style={{ color: 'white', marginTop: 15 }}>
-          加载失败，请刷新重试~
-        </Text>
-      </View>
-    )
   }
   return (
     <View style={styles.container}>
@@ -451,15 +292,15 @@ const Profile = (props) => {
             data={listData}
             numColumns={2}
             renderItem={({ item, index, columnIndex }) => {
-              <FlowListItem
-                title={item.title}
-                username={item.username}
-                likeNum={item.likeNum}
-                time={item.moodTime}
-                userId={item.userId}
-                imgUrl={item.imgUrl}
-              />
-              // <Text>123</Text>
+              // <FlowListItem
+              //   title={item.title}
+              //   username={item.username}
+              //   likeNum={item.likeNum}
+              //   time={item.moodTime}
+              //   userId={item.userId}
+              //   imgUrl={item.imgUrl}
+              // />
+              <Text>123</Text>
               }
             }
           />
@@ -476,15 +317,15 @@ const Profile = (props) => {
               listData.map(item => {
                 return (
                   // eslint-disable-next-line react/jsx-key
-                  <ListItem name={item.name} navigation={props.navigation} />
+                  <HomeListItem key={item.id} item={item} navigation={props.navigation} />
                 )
               })
             }
           </ScrollView>
         }
-        { !isError && isRefreshing && <RefreshingContent/> }
-        { !isError && !isRefreshing && listData.length <= 0 && <EmptyContent/> }
-        { isError && <ErrorContent/> }
+        { !isError && isRefreshing && <RefreshingContent style={{transform: [{ translateY: Dimensions.get('window').height / 4}]}}/> }
+        { !isError && !isRefreshing && listData.length <= 0 && <EmptyContent style={{transform: [{ translateY: Dimensions.get('window').height / 4}]}}/> }
+        { isError && <ErrorContent style={{transform: [{ translateY: Dimensions.get('window').height / 4}]}} onPressRefresh={() => onPressRefresh()}/> }
       </LinearGradient>
     </View>
   )

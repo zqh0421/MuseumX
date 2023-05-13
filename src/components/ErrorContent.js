@@ -1,5 +1,5 @@
 import { View, Text, Pressable } from 'react-native'
-const ErrorContent = ({ onPressRefresh }) => {
+const ErrorContent = ({ onPressRefresh, style }) => {
 
   return (
     <View
@@ -22,10 +22,10 @@ const ErrorContent = ({ onPressRefresh }) => {
         }}
       >
         <Text
-          style={{
+          style={[{
             color: '#ffdcb2',
             fontSize: 18
-          }}
+          }, style]}
         >
           刷新重试
         </Text>

@@ -44,9 +44,9 @@ const Home = (props) => {
         style={styles.background}
         colors={['#727480', '#454653']}
       >
-        <Text style={styles.pageTitle}>首页</Text>
+        <Text style={{ marginLeft: 20,  marginTop: 20, fontSize: 28, color: '#fff' }}>首页</Text>
         {!isError && !isRefreshing && list.length > 0 && (
-          <ScrollView style={[{ marginTop: 30 }, { position: 'absolute', top: 45, left: 0}]}>
+          <ScrollView style={[{ marginTop: 30 }]}>
             {
               list.map(item => {
                 // console.log("item: ", item)
@@ -73,12 +73,5 @@ const styles = StyleSheet.create({
   },
   background: {
     flex: 1
-  },
-  pageTitle: {
-    fontSize: 28,
-    color: '#fff',
-    position: 'absolute',
-    top: 20,
-    left: 20
   }
 })

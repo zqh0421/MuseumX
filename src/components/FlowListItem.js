@@ -7,13 +7,14 @@ const FlowListItem = (props) => {
   const { item } = props
   const [color, setColor] = useState(props.isLoved ? MD3Colors.error60 : '#ccc') // TODO: 收藏状态
   const [height, setHeight] = useState(80)
-  // useEffect(() => {
-  //   Image.getSize(item.imgUrl, (w, h) => {
-  //     setHeight(h / w * 0.93 * 0.45 * Dimensions.get('window').width)
-  //   },
-  //     (failure) => { console.log('failure', failure) }
-  //   );
-  // }, [])
+  useEffect(() => {
+    Image.getSize(item.imgUrl, (w, h) => {
+      setHeight(h / w * 0.93 * 0.45 * Dimensions.get('window').width)
+    },
+      (failure) => { console.log('failure', failure) }
+    );
+  }, [])
+  // console.log(item.imgUrl)
   const onPressFlowListItem = () => {
     props.navigation.navigate('HeritageDiscover', {item: item})
   }

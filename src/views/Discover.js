@@ -23,68 +23,6 @@ const Discover = (props) => {
   const [listData, setListData] = useState([]) // 存储当前显示的数据列表
   const [isRefreshing, setIsRefreshing] = useState(false) // 正在加载数据
   const [isError, setIsError] = useState(true) // 数据加载错误
-  const arr = [
-    {
-      title: '（一）博物馆博物馆博物馆博物馆博物馆博物馆',
-      username: 'user123456',
-      likes: 0,
-    },
-    {
-      title: 'title2',
-      username: 'user2',
-      likes: 255
-    },
-    {
-      title: 'title3',
-      username: 'user3',
-      likes: 255
-    },
-    {
-      title: 'title1',
-      username: 'user1',
-      likes: 25
-    },
-    {
-      title: 'title2',
-      username: 'user2',
-      likes: 255
-    },
-    {
-      title: 'title3',
-      username: 'user3',
-      likes: 255
-    },
-    {
-      title: 'title1',
-      username: 'user1',
-      likes: 25
-    },
-    {
-      title: 'title2',
-      username: 'user2',
-      likes: 2
-    },
-    {
-      title: 'title3',
-      username: 'user3',
-      likes: 255
-    },
-    {
-      title: 'title1',
-      username: 'user1',
-      likes: 25
-    },
-    {
-      title: 'title2',
-      username: 'user2',
-      likes: 2
-    },
-    {
-      title: 'title3',
-      username: 'user3',
-      likes: 255,
-    },
-  ]
 
   useEffect(() => { // 当toggleNew为false，显示“热门”内容；否则显示“最新”内容。
     if (toggleNew) {
@@ -103,7 +41,7 @@ const Discover = (props) => {
   const loadDataNew = () => {
     setIsError(false)
     setIsRefreshing(true)
-    allNew(1, 10).then(res => {
+    allPopular(1, 15).then(res => { // TODO: Item频闪问题
       if (res.code === 0) { // 数据获取成功
         console.log('discover-res:')
         console.log(res.data.data)
@@ -125,7 +63,7 @@ const Discover = (props) => {
   const loadDataPopular = () => {
     setIsError(false)
     setIsRefreshing(true)
-    allPopular(1, 10).then(res => {
+    allPopular(1, 15).then(res => {
       if (res.code === 0) { // 数据获取成功
         console.log('discover-res:')
         console.log(res.data.data)
