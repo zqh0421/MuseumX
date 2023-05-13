@@ -133,7 +133,6 @@ const Home = (props) => {
   const [list, setList] = useState([]) // 列表数据初始状态
   const[arr,setArr]=useState([])
 
-
   const RefreshingContent = () => {
     return (
       <View
@@ -235,6 +234,12 @@ const Home = (props) => {
         style={styles.background}
         colors={['#727480', '#454653']}
       >
+        <Text onPress={() => props.navigation.navigate('Person')} style={{marginBottom: 50}}>
+                点击弹出资料页面
+        </Text>       
+        <Text onPress={() => props.navigation.navigate('Publish') } style={{marginBottom: 50}}>
+            点击弹出发表动态页面
+        </Text>
         <Text style={styles.pageTitle}>发现</Text>
         {!isError && !isRefreshing && list.length > 0 && (
           <ScrollView style={{ marginTop: 30}}>

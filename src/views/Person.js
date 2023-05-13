@@ -21,8 +21,8 @@ const ListItem = (props) => {
             case '用户名':
                 props.navigation.navigate('EditUsername')
                 break
-            case '描述':
-                props.navigation.navigate('EditDescription')
+            case '密码':
+                props.navigation.navigate('EditPassword')
                 break
             default: break
         }
@@ -71,7 +71,10 @@ const Person = (props) => {
             <Text>账户信息</Text>
             <View style={styles.list}>
                 <ListItem title="用户名" content={fakeUserInfo.username} navigation={props.navigation} />
-                <ListItem title="描述" content={fakeUserInfo.userInfo} navigation={props.navigation} />
+                <ListItem title="密码" content={fakeUserInfo.userInfo} navigation={props.navigation} />
+            </View>
+            <View style = {styles.buttonStyle}>
+                <Button title="退出登录"  borderColor= '#dcdcdc'  color='#ccc' onPress={handleLogout} />
             </View>
             <View style = {styles.buttonStyle}>
                 <Button title="退出登录"  borderColor= '#dcdcdc' onPress={handleLogout} />

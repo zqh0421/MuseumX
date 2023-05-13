@@ -7,7 +7,7 @@ import Register from './src/views/Register'
 import Publish from './src/views/Publish'
 import Person from './src/views/Person'
 import EditUsername from './src/views/EditUsername'
-import EditDescription from'./src/views/EditDescription'
+import EditPassword from './src/views/EditPassword'
 import TabBar from './src/components/TabBar'
 import HeritageDetails from './src/views/HeritageDetails'
 import HeritageDiscover from './src/views/HeritageDiscover'
@@ -28,7 +28,7 @@ const App = () => {
           <Stack.Screen name="TabBar" component={TabBar} />
           <Stack.Screen name="Person" component={Person} />
           <Stack.Screen name="EditUsername" component={EditUsername} />
-          <Stack.Screen name="EditDescription" component={EditDescription} />
+          <Stack.Screen name="EditPassword" component={EditPassword} />
           <Stack.Screen name="Publish" component={Publish} />
         </Stack.Group>
         <Stack.Group

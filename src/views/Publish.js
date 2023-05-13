@@ -12,7 +12,10 @@ import React, { useState, useEffect } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
 import { TextInput, Checkbox } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
+<<<<<<< Updated upstream
 import { publishInterface }  from '../api/publishInterface';
+=======
+>>>>>>> Stashed changes
 
 const Publish = (props) => {
   const [title, setTitle] = useState('');
@@ -42,6 +45,7 @@ const Publish = (props) => {
 
   const onPressSubmit = () => {
     // 提交到后端
+<<<<<<< Updated upstream
     if (title && description && pickImage) {
       publishInterface(description)
       .then(res => {
@@ -51,6 +55,17 @@ const Publish = (props) => {
         alert(err)
       })
     }
+=======
+    // if (title && description && pickImage) {
+    //   publishInterface(description)
+    //   .then(res => {
+    //     console.log(res)
+    //   })
+    //   .catch(err => {
+    //     alert(err)
+    //   })
+    // }
+>>>>>>> Stashed changes
   }
   return (
       <View style={styles.container}>
