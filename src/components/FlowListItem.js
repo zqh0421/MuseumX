@@ -8,7 +8,7 @@ const FlowListItem = (props) => {
   const { item } = props
   const [likeNum, setLikeNum] = useState(item.likeNum)
   const [color, setColor] = useState(new Set(props.likeSet).has(item.id) ? MD3Colors.error60 : '#ccc') // TODO: 收藏状态
-  const [height, setHeight] = useState(80)
+  const [height, setHeight] = useState(180)
   console.log('likeset', props.likeSet)
 
   // useEffect(() => {

@@ -1,7 +1,7 @@
 import { View, Text,StyleSheet,FlatList, Pressable, Dimensions, Linking, TouchableOpacity } from 'react-native'
 import React , {useEffect, useState} from 'react'
 import { Searchbar,Button, MD3Colors } from 'react-native-paper'
-import { pickDocument,KeySearch } from '../api/SearchInterface'
+import { pickDocument, KeySearch } from '../api/SearchInterface'
 import { Show } from '../api/HomeInterface'
 import { AntDesign } from '@expo/vector-icons'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
@@ -25,8 +25,8 @@ const HotItem = (props) => {
 const Search = (props) => {
   const[SearchQuery,setSearchQuery]=React.useState('')
   const[hotitem,setHotItem]=useState([]) //热门榜
-  const[currPage,setcurrPage]=useState(1)
-  const[pageSize,setpageSize]=useState(15)
+  const[currPage, setcurrPage]=useState(1)
+  const[pageSize, setpageSize]=useState(15)
   const [isRefreshing, setIsRefreshing] = useState(false) // 正在加载数据
   const [isError, setIsError] = useState(true) // 数据加载错误
   useEffect(() => {
@@ -38,12 +38,14 @@ const Search = (props) => {
     })
     return unsubscribe
   }, [props.navigation])
-  const handleSearch=(props)=>{ // 关键词搜索
-    KeySearch(currPage,SearchQuery,pageSize).then(async res=>{
+
+  const handleSearch=()=>{ // 关键词搜索
+    console.log(currPage, SearchQuery, pageSize)
+    KeySearch(currPage, SearchQuery, pageSize).then(res => {
       if(res.message==='ok'){
         try{
-          props.navigation.navigate('Result',{
-            //ResultScreen(res)
+          props.navigation.navigate('Result', {
+            list: res.data.list
           })
         }catch(error){
           console.log(error)
@@ -87,7 +89,7 @@ const Search = (props) => {
             style={styles.searchBar}
           />
           <View style={{flexDirection: 'row', marginTop: 30, justifyContent: 'space-between', width: '70%'}}>
-            <Button icon="file" mode="contained" onPress={() => props.navigation.navigate('ccrp-gpt.live')}>
+            <Button icon="file" mode="contained" onPress={() => Linking.openURL('http://ccrp-gpt.live')}>
               智能问答
             </Button>
             <Button
