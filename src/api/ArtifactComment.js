@@ -5,9 +5,6 @@ export async function artifactComment(id) {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      // body: JSON.stringify({
-      //   artifactId: id,
-      // })
     }
   
     try {
