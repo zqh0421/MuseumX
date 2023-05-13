@@ -85,7 +85,7 @@ const Discover = (props) => {
       likes: 255,
     },
   ]
-  
+
   useEffect(() => { // 当toggleNew为false，显示“热门”内容；否则显示“最新”内容。
     if (toggleNew) {
       loadDataNew()
@@ -105,7 +105,7 @@ const Discover = (props) => {
     setIsRefreshing(true)
     allNew(1, 10).then(res => {
       if (res.code === 0) { // 数据获取成功
-        console.log("discover-res:")
+        console.log('discover-res:')
         console.log(res.data.data)
         setListData(res.data.data.records)
         setIsRefreshing(false)
@@ -127,7 +127,7 @@ const Discover = (props) => {
     setIsRefreshing(true)
     allPopular(1, 10).then(res => {
       if (res.code === 0) { // 数据获取成功
-        console.log("discover-res:")
+        console.log('discover-res:')
         console.log(res.data.data)
         setListData(res.data.data.records)
         setIsRefreshing(false)
@@ -142,7 +142,7 @@ const Discover = (props) => {
       setListData([])
       alert(err)
     })
-  } 
+  }
   useEffect(() => { // 页面初始化
     loadDataPopular()
   }, [])
@@ -251,11 +251,8 @@ const Discover = (props) => {
             numColumns={2}
             renderItem={({ item, index, columnIndex }) => (
               <FlowListItem
-                title={item.title}
-                time={item.time}
-                userId={item.userId}
-                likeNum={item.likeNum}
-                imgUrl={item.imgUrl}
+                item={item}
+                navigation={props.navigation}
               />
             )}
           />
