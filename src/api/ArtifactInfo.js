@@ -27,4 +27,4 @@ export async function artifact(id) {
     } catch (err) {
       console.log(err)
     }
-  }
+}

@@ -1,6 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-// import { CardStyleInterpolators } from '@react-navigation/stack'
 import React from 'react'
 import Login from './src/views/Login'
 import Register from './src/views/Register'
@@ -11,10 +10,6 @@ import EditDescription from'./src/views/EditDescription'
 import TabBar from './src/components/TabBar'
 import Heritage_Details from './src/views/Heritage_Details'
 import Heritage_Discover from './src/views/Heritage_Discover'
-
-
-// import LoginScreen from './src/views/My/HomeScreen'
-// import { Provider as PaperProvider } from 'react-native-paper'
 
 const Stack = createNativeStackNavigator()
 

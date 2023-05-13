@@ -15,16 +15,16 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { List, MD3Colors, SegmentedButtons, TextInput, IconButton, Surface, Button}  from 'react-native-paper';
 import { render } from 'react-dom';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// import {Tab, Box, TabPanel} from '@mui/material/Tab';
 import { collect_number } from '../api/CollectNumber'
 import { collect } from '../api/Collect'
 import { artifact } from '../api/ArtifactInfo'
 import { artifactComment } from '../api/ArtifactComment';
-import { publishComment } from '../api/PublishComment';
+import { publishComment } from '../api/PublishArtifactComment';
 
 
 const ListItem = (props) => {
     const [value, setValue] = useState('')
-    const [artifactID, setArtifactID] = useState(16)
     const [artifactName, setArtifactname] = useState('')
     const [author, setAuthor] = useState('')
     const [relicTime, setRelicTime] = useState('')
@@ -32,7 +32,6 @@ const ListItem = (props) => {
     const [description, setDescription] = useState('')
     const [collectNum, setCollectNum] = useState(50)
     const [color, setColor] = useState(props.isCollected ? MD3Colors.error60 : MD3Colors.neutral100)
-    
     const [comments, setComments] = useState([])
     const [comment, setComment] = useState('')
 
@@ -41,7 +40,6 @@ const ListItem = (props) => {
         // 获取当前文物信息，请求参数：id
         artifact(artifactID).then(async res => { 
             if (res.message === 'ok') { // TODO: 判断登录成功的条件根据实际接口修改！
-                setArtifactID(res.data.id)
                 setArtifactname(res.data.artifactName)
                 setAuthor(res.data.author)
                 setRelicTime(res.data.relicTime)
@@ -135,27 +133,35 @@ const ListItem = (props) => {
                             label:'留 言',
                         },
                     ]}
-                />  
+                /> 
+
+
+                {/* <TabContext value={value}>
+                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                        <TabList onChange={handleChange} aria-label="lab API tabs example">
+                            <Tab label="简 介" value="1" />
+                            <Tab label="详 解" value="2" />
+                            <Tab label="留 言" value="3" />
+                        </TabList>
+                    </Box>
+                    <TabPanel value="1">{artifactName}</TabPanel>
+                    <TabPanel value="2">{description}</TabPanel>
+                    <TabPanel value="3">Comments</TabPanel>
+                </TabContext>  */}
                 
                 {/* 文字显示 */}
                 <Text style={styles.Titlefont}> 
                     {artifactName}
-                    <Text style={styles.textStyle}>
-                        {'\r\n\n'}Author : {author}
-                        {'\r\n\n'}Dynasty : {relicTime}
-                    </Text>
+                    <Tect style={styles.textStyle}>Author : {author}</Tect>    
+                    <Tect style={styles.textStyle}>Dynasty : {author}</Tect> 
                 </Text>
 
                 <Text style={styles.Titlefont}>
                     Description
-                    <Text style={styles.textStyle}>
-                        {'\r\n\n'}{description}
-                    </Text>
+                    <Text style={styles.textStyle}>{'\r\n\n'}{description}</Text>
                 </Text>
 
-                <Text style={styles.Titlefont}>
-                    Comments
-                </Text>
+                <Text style={styles.Titlefont}>Comments</Text>
                 
                 {/* <Text style={styles.textStyle}>{comments[0].userId}</Text>
                 <Text style={styles.textStyle}>{comments[0].content}</Text> */} 
@@ -168,13 +174,11 @@ const ListItem = (props) => {
                     })
                 }              
                 </View> 
-            
 
                 <View style={{ backgroundColor: '#3a3a3a', height: 80}}></View>
                 </LinearGradient>
-                </ScrollView>
+            </ScrollView>
             
-        
             {/* 评论输入框 */}
             <View style={styles.bottombar}>
                 <TextInput
@@ -200,25 +204,98 @@ const ListItem = (props) => {
                     onPress={onPressCollect}
                     style={{ top: -8 }}
                 />
+                
                 {/* 显示收藏数量 */}
-                {/* id = 16 */}
-                <Text style={{color:'#EEEEEE', top: -8}}>
-                    {collectNum}
-                </Text>  
+                <Text style={{color:'#EEEEEE', top: -8}}>{collectNum}</Text>  
 
-                
-
-                
-            </View>
-
-            
-            
+            </View>            
         </SafeAreaView>
     )
 }
 
 const Heritage_Details = (props) => {
+    const {artifactId} = props.navigation.navigate.id
+    const [isRefreshing, setIsRefreshing] = useState(false)  //正在加载数据
+    const [isError, setIsError] = useState(true)  //数据加载错误
+    
+    const RefreshingContent = () => {
+        <View
+            style={{
+                alignItems:'center',
+                justifyContent:'center',
+                flex:1
+            }}
+        >
+            <Text style={{color:"white"}}>加载中</Text>
+        </View>
+    }
 
+    const EmptyContent = () => {
+        <View
+            style={{
+                alignItems:'center',
+                justifyContent:'center',
+                flex:1
+            }}
+        >
+            <AntDesign name="frowno" color="white" size={50}/>
+            <Text style={{color:"white", marginTop:15}}>暂无内容</Text>
+        </View>
+    }
+
+    const loadDate = () => {
+        setIsError(false)
+        setIsRefreshing(true)
+        setTimeout(() => {
+            //加载成功
+            setArtifactname(artifactName)
+            setAuthor(author)
+            setRelicTime(relicTime)
+            setDescription(description)
+            setImageUrl(imageUrl)
+            setCollectNum(collectNum)
+            setComments(comment)
+            setIsRefreshing(false)
+        }, 800)
+    }
+
+    const onPressRefresh = () => {
+        loadDate()
+    }
+
+    const ErrorContent = () => {
+        return(
+            <View
+                style={{
+                    alignItems:'center',
+                    justifyContent:'center',
+                    flex:1
+                }}
+            >
+                <Pressable
+                    onPress={onPressRefresh}
+                    style={{
+                        width:150,
+                        height:50,
+                        borderRadius:25,
+                        borderWidth:1,
+                        boderColor:"#ffdcb2",
+                        alignItems:'center',
+                        justifyContent:'center'
+                    }}
+                >
+                    <Text
+                        style={{
+                            color:"#ffdcb2",
+                            fontSize:18
+                        }}
+                    >
+                        刷新重试
+                    </Text>
+                </Pressable>
+            </View>
+        )
+    }
     return (
         <View>
             <ListItem />

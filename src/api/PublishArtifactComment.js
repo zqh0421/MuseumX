@@ -1,4 +1,4 @@
-//发表评论
+//文物发表评论
 export async function publishComment(artifactId, content) {
     const options = {
       method: 'POST',

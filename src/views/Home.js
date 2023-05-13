@@ -1,8 +1,6 @@
 import { View, Text,Image,StyleSheet, Pressable, ScrollView} from 'react-native'
 import React , {useEffect, useState} from 'react'
 import { Surface,IconButton,MD3Colors} from 'react-native-paper'
-// import { ScrollView } from 'react-native-web'
-// import * as React from 'react'
 
 const ListItem = (props) => {
   const [color, setColor] = useState(props.isCollected ? MD3Colors.error60 : MD3Colors.error0)
@@ -81,6 +79,9 @@ const Home = (props) => {
       </Text>
       <Text onPress={() => props.navigation.navigate('Heritage_Details')}>
         点击弹出文物详情页面
+      </Text>
+      <Text onPress={() => props.navigation.navigate('Heritage_Discover')}>
+        点击弹出帖子详情页面
       </Text>
       <ScrollView>
         {
