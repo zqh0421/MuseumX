@@ -17,6 +17,7 @@ const TabBar = () => {
       barStyle={{ backgroundColor: '#3A3A3A' }}
       activeColor="#BEBCD2"
       inactiveColor="#727480"
+      initialRouteName='Discover'
     >
       <Tab.Screen
         name="Home"
