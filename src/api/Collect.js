@@ -1,4 +1,3 @@
-//收藏
 export async function collect(token, id) {
   const options = {
     method: 'GET',

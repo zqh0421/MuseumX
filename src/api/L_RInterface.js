@@ -6,15 +6,14 @@ export async function login(username, password) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-      'userAccount': username,
-      'userPassword': password
+         userAccount: username,
+         userPassword: password
      })
     }
   
     try {
        const response = await fetch(
       'http://101.200.148.39:3599/api/controller/all/user/login',
-      //'http://101.200.148.39:3599/api/all/user/login',
        options
       )
        if (response.ok) {
