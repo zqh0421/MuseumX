@@ -9,10 +9,12 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { AntDesign } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { mylike } from '../api/mylike'
+import { allNew } from '../api/discover/newInterface'
+import { myrelease } from '../api/myreleaseInterface'
 import Home from '../views/Home'
+import { current } from '../api/currentUserInterface'
 const ListItem = (props) => {
   const [color, setColor] = useState(props.isCollected ? MD3Colors.error60 : MD3Colors.error0)
-  const [list, setList] = useState([]) // 列表数据初始状态
   useEffect(() => {
     // 获取后端数据
     // setList
@@ -49,8 +51,14 @@ const ListItem = (props) => {
 const Profile = (props) => {
   const [toggleSelected, setToggleSelected] = useState('0')
   const [toggleBar0Style, setToggleBar0Style] = useState(styles.toggleBar)
-  const [toggleBar1Style, setToggleBar1Style] = useState([styles.toggleBar, { opacity: 0 }])
-  const [toggleBar2Style, setToggleBar2Style] = useState([styles.toggleBar, { opacity: 0 }])
+  const [toggleBar1Style, setToggleBar1Style] = useState([
+    styles.toggleBar,
+    { opacity: 0 }
+  ])
+  const [toggleBar2Style, setToggleBar2Style] = useState([
+    styles.toggleBar,
+    { opacity: 0 }
+  ])
   const [listData, setListData] = useState([]) // 存储当前显示的数据列表
   const [isRefreshing, setIsRefreshing] = useState(false) // 正在加载数据
   const [isError, setIsError] = useState(true) // 数据加载错误
@@ -58,64 +66,63 @@ const Profile = (props) => {
     {
       title: '（一）博物馆博物馆博物馆博物馆博物馆博物馆',
       username: 'user123456',
-      likes: 25,
+      likes: 25
     },
     {
       title: 'title2',
       username: 'user2',
-      likes: 255,
+      likes: 255
     },
     {
       title: 'title3',
       username: 'user3',
-      likes: 255,
+      likes: 255
     },
     {
       title: 'title1',
       username: 'user1',
-      likes: 25,
+      likes: 25
     },
     {
       title: 'title2',
       username: 'user2',
-      likes: 255,
+      likes: 255
     },
     {
       title: 'title3',
       username: 'user3',
-      likes: 255,
+      likes: 255
     },
     {
       title: 'title1',
       username: 'user1',
-      likes: 25,
+      likes: 25
     },
     {
       title: 'title2',
       username: 'user2',
-      likes: 2,
+      likes: 2
     },
     {
       title: 'title3',
       username: 'user3',
-      likes: 255,
+      likes: 255
     },
     {
       title: 'title1',
       username: 'user1',
-      likes: 25,
+      likes: 25
     },
     {
       title: 'title2',
       username: 'user2',
-      likes: 2,
+      likes: 2
     },
     {
       title: 'title3',
       username: 'user3',
-      likes: 255,
-    },
-
+      likes: 255
+    }
   ]
   const arr2 = [
     {
@@ -158,7 +165,7 @@ const Profile = (props) => {
     try {
       const jsonValue = await AsyncStorage.getItem('userData')
       return jsonValue !== null ? JSON.parse(jsonValue) : null
-    } catch(e) {
+    } catch (e) {
       // error reading value
     }
   }
@@ -167,10 +174,11 @@ const Profile = (props) => {
     try {
       await AsyncStorage.removeItem('userData')
       props.navigation.navigate('Home')
-    } catch(e) {
+    } catch (e) {
       // remove error
     }
   }
+
   const loadDataMylike = () => {
     setIsError(false)
     setIsRefreshing(true)
@@ -178,7 +186,7 @@ const Profile = (props) => {
       if (res.code === 0) { // 数据获取成功
         console.log("profile-res:")
         console.log(res.data.data)
-        setListData(res.data.data.records)
+        setListData(res.data.data)
         setIsRefreshing(false)
       } else { // 获取失败
         setIsError(true)
@@ -192,24 +200,55 @@ const Profile = (props) => {
       alert(err)
     })
   }
-  const loadData = (selected) => {
-    // 已登录，加载数据
+
+  // listData.map(item=>{
+  //   allNew(item.id).then(res=>{
+  //     num=res.data.data.records.likeNum
+  //   })
+  // })
+  const loadDataMyrelease = () => {
     setIsError(false)
     setIsRefreshing(true)
-    setTimeout(() => {
-      // 加载成功
-      if (selected === '0' || selected === '2') {
-        setListData(arr)
-      } else {
-        setListData(arr2)
+    myrelease().then(res => {
+      if (res.code === 0) { // 数据获取成功
+        console.log("profile-res:")
+        console.log(res.data.data)
+        setListData(res.data.data)
+        setIsRefreshing(false)
+      } else { // 获取失败
+        setIsError(true)
+        setIsRefreshing(false)
+        setListData([])
       }
+    }).catch(err => {
+      setIsError(true)
       setIsRefreshing(false)
-      //  加载失败
-      // setIsError(true)
-      // setIsRefreshing(false)
-      // setListData([])
-    }, 800)
+      setListData([])
+      alert(err)
+    })
   }
+
+  const current = () => {
+
+  }
+  // const loadData = (selected) => {
+  //   // 已登录，加载数据
+  //   setIsError(false)
+  //   setIsRefreshing(true)
+  //   setTimeout(() => {
+  //     // 加载成功
+  //     if (selected === '0' || selected === '2') {
+  //       setListData(arr)
+  //     } else {
+  //       setListData(arr2)
+  //     }
+  //     setIsRefreshing(false)
+  //     //  加载失败
+  //     // setIsError(true)
+  //     // setIsRefreshing(false)
+  //     // setListData([])
+  //   }, 800)
+  // }
 
   useEffect(() => {
     // 打开应用后首次进入该页面时，执行如下操作
@@ -224,7 +263,7 @@ const Profile = (props) => {
         props.navigation.navigate('Login') // 跳转登录页面
       } else {
         // 已登录，加载数据
-        loadData('0')
+        loadDataMylike()
       }
     }).catch(err => {
       // error
@@ -247,7 +286,7 @@ const Profile = (props) => {
           const jumpToAction = TabActions.jumpTo('Profile')
           props.navigation.dispatch(jumpToAction)
           // 已登录，加载数据
-          loadData('0')
+          loadDataMylike()
         }
       }).catch(err => {
         // error
@@ -280,7 +319,7 @@ const Profile = (props) => {
 
   const onPressLike = () => {
     setToggleSelected('0')
-    loadData('0')
+    loadDataMylike()
   }
 
   const onPressCollect = () => {
@@ -290,16 +329,16 @@ const Profile = (props) => {
 
   const onPressActivity = () => {
     setToggleSelected('2')
-    loadData('2')
+    loadDataMyrelease()
   }
 
   const onPressRefresh = () => {
-    if (selected === '0') {
+    if (toggleSelected==='0') {
       loadDataMylike()
     } else if(selected === '1') {
-      
-    } else{
 
+    } else{
+        loadDataMyrelease()
     }
   }
   const EmptyContent = () => {
@@ -310,7 +349,7 @@ const Profile = (props) => {
           transform: [{ translateY: Dimensions.get('window').height / 4}]
         }}
       >
-        <AntDesign name='frowno' color='white' size={50}/>
+        <AntDesign name="frowno" color="white" size={50} />
         <Text style={{ color: 'white', marginTop: 15 }}>暂无内容~</Text>
       </View>
     )
@@ -346,17 +385,21 @@ const Profile = (props) => {
             borderWidth: 1,
             borderColor: '#ffdcb2',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'center'
           }}
         >
           <Text
             style={{
               color: '#ffdcb2',
-              fontSize: 18,
+              fontSize: 18
             }}
-          >刷新重试</Text>
+          >
+            刷新重试
+          </Text>
         </Pressable>
-        <Text style={{ color: 'white', marginTop: 15 }}>加载失败，请刷新重试~</Text>
+        <Text style={{ color: 'white', marginTop: 15 }}>
+          加载失败，请刷新重试~
+        </Text>
       </View>
     )
   }
@@ -367,12 +410,12 @@ const Profile = (props) => {
         style={styles.background}>
         <View style={{ flexDirection: 'row', marginTop: 50, marginLeft: '8%', marginRight: '8%', marginBottom: 30, justifyContent: 'space-between' }}>
           <View style={{ flexDirection: 'row'}}>
-            <Text style={styles.image}></Text>
+            <Text style={styles.image}>{props.avatarUrl}</Text>
             <View style={{ marginLeft: 20, justifyContent: 'center' }}>
-              <Text style={styles.nickname}>昵称</Text>
-              <Text style={styles.userid}>ID: zheshiid</Text>
+              <Text style={styles.nickname}>{props.username}</Text>
+              <Text style={styles.userid}>ID: {props.id}</Text>
             </View>
-          </View>          
+          </View>
         <Pressable style={[styles.edit, { alignSelf: 'center' }]} onPress={onPressEdit}>
           <MaterialCommunityIcons name="account-edit" color="white" size={20} />
         </Pressable>
@@ -380,17 +423,17 @@ const Profile = (props) => {
         <View style={styles.toggle}>
           <Pressable onPress={onPressLike} style={styles.toggleItem}>
             <Text style={styles.toggleNumber}>3</Text>
-            <Text style={styles.toggleTitle}>喜  欢</Text>
+            <Text style={styles.toggleTitle}>喜 欢</Text>
             <View style={toggleBar0Style}></View>
           </Pressable>
           <Pressable onPress={onPressCollect} style={styles.toggleItem}>
             <Text style={styles.toggleNumber}>123</Text>
-            <Text style={styles.toggleTitle}>收  藏</Text>
+            <Text style={styles.toggleTitle}>收 藏</Text>
             <View style={toggleBar1Style}></View>
           </Pressable>
           <Pressable onPress={onPressActivity} style={styles.toggleItem}>
             <Text style={styles.toggleNumber}>123</Text>
-            <Text style={styles.toggleTitle}>动  态</Text>
+            <Text style={styles.toggleTitle}>动 态</Text>
             <View style={toggleBar2Style}></View>
           </Pressable>
         </View>
@@ -405,18 +448,21 @@ const Profile = (props) => {
               paddingLeft: '2%',
               paddingRight: '2%'
             }}
-            data={arr}
+            data={listData}
             numColumns={2}
-            renderItem={({ item, index, columnIndex }) =>
+            renderItem={({ item, index, columnIndex }) => {
               <FlowListItem
                 title={item.title}
-                time={item.time}
                 username={item.username}
-                likes={item.likes}
+                likeNum={item.likeNum}
+                time={item.moodTime}
+                userId={item.userId}
+                imgUrl={item.imgUrl}
               />
               // <Text>123</Text>
+              }
             }
-          /> 
+          />
         }
         {
           !isError && !isRefreshing && listData.length > 0 && toggleSelected ==='1' &&
@@ -454,15 +500,15 @@ const styles = StyleSheet.create({
     // justifyContent:'center',
     // alignContent:'center',
     // alignItems:'center',
-    
+
     flex:1
   },
   image: {
     width: 80,
     height: 80,
     borderRadius: 100,
-    borderWidth:2,
-    borderColor:'white',
+    borderWidth: 2,
+    borderColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#CCCCCC',
@@ -470,7 +516,7 @@ const styles = StyleSheet.create({
     // top: 70,
     // left: 35,
   },
-  nickname:{
+  nickname: {
     fontSize: 23,
     color: '#fff',
     // position: 'absolute',
@@ -495,8 +541,7 @@ const styles = StyleSheet.create({
     // top: 85,
     // right: '8%',
     borderWidth: 1,
-    borderColor: 'white',
-
+    borderColor: 'white'
   },
   toggle: {
     flexDirection: 'row',
@@ -510,21 +555,21 @@ const styles = StyleSheet.create({
     borderTopStartRadius: 25,
     borderTopEndRadius: 25,
     borderBottomColor: '#eee',
-    borderBottomWidth: 1,
+    borderBottomWidth: 1
   },
   toggleItem: {
     width: 60,
     alignItems: 'center',
     justifyContent: 'center',
-    alignContent:'center',
+    alignContent: 'center'
   },
-  toggleTitle:{
+  toggleTitle: {
     width: '100%',
     fontSize: 10,
     color: '#fff',
     textAlign: 'center'
   },
-  toggleNumber:{
+  toggleNumber: {
     width: '100%',
     fontSize: 18,
     color: '#fff',
@@ -542,7 +587,7 @@ const styles = StyleSheet.create({
     height: 5,
     marginTop: 2,
     backgroundColor: '#CC6666',
-    borderRadius: 5,
+    borderRadius: 5
     // position: 'absolute',
     // top: 225,
     // left: '20%',

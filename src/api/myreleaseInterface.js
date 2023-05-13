@@ -3,11 +3,9 @@ export async function myrelease() {
     const options = {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'token' : 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ7XG4gICAgXCJpZFwiOiAzLFxuICAgIFwidXNlckFjY291bnRcIjogXCIxMjM0NTY3ODkwXCIsXG4gICAgXCJwYXNzd29yZFwiOiBcImVkOTk0MWZhOTBmZTg0NWE0MTA1ZGU5MWQ4YjNkNWNlXCIsXG4gICAgXCJjcmVhdGVUaW1lXCI6IDE2ODM3Nzc0OTgwMDAsXG4gICAgXCJ1cGRhdGVUaW1lXCI6IDE2ODM3Nzc0OTgwMDAsXG4gICAgXCJpc0RlbGV0ZVwiOiAwXG59IiwiaWF0IjoxNjgzOTAzMTMwLCJleHAiOjE2ODM5MDY3MzB9.zpPvhTZbTaZ4cIatsbYYoGLXm19k76N3UxhBTaVjn0bsaB9KXYRZcp0UcfnfyienMBM-mb6idR_Dc27o4iY-lQ'
       },
-      body: JSON.stringify({
-        
-      })
     }
   
     try {
