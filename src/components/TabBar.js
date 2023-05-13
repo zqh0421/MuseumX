@@ -1,5 +1,9 @@
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
-import { AntDesign, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons'
+import {
+  AntDesign,
+  MaterialIcons,
+  MaterialCommunityIcons
+} from '@expo/vector-icons'
 import Home from '../views/Home'
 import Search from '../views/Search'
 import Discover from '../views/Discover'
@@ -21,7 +25,7 @@ const TabBar = () => {
           tabBarLabel: 'Home',
           tabBarIcon: ({ color }) => (
             <MaterialIcons name="museum" color={color} size={26} />
-          ),
+          )
         }}
       />
       <Tab.Screen
@@ -30,8 +34,12 @@ const TabBar = () => {
         options={{
           tabBarLabel: 'Search',
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="text-search" color={color} size={26} />
-          ),
+            <MaterialCommunityIcons
+              name="text-search"
+              color={color}
+              size={26}
+            />
+          )
         }}
       />
       <Tab.Screen
@@ -41,7 +49,7 @@ const TabBar = () => {
           tabBarLabel: 'Discover',
           tabBarIcon: ({ color }) => (
             <AntDesign name="find" color={color} size={26} />
-          ),
+          )
         }}
       />
       <Tab.Screen
@@ -52,7 +60,7 @@ const TabBar = () => {
           tabBarColor: '#fff',
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="account" color={color} size={26} />
-          ),
+          )
         }}
       />
     </Tab.Navigator>

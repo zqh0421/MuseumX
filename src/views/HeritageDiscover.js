@@ -157,7 +157,7 @@ const ListItem = (props) => {
 
 }
 
-const Heritage_Discover = (props) => {
+const HeritageDiscover = (props) => {
 
     const [isRefreshing, setIsRefreshing] = useState(false)  //正在加载数据
     const [isError, setIsError] = useState(true)  //数据加载错误
@@ -307,5 +307,5 @@ const Heritage_Discover = (props) => {
     }
   })
 
-  export default Heritage_Discover
+  export default HeritageDiscover
 
