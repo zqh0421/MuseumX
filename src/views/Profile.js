@@ -13,48 +13,16 @@ import RefreshingContent from '../components/RefreshingContent'
 import HomeListItem from '../components/HomeListItem'
 import FlowListItem from '../components/FlowListItem'
 import { mylike } from '../api/mylike'
-import { allNew } from '../api/discover/newInterface'
+import { myCollect } from '../api/myCollect'
 import { myrelease } from '../api/myreleaseInterface'
+import { allNew } from '../api/discover/newInterface'
 import { current } from '../api/currentUserInterface'
 
-const ListItem = (props) => {
-  const [color, setColor] = useState(props.isCollected ? MD3Colors.error60 : MD3Colors.error0)
-  useEffect(() => {
-    // 获取后端数据
-    // setList
-  }, [])
-  const onPressCollect = () => {
-    // 1. 收藏按钮样式变化
-    if (color === MD3Colors.error60) setColor(MD3Colors.error0)
-    else if (color === MD3Colors.error0) setColor(MD3Colors.error60)
-    // 2. 向后端发送请求，修改
-  }
-
-  const onPressItem = () => {
-    props.navigation.navigate('Login')
-  }
-  return (
-    <Pressable onPress={onPressItem}>
-      <Surface style={styles.surface} elevation={4}>
-        <Image style={styles.image1} source={{ uri: 'https://picsum.photos/700' }}/>
-        <Text style={styles.text}>{props.name}</Text>
-        <Text style={styles.text_2}>文物描述</Text>
-        <View style={styles.button}>
-          <IconButton
-            icon="star"
-            iconColor={color}
-            size={20}
-            onPress={onPressCollect}
-          />
-        </View>
-        <Text style={styles.num}>num</Text>
-      </Surface>
-    </Pressable>
-  )
-}
 const Profile = (props) => {
   const [toggleSelected, setToggleSelected] = useState('0')
   const [toggleBar0Style, setToggleBar0Style] = useState(styles.toggleBar)
+  const [likeSet, setLikeSet] = useState([])
+  const [collectSet, setCollectSet] = useState([])
   const [toggleBar1Style, setToggleBar1Style] = useState([
     styles.toggleBar,
     { opacity: 0 }
@@ -68,8 +36,7 @@ const Profile = (props) => {
   const [isError, setIsError] = useState(true) // 数据加载错误
 
   const onPressEdit = () => {
-    alert('编辑资料！')
-    logOut()
+    props.navigation.navigate('Person')
   }
 
   const getData = async () => {
@@ -81,15 +48,6 @@ const Profile = (props) => {
     }
   }
 
-  const logOut = async () => {
-    try {
-      await AsyncStorage.removeItem('userData')
-      props.navigation.navigate('Home')
-    } catch (e) {
-      // remove error
-    }
-  }
-
   const loadDataMylike = async () => {
     setIsError(false)
     setIsRefreshing(true)
@@ -98,9 +56,58 @@ const Profile = (props) => {
       if (userData) {
         mylike(JSON.parse(userData).data).then(res => {
           if (res.code === 0) { // 数据获取成功
-            console.log("profile-res:")
+            console.log('profile-res:')
             console.log(res.data.data)
+            let temp = []
+            res && res.data && res.data.data && res.data.data.forEach(item => {
+              console.log(item.id)
+              temp = [...temp, item.id]
+            })
+            setLikeSet(temp)
             setListData(res.data.data)
+            setIsRefreshing(false)
+          } else { // 获取失败
+            setIsError(true)
+            setIsRefreshing(false)
+            setListData([])
+          }
+        }).catch(err => {
+          setIsError(true)
+          setIsRefreshing(false)
+          setListData([])
+          alert(err)
+        })
+      } else {
+        props.navigation.navigate('Login')
+      }
+    } catch {
+      alert('err')
+    }
+  }
+
+  const loadDataMyCollect = async () => {
+    setIsError(false)
+    setIsRefreshing(true)
+    try {
+      const userData = await AsyncStorage.getItem('userData')
+      if (userData) {
+        myCollect(JSON.parse(userData).data).then(res => {
+          console.log(res)
+          if (res.code === 0) { // 数据获取成功
+            console.log('profile-res:')
+            console.log(res.data.data)
+            if (res.data.data === '收藏为空') {
+              setCollectSet([])
+              setListData([])
+            } else {
+              let temp = []
+              res && res.data && res.data.data && res.data.data !== '收藏为空' && res.data.data.forEach(item => {
+                console.log(item.id)
+                temp = [...temp, item.id]
+              })
+              setCollectSet(temp)
+              setListData(res.data.data)
+            }
             setIsRefreshing(false)
           } else { // 获取失败
             setIsError(true)
@@ -129,7 +136,7 @@ const Profile = (props) => {
       if (userData) {
         myrelease(JSON.parse(userData).data).then(res => {
           if (res.code === 0) { // 数据获取成功
-            console.log("profile-res:")
+            console.log('profile-res:')
             console.log(res.data.data)
             setListData(res.data.data)
             setIsRefreshing(false)
@@ -166,6 +173,11 @@ const Profile = (props) => {
       } else {
         // 已登录，加载数据
         // TODO: getCurrentUser()
+        console.log("getcurrentuser")
+        current(JSON.parse(res).data).then(ressponse => {
+          console.log('current-res:')
+          console.log(ressponse)
+        })
         loadDataMylike()
       }
     }).catch(err => {
@@ -188,7 +200,13 @@ const Profile = (props) => {
           // 已登录，正常进入该页面
           const jumpToAction = TabActions.jumpTo('Profile')
           props.navigation.dispatch(jumpToAction)
+          // TODO: 加载用户数据
+          // current(JSON.parse(res).data).then(response => {
+          //   console.log('current-res:')
+          //   console.log(response)
+          // })
           // 已登录，加载数据
+          setToggleSelected('0')
           loadDataMylike()
         }
       }).catch(err => {
@@ -227,7 +245,7 @@ const Profile = (props) => {
 
   const onPressCollect = () => {
     setToggleSelected('1')
-    loadDataMylike()
+    loadDataMyCollect()
   }
 
   const onPressActivity = () => {
@@ -239,11 +257,12 @@ const Profile = (props) => {
     if (toggleSelected==='0') {
       loadDataMylike()
     } else if (toggleSelected==='1') {
-      loadDataMylike()
+      loadDataMyCollect()
     } else {
       loadDataMyrelease()
     }
   }
+
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -257,9 +276,9 @@ const Profile = (props) => {
               <Text style={styles.userid}>ID: {props.id}</Text>
             </View>
           </View>
-        <Pressable style={[styles.edit, { alignSelf: 'center' }]} onPress={onPressEdit}>
-          <MaterialCommunityIcons name="account-edit" color="white" size={20} />
-        </Pressable>
+          <Pressable style={[styles.edit, { alignSelf: 'center' }]} onPress={onPressEdit}>
+            <MaterialCommunityIcons name="account-edit" color="white" size={20} />
+          </Pressable>
         </View>
         <View style={styles.toggle}>
           <Pressable onPress={onPressLike} style={styles.toggleItem}>
@@ -278,54 +297,52 @@ const Profile = (props) => {
             <View style={toggleBar2Style}></View>
           </Pressable>
         </View>
-        {
-          !isError && !isRefreshing && listData.length > 0 && (toggleSelected ==='0' || toggleSelected === '2') &&
+        {!isError && !isRefreshing && listData && listData.length > 0 && (toggleSelected ==='0' || toggleSelected === '2') && (
           <WaterfallFlow
-            style={{
-              maxHeight: Dimensions.get('window').height - 305,
-            }}
+            style={{ paddingTop: 10 }}
             contentContainerStyle={{
-              justifyContent: 'space-evenly',
               paddingLeft: '2%',
               paddingRight: '2%'
             }}
             data={listData}
             numColumns={2}
-            renderItem={({ item, index, columnIndex }) => {
-              // <FlowListItem
-              //   title={item.title}
-              //   username={item.username}
-              //   likeNum={item.likeNum}
-              //   time={item.moodTime}
-              //   userId={item.userId}
-              //   imgUrl={item.imgUrl}
-              // />
-              <Text>123</Text>
-              }
-            }
+            renderItem={({ item, index, columnIndex }) => (
+              <FlowListItem
+                ket={item.id}
+                item={item}
+                likeSet={likeSet}
+                navigation={props.navigation}
+              />
+            )}
           />
-        }
+        )}
         {
-          !isError && !isRefreshing && listData.length > 0 && toggleSelected ==='1' &&
+          !isError && !isRefreshing && listData && listData.length > 0 && toggleSelected ==='1' &&
           <ScrollView style={{
             height: Dimensions.get('window').height - 305,
             paddingLeft: '2%',
             paddingRight: '2%',
+            paddingTop: 10,
           }}
           >
             {
               listData.map(item => {
                 return (
                   // eslint-disable-next-line react/jsx-key
-                  <HomeListItem key={item.id} item={item} navigation={props.navigation} />
+                  <HomeListItem
+                    key={item.id}
+                    item={item}
+                    navigation={props.navigation}
+                    collectSet={collectSet}
+                  />
                 )
               })
             }
           </ScrollView>
         }
-        { !isError && isRefreshing && <RefreshingContent style={{transform: [{ translateY: Dimensions.get('window').height / 4}]}}/> }
-        { !isError && !isRefreshing && listData.length <= 0 && <EmptyContent style={{transform: [{ translateY: Dimensions.get('window').height / 4}]}}/> }
-        { isError && <ErrorContent style={{transform: [{ translateY: Dimensions.get('window').height / 4}]}} onPressRefresh={() => onPressRefresh()}/> }
+        { !isError && isRefreshing && <RefreshingContent /> }
+        { !isError && !isRefreshing && (!listData || listData.length <= 0) && <EmptyContent /> }
+        { isError && <ErrorContent onPressRefresh={() => onPressRefresh()}/> }
       </LinearGradient>
     </View>
   )

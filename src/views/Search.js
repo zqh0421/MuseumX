@@ -33,7 +33,7 @@ const Search = (props) => {
     loadData()
   }, [])
   useEffect(()=>{
-    const unsubscribe = props.navigation.addListener('tabPress', () => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
       loadData()
     })
     return unsubscribe

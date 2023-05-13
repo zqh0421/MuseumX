@@ -1,13 +1,13 @@
 import { View, Text, Pressable } from 'react-native'
-const ErrorContent = ({ onPressRefresh, style }) => {
+const ErrorContent = ({ onPressRefresh }) => {
 
   return (
     <View
-      style={{
+      style={[{
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1,
-      }}
+      }]}
     >
       <Pressable
         onPress={onPressRefresh}
@@ -25,10 +25,8 @@ const ErrorContent = ({ onPressRefresh, style }) => {
           style={[{
             color: '#ffdcb2',
             fontSize: 18
-          }, style]}
-        >
-          刷新重试
-        </Text>
+          }]}
+        >刷新重试</Text>
       </Pressable>
       <Text style={{ color: 'white', marginTop: 15 }}>
         加载失败，请刷新重试~

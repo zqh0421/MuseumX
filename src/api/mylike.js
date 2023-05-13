@@ -5,8 +5,7 @@ export async function mylike(token) {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
       'token': token
-    },
-
+    }
   }
 
   try {
