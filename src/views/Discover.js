@@ -149,7 +149,7 @@ const Discover = (props) => {
               temp = [...temp, item.id]
             })
             setLikeSet(temp)
-            loadDataPopular()
+            loadDataNew()
           } else { // 获取失败
             setIsRefreshing(false)
           }
@@ -198,8 +198,8 @@ const Discover = (props) => {
         <Text style={styles.title}>发现</Text>
         <Pressable style={styles.toggle} onPress={() => setToggleNew(!toggleNew)}>
           <View style={toggleStyle}></View>
-          <Text style={toggleHotColor}>热门</Text>
-          <Text style={toggleNewColor}>最新</Text>
+          <Text style={toggleHotColor}>最新</Text>
+          <Text style={toggleNewColor}>热门</Text>
         </Pressable>
         {!isError && !isRefreshing && listData && listData.length > 0 && (
           <WaterfallFlow

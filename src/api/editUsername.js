@@ -1,16 +1,16 @@
 export async function editUsername(token, newname, oldname, password) {
   console.log(token, newname, oldname, password)
+  const formData = new FormData()
+  formData.append('newAccount', newname)
+  formData.append('userAccount', oldname)
+  formData.append('userPassword', password)
   const options = {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Type': 'multipart/form-data',
       'token': token
     },
-    body: JSON.stringify({
-      newAccount: newname,
-      userAccount: oldname,
-      userPassword: password,
-    })
+    body: formData
   }
 
   try {

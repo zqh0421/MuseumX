@@ -120,9 +120,7 @@ const styles = StyleSheet.create({
     color: '#CCCCCC',
     top: 20,
     left: 20,
-      
-<<<<<<< HEAD
-  }, 
+  },
   Name: {
     fontSize: 15,
     justifyContent: 'center',
@@ -148,34 +146,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5
 
   }
-=======
-    }, 
-    Name: {
-      fontSize: 15,
-      justifyContent: 'center',
-      position: 'absolute',
-      color: '#CCCCCC',
-      top: 20,
-      left: 150,
-      alignItems: 'center'
-    },
-    save: {
-      fontSize: 15,
-      color: '#CCCCCC',
-      position: 'absolute',
-      top: 20,
-      right: 20
-    }, 
-    
-    inputStyle: {
-      top: 100,
-      width: Dimensions.get('window').width -20,
-      margin: 10,
-      color: '#CCCCCC',
-      paddingHorizontal: 5
-
-    }
->>>>>>> dy2
 })
 
 export default EditUsername
