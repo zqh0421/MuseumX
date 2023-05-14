@@ -73,7 +73,7 @@ const FlowListItem = (props) => {
         }}
       >
         <View style={{ flexDirection: 'row' }}>
-          <Text style={styles.HeadSculpture}></Text>
+          <Image style={styles.HeadSculpture} source={{uri: 'https://pic3.zhimg.com/80/v2-4aff13816be5ec5a81f744b88dbda6ee_1440w.webp'}} />
           <Text style={styles.itemUsername}>{item.userId}</Text>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>

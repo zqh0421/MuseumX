@@ -2,24 +2,7 @@ import { View, Text, StyleSheet, AppRegistry, Dimensions } from 'react-native'
 import React, { useState } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Appbar, List, MD3Colors,TextInput} from 'react-native-paper';
-<<<<<<< Updated upstream
 import { editUsername } from '../api/editUsername';
-const EditUsername = (props) => {
-    const [title, setTitle] = useState('');
-    const onPressSave = () => {
-        // 提交到后端
-        if (title) {
-          editUsername(title)
-          .then(res => {
-            console.log(res)
-          })
-          .catch(err => {
-            alert(err)
-          })
-        }
-
-        alert(title)
-=======
 import { editnameInterface } from '../api/editnameInterface';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const EditUsername = (props) => {
@@ -46,7 +29,6 @@ const EditUsername = (props) => {
       } else {
         // 跳转登录
         props.navigation.navigate('Login')
->>>>>>> Stashed changes
       }
     }
     return (
@@ -54,7 +36,6 @@ const EditUsername = (props) => {
           <LinearGradient
             colors = {['#727480','#454653']}
             style={styles.backgroud}>
-<<<<<<< Updated upstream
            
             <Text style={styles.back} onPress={() => props.navigation.goBack()}>Cancel</Text>
             <Text style={styles.Name}> Edit Name</Text>
@@ -68,51 +49,6 @@ const EditUsername = (props) => {
                 maxLength={14}
              />
              <Text style={styles.length}> {title.length}/14 </Text>
-=======
-            <Text style={styles.back} onPress={() => props.navigation.goBack()}>Cancel</Text>
-            <Text style={styles.Name}> Edit Name</Text>
-            <Text style={styles.save} onPress={onPressSave}>Save</Text> 
-            <TextInput
-                mode='outlined'
-                style={styles.inputStyle}
-                placeholder="新的用户名"
-                placeholderTextColor={'#808080'}
-                textColor='#CCCCCC'
-                outlineStyle={{borderRadius:7}}
-                contentStyle={{paddingLeft:15}}
-                outlineColor={'#CCCCCC'}
-                activeOutlineColor={'#CCCCCC'}
-                value={newname}
-                onChangeText={(value) => setnewname(value)}
-            />
-            <TextInput
-                mode='outlined'
-                style={styles.inputStyle}
-                placeholder="旧的用户名"
-                placeholderTextColor={'#808080'}
-                textColor='#CCCCCC'
-                outlineStyle={{borderRadius:7}}
-                contentStyle={{paddingLeft:15}}
-                outlineColor={'#CCCCCC'}
-                activeOutlineColor={'#CCCCCC'}
-                value={oldname}
-                onChangeText={(value) => setoldname(value)}
-            />
-            <TextInput
-                mode='outlined'
-                style={styles.inputStyle}
-                placeholder="原始密码"
-                placeholderTextColor={'#808080'}
-                textColor='#CCCCCC'
-                outlineStyle={{borderRadius:7}}
-                contentStyle={{paddingLeft:15}}
-                outlineColor={'#CCCCCC'}
-                activeOutlineColor={'#CCCCCC'}
-                value={password}
-                onChangeText={(value) => setpassword(value)}
-            />
-            
->>>>>>> Stashed changes
           </LinearGradient>
             
         </View>
@@ -158,7 +94,6 @@ const styles = StyleSheet.create({
       top: 20,
       right: 20
     }, 
-<<<<<<< Updated upstream
     lab: {
       fontSize: 10,
       position: 'absolute',
@@ -167,9 +102,6 @@ const styles = StyleSheet.create({
       color: '#CCCCCC'
     },
     input: {
-=======
-    inputStyle: {
->>>>>>> Stashed changes
       top: 100,
       width: Dimensions.get('window').width -20,
       margin: 10,
