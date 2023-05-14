@@ -40,21 +40,6 @@ const Login = (props) => {
     })
   }
 
-    
-  //方法 提交
-  // Submit = () => {
-  //   const   { username, pwdFirst,pwdSecond} = this.state;
-  //   if (!username || !username.trim()) {
-  //     Alert.alert('请输入用户名');
-  //     return;
-  //   }
-
-    // if (!pwd || !pwd.trim()) {
-    //   Alert.alert('密码不能为空')
-    //   return
-    // }
-  
-
   return (
     <View style={styles.container}>
 
