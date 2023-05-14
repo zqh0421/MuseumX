@@ -1,4 +1,3 @@
-
 export async function editUsername(token, newname, oldname, password) {
   console.log(token, newname, oldname, password)
   const options = {
