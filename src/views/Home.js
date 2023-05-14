@@ -20,6 +20,7 @@ const Home = (props) => {
   const [loadMore, setLoadMore] = useState(false)
   useEffect(() => {
     setpage(1)
+    loadData()
   }, [])
   useEffect(()=>{
     const unsubscribe = props.navigation.addListener('focus', () => {

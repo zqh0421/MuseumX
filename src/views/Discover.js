@@ -179,6 +179,19 @@ const Discover = (props) => {
     return unsubscribe
   }, [props.navigation])
 
+  const onPressPublish = () => {
+    getData().then(userData => {
+      console.log(userData)
+      if (userData) {
+        props.navigation.navigate('Publish')
+      } else {
+        props.navigation.navigate('Login')
+      }
+    }).catch(err => {
+      props.navigation.navigate('Login')
+    })
+  }
+
   return (
     <View style={styles.container}>
       <LinearGradient colors={['#727480', '#454653']} style={styles.background}>
@@ -213,7 +226,7 @@ const Discover = (props) => {
         {!isError && isRefreshing && <RefreshingContent onPressRefresh={() => toggleNew ? loadDataNew() : loadDataPopular()} />}
         {!isError && !isRefreshing && (!listData || listData.length <= 0) && <EmptyContent />}
         {isError && <ErrorContent />}
-        <TouchableOpacity style={styles.publish} onPress={() => props.navigation.navigate('Publish')}>
+        <TouchableOpacity style={styles.publish} onPress={onPressPublish}>
           <Text style={{ fontSize: 24, color: '#3A3A3A' }}>+</Text>
         </TouchableOpacity>
       </LinearGradient>
