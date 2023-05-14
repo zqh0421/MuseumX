@@ -14,101 +14,80 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import FlowListItem from '../components/FlowListItem'
 import { like } from '../api/discover/likeInterface'
 import { allNew } from '../api/discover/newInterface'
+import { mylike } from '../api/mylike'
 import { allPopular } from '../api/discover/popularInterface'
+import ErrorContent from '../components/ErrorContent'
+import EmptyContent from '../components/EmptyContent'
+import RefreshingContent from '../components/RefreshingContent'
+
 const Discover = (props) => {
   const [toggleNew, setToggleNew] = useState(false)
   const [toggleStyle, setToggleStyle] = useState(styles.toggleSelected)
   const [toggleHotColor, setToggleHotColor] = useState({ color: '#333'})
   const [toggleNewColor, setToggleNewColor] = useState({ color: '#ccc'})
   const [listData, setListData] = useState([]) // 存储当前显示的数据列表
+  const [likeSet, setLikeSet] = useState([])
   const [isRefreshing, setIsRefreshing] = useState(false) // 正在加载数据
   const [isError, setIsError] = useState(true) // 数据加载错误
-  const arr = [
-    {
-      title: '（一）博物馆博物馆博物馆博物馆博物馆博物馆',
-      username: 'user123456',
-      likes: 0,
-    },
-    {
-      title: 'title2',
-      username: 'user2',
-      likes: 255
-    },
-    {
-      title: 'title3',
-      username: 'user3',
-      likes: 255
-    },
-    {
-      title: 'title1',
-      username: 'user1',
-      likes: 25
-    },
-    {
-      title: 'title2',
-      username: 'user2',
-      likes: 255
-    },
-    {
-      title: 'title3',
-      username: 'user3',
-      likes: 255
-    },
-    {
-      title: 'title1',
-      username: 'user1',
-      likes: 25
-    },
-    {
-      title: 'title2',
-      username: 'user2',
-      likes: 2
-    },
-    {
-      title: 'title3',
-      username: 'user3',
-      likes: 255
-    },
-    {
-      title: 'title1',
-      username: 'user1',
-      likes: 25
-    },
-    {
-      title: 'title2',
-      username: 'user2',
-      likes: 2
-    },
-    {
-      title: 'title3',
-      username: 'user3',
-      likes: 255,
-    },
-  ]
-  
+
   useEffect(() => { // 当toggleNew为false，显示“热门”内容；否则显示“最新”内容。
-    if (toggleNew) {
-      loadDataNew()
-      setToggleStyle([styles.toggleSelected, styles.toggleNew])
-      setToggleNewColor({ color: '#333' })
-      setToggleHotColor({ color: '#ccc' })
-    } else {
-      loadDataPopular()
-      setToggleStyle(styles.toggleSelected)
-      setToggleNewColor({ color: '#ccc' })
-      setToggleHotColor({ color: '#333' })
-    }
+    setIsError(false)
+    setIsRefreshing(true)
+    getData().then(userData => {
+      if (userData) {
+        mylike(userData.data).then(res => {
+          if (res.code === 0) { // 数据获取成功
+            // console.log('profile-res:')
+            // console.log(res.data.data)
+            let temp = []
+            res && res.data && res.data.data && res.data.data.forEach(item => {
+              console.log(item.id)
+              temp = [...temp, item.id]
+            })
+            setLikeSet(temp)
+            if (toggleNew) {
+              loadDataNew()
+              setToggleStyle([styles.toggleSelected, styles.toggleNew])
+              setToggleNewColor({ color: '#333' })
+              setToggleHotColor({ color: '#ccc' })
+            } else {
+              loadDataPopular()
+              setToggleStyle(styles.toggleSelected)
+              setToggleNewColor({ color: '#ccc' })
+              setToggleHotColor({ color: '#333' })
+            }
+            setIsRefreshing(false)
+          } else { // 获取失败
+            setIsRefreshing(false)
+          }
+        }).catch(err => {
+          setIsRefreshing(false)
+          alert(err)
+        })
+      } else {
+        if (toggleNew) {
+          setToggleStyle([styles.toggleSelected, styles.toggleNew])
+          setToggleNewColor({ color: '#333' })
+          setToggleHotColor({ color: '#ccc' })
+        } else {
+          setToggleStyle(styles.toggleSelected)
+          setToggleNewColor({ color: '#ccc' })
+          setToggleHotColor({ color: '#333' })
+        }
+      }
+    }).catch(err => {
+      console.log(err)
+      setIsError(true)
+      setIsRefreshing(false)
+    })
   }, [toggleNew])
 
   const loadDataNew = () => {
-    setIsError(false)
-    setIsRefreshing(true)
-    allNew(1, 10).then(res => {
+    allNew(1, 30).then(res => {
       if (res.code === 0) { // 数据获取成功
-        console.log("discover-res:")
-        console.log(res.data.data)
+        // console.log('discover-res:')
+        // console.log(res.data.data)
         setListData(res.data.data.records)
-        setIsRefreshing(false)
       } else { // 获取失败
         setIsError(true)
         setIsRefreshing(false)
@@ -121,16 +100,17 @@ const Discover = (props) => {
       alert(err)
     })
   }
+
+  useEffect(() => {
+    setIsRefreshing(false)
+  },[listData])
 
   const loadDataPopular = () => {
-    setIsError(false)
-    setIsRefreshing(true)
-    allPopular(1, 10).then(res => {
+    allPopular(1, 30).then(res => {
       if (res.code === 0) { // 数据获取成功
-        console.log("discover-res:")
-        console.log(res.data.data)
+        // console.log('discover-res:')
+        // console.log(res.data.data)
         setListData(res.data.data.records)
-        setIsRefreshing(false)
       } else { // 获取失败
         setIsError(true)
         setIsRefreshing(false)
@@ -142,101 +122,73 @@ const Discover = (props) => {
       setListData([])
       alert(err)
     })
-  } 
-  useEffect(() => { // 页面初始化
-    loadDataPopular()
-  }, [])
-
-  const onPressToggle = () => {
-    // 点击 “热门/最新” 按钮触发事件。
-    setToggleNew(!toggleNew)
   }
 
-  const onPressPublish = () => {
-    alert('发布！')
-  }
-
-  const onPressRefresh = () => {
-    if (toggleNew) {
-      loadDataNew()
-    } else {
-      loadDataPopular()
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('userData')
+      return jsonValue !== null ? JSON.parse(jsonValue) : null
+    } catch (e) {
+      // error reading value
     }
   }
 
-  const EmptyContent = () => {
-    return (
-      <View
-        style={{
-          alignItems: 'center',
-          transform: [{ translateY: Dimensions.get('window').height / 2 }]
-        }}
-      >
-        <AntDesign name="frowno" color="white" size={50} />
-        <Text style={{ color: 'white', marginTop: 15 }}>暂无内容~</Text>
-      </View>
-    )
+  const initialize = () => {
+    setIsError(false)
+    setIsRefreshing(true)
+    getData().then(userData => {
+      // console.log(userData.data, 'userData')
+      if (userData) {
+        mylike(userData.data).then(res => {
+          if (res.code === 0) { // 数据获取成功
+            // console.log('profile-res:')
+            // console.log(res.data.data)
+            let temp = []
+            res && res.data && res.data.data && res.data.data.forEach(item => {
+              // console.log(item.id)
+              temp = [...temp, item.id]
+            })
+            setLikeSet(temp)
+            loadDataPopular()
+          } else { // 获取失败
+            setIsRefreshing(false)
+          }
+        }).catch(err => {
+          setIsRefreshing(false)
+          alert(err)
+        })
+      } else {
+        loadDataPopular()
+      }
+    }).catch(err => {
+      console.log(err)
+      setIsError(true)
+      setIsRefreshing(false)
+    })
   }
 
-  const RefreshingContent = () => {
-    return (
-      <View
-        style={{
-          alignItems: 'center',
-          transform: [{ translateY: Dimensions.get('window').height / 2 }]
-        }}
-      >
-        <Text style={{ color: 'white' }}>加载中...</Text>
-      </View>
-    )
-  }
+  useEffect(() => { // 页面初始化
+    initialize()
+  }, [])
 
-  const ErrorContent = () => {
-    return (
-      <View
-        style={{
-          alignItems: 'center',
-          transform: [{ translateY: Dimensions.get('window').height / 2 }]
-        }}
-      >
-        <Pressable
-          onPress={onPressRefresh}
-          style={{
-            width: 150,
-            height: 50,
-            borderRadius: 25,
-            borderWidth: 1,
-            borderColor: '#ffdcb2',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <Text
-            style={{
-              color: '#ffdcb2',
-              fontSize: 18
-            }}
-          >
-            刷新重试
-          </Text>
-        </Pressable>
-        <Text style={{ color: 'white', marginTop: 15 }}>
-          加载失败，请刷新重试~
-        </Text>
-      </View>
-    )
-  }
+  useEffect(()=>{
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      setToggleNew(false)
+      initialize()
+    })
+    return unsubscribe
+  }, [props.navigation])
 
   return (
     <View style={styles.container}>
       <LinearGradient colors={['#727480', '#454653']} style={styles.background}>
         <Text style={styles.title}>发现</Text>
-        <Pressable style={styles.toggle} onPress={onPressToggle}>
+        <Pressable style={styles.toggle} onPress={() => setToggleNew(!toggleNew)}>
           <View style={toggleStyle}></View>
           <Text style={toggleHotColor}>热门</Text>
           <Text style={toggleNewColor}>最新</Text>
         </Pressable>
-        {!isError && !isRefreshing && listData.length > 0 && (
+        {!isError && !isRefreshing && listData && listData.length > 0 && (
           <WaterfallFlow
             style={{
               transform: [{ translateY: 75 }],
@@ -251,19 +203,17 @@ const Discover = (props) => {
             numColumns={2}
             renderItem={({ item, index, columnIndex }) => (
               <FlowListItem
-                title={item.title}
-                time={item.time}
-                userId={item.userId}
-                likeNum={item.likeNum}
-                imgUrl={item.imgUrl}
+                item={item}
+                navigation={props.navigation}
+                likeSet={likeSet}
               />
             )}
           />
         )}
-        {!isError && isRefreshing && <RefreshingContent />}
-        {!isError && !isRefreshing && listData.length <= 0 && <EmptyContent />}
+        {!isError && isRefreshing && <RefreshingContent onPressRefresh={() => toggleNew ? loadDataNew() : loadDataPopular()} />}
+        {!isError && !isRefreshing && (!listData || listData.length <= 0) && <EmptyContent />}
         {isError && <ErrorContent />}
-        <TouchableOpacity style={styles.publish} onPress={onPressPublish}>
+        <TouchableOpacity style={styles.publish} onPress={() => props.navigation.navigate('Publish')}>
           <Text style={{ fontSize: 24, color: '#3A3A3A' }}>+</Text>
         </TouchableOpacity>
       </LinearGradient>

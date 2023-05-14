@@ -1,5 +1,5 @@
-//发表评论
-export async function publishComment(username, password) {
+// 点赞帖子
+export async function like(mid) {
     const options = {
       method: 'GET',
       headers: {
@@ -10,16 +10,17 @@ export async function publishComment(username, password) {
   
     try {
       const response = await fetch(
-        `http://101.200.148.39:3599/api/moodcomment/all.do?userAccount=${username}&userPassword=${password}`,
+        `http://101.200.148.39:3599/api/controller/moodlike/save.do?mid=${mid}`,
+        options
       )
-      if (response.ok) {
+      if (response.ok) {  //请求成功,使用 ===
         console.log('Request successful')
       } else {
         console.log('Request failed')
       }
       const data = await response.json()
       console.log(data)
-      return data
+      return data       // 返回请求到的数据
     } catch (err) {
       console.log(err)
     }

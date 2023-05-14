@@ -1,38 +1,51 @@
-import { View, Text,StyleSheet,FlatList,Pressable,Dimensions, } from 'react-native'
+import { View, Text,StyleSheet,FlatList, Image, Pressable, Dimensions, Linking, TouchableOpacity } from 'react-native'
 import React , {useEffect, useState} from 'react'
-import { Searchbar,Button} from 'react-native-paper'
-import { pickDocument,KeySearch } from '../api/SearchInterface'
-import {Show} from '../api/HomeInterface'
+import { Searchbar,Button, MD3Colors } from 'react-native-paper'
+import { pickDocument, KeySearch } from '../api/SearchInterface'
+import { Show } from '../api/HomeInterface'
 import { AntDesign } from '@expo/vector-icons'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { LinearGradient } from 'expo-linear-gradient'
+import EmptyContent from '../components/EmptyContent'
+import ErrorContent from '../components/ErrorContent'
+import RefreshingContent from '../components/RefreshingContent'
+import * as ImagePicker from 'expo-image-picker'
 
-const HotItem = ({ item }) => (
-  <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
-    <Text>{item.artifactName}</Text>
-    <Text>{item.collectNum}</Text>
-  </View>
-)
+const HotItem = (props) => {
+  return (
+    <TouchableOpacity
+      onPress={() => props.navigation.navigate('HeritageDetails', { id: props.item.item.id })}
+      style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10, borderRadius: 20, height: 40, backgroundColor: 20, marginTop: 10 }}
+    >
+      <Text style={{ color: 'white' }}>{props.item.item.artifactName}</Text>
+      <Text style={{ color: 'white' }}>{props.item.item.collectNum}</Text>
+    </TouchableOpacity>
+  )
+}
 
 const Search = (props) => {
   const[SearchQuery,setSearchQuery]=React.useState('')
-  const[hotitem,sethotitem]=useState([]) //热门榜
-  const[currPage,setcurrPage]=useState(1)
-  const[pageSize,setpageSize]=useState(15)
+  const[hotitem,setHotItem]=useState([]) //热门榜
+  const [pickedImage, setPickedImage] = useState();
   const [isRefreshing, setIsRefreshing] = useState(false) // 正在加载数据
   const [isError, setIsError] = useState(true) // 数据加载错误
+  useEffect(() => {
+    loadData()
+  }, [])
   useEffect(()=>{
-    Show(1, 5).then(async res=>{
-      if(res.message==='ok'){
-        //sethotitem
-        sethotitem(res.data.data.records)
-      }
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      loadData()
     })
-  })
-  const handleSearch=(props)=>{ //关键词搜索
-    KeySearch(currPage,SearchQuery,pageSize).then(async res=>{
+    return unsubscribe
+  }, [props.navigation])
+
+  const handleSearch=()=>{ // 关键词搜索
+    console.log(currPage, SearchQuery, pageSize)
+    KeySearch(currPage, SearchQuery, pageSize).then(res => {
       if(res.message==='ok'){
         try{
-          props.navigation.navigate('Result',{
-            //ResultScreen(res)
+          props.navigation.navigate('Result', {
+            list: res.data.list
           })
         }catch(error){
           console.log(error)
@@ -40,151 +53,94 @@ const Search = (props) => {
       }
     })
   }
+  useEffect(() => {
+    console.log(pickedImage)
+  }, [pickedImage])
+
+  const takeImageHandler = async () => {
+    console.log('test')
+    const image = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [16, 9],
+      quality: 0.5
+    })
+    setPickedImage(image.assets[0].uri)
+  }
 
   const loadData = () => {
     setIsError(false)
     setIsRefreshing(true)
-    setTimeout(() => {
-      // 加载成功
-      setListData(arr)
+    Show(1, 5).then(async res=>{
+      if(res.message==='ok') {
+        setHotItem(res.data.data.records)
+        setIsRefreshing(false)
+      } else {
+        setIsError(true)
+        setIsRefreshing(false)
+        setHotItem([])
+      }
+    }).catch(err => {
+      console.log(err)
+      setIsError(true)
       setIsRefreshing(false)
-      //  加载失败
-      // setIsError(true)
-      // setIsRefreshing(false)
-      //setListData([])
-    }, 800)
-  }
-
-  const onPressRefresh = () => {
-    loadData()
-  }
-
-  const EmptyContent = () => {
-    return (
-      <View
-        style={{
-          alignItems: 'center',
-          transform: [{ translateY: Dimensions.get('window').height / 2 }]
-        }}
-      >
-        <AntDesign name="frowno" color="white" size={50} />
-        <Text style={{ color: 'white', marginTop: 15 }}>暂无内容~</Text>
-      </View>
-    )
-  }
-
-  const RefreshingContent = () => {
-    return (
-      <View
-        style={{
-          alignItems: 'center',
-          transform: [{ translateY: Dimensions.get('window').height / 2 }]
-        }}
-      >
-        <Text style={{ color: 'white' }}>加载中...</Text>
-      </View>
-    )
-  }
-
-  const ErrorContent = () => {
-    return (
-      <View
-        style={{
-          alignItems: 'center',
-          transform: [{ translateY: Dimensions.get('window').height / 2 }]
-        }}
-      >
-        <Pressable
-          onPress={onPressRefresh}
-          style={{
-            width: 150,
-            height: 50,
-            borderRadius: 25,
-            borderWidth: 1,
-            borderColor: '#ffdcb2',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <Text
-            style={{
-              color: '#ffdcb2',
-              fontSize: 18
-            }}
-          >
-            刷新重试
-          </Text>
-        </Pressable>
-        <Text style={{ color: 'white', marginTop: 15 }}>
-          加载失败，请刷新重试~
-        </Text>
-      </View>
-    )
+      setHotItem([])
+    })
   }
 
   return (
     <View style={styles.container}>
-      <Searchbar
-        placeholder='文物搜索'
-        onChangeText={setSearchQuery}
-        onSubmitEditing={handleSearch}
-        value={SearchQuery}
-      />
-      <View style={styles.vbutton_1}>
-        <Button icon="file" mode="contained" onPress={() => props.navigation.navigate('ccrp-gpt.live')}>
-          智能问答
-        </Button>
-      </View>
-      <View style={styles.vbutton_2}>
-        <Button icon="camera" mode="contained" onPress={()=>pickDocument().then(async res=>{
-          if(res.message==='ok'){
-            try{
-              navigation.navigate('Result', {res})
-            }catch(error){
-              console.log(error)
-            }
-          }
-        })} >
-          以图搜图
-        </Button>
-      </View>
-      {!isError && !isRefreshing && hotitem.length > 0 && (
-        <><Text>
-          热门榜
-        </Text><FlatList
-          data={hotitem}
-          renderItem={HotItem}
-          keyExtractor={(item) => item.id.toString()} /></>
-      )}
-      {!isError && isRefreshing && <RefreshingContent />}
-      {!isError && !isRefreshing && hotitem.length <= 0 && <EmptyContent />}
-      {isError && <ErrorContent />}
+      <LinearGradient
+        style={styles.background}
+        colors={['#727480', '#454653']}
+      >
+        <View style={{ alignItems: 'center', marginTop: 30 }}>
+          <Searchbar
+            placeholder='文物搜索'
+            onChangeText={setSearchQuery}
+            onSubmitEditing={handleSearch}
+            value={SearchQuery}
+            style={styles.searchBar}
+          />
+          <View style={{flexDirection: 'row', marginTop: 30, justifyContent: 'space-between', width: '70%'}}>
+            <Button icon="file" mode="contained" onPress={() => Linking.openURL('http://ccrp-gpt.live')}>
+              智能问答
+            </Button>
+            <Button
+              icon="camera"
+              mode="contained"
+              onPress={takeImageHandler}>以图搜图</Button>
+          </View>
+        </View>
+        {!isError && !isRefreshing && hotitem.length > 0 && (
+          <View style={{ marginTop: 30, width: '90%', alignSelf: 'center' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <MaterialCommunityIcons name='fire' size={24} color={MD3Colors.error60} />
+              <Text style={{ color: MD3Colors.error60, fontSize: 20 }}>热门榜</Text>
+            </View>
+            <FlatList
+              data={hotitem}
+              renderItem={item => <HotItem navigation={props.navigation} item={item}/>}
+              keyExtractor={(item) => item.id.toString()} />
+          </View>
+        )}
+        {!isError && isRefreshing && <RefreshingContent />}
+        {!isError && !isRefreshing && hotitem.length <= 0 && <EmptyContent />}
+        {isError && <ErrorContent onPressRefresh={loadData}/>}
+      </LinearGradient>
     </View>
   )
 }
 const styles=StyleSheet.create({
-  vbutton_1:{
-    height:50,
-    width:150,
-    top:20
-  },
-  vbutton_2:{
-    height:50,
-    width:150,
-    right:-170,
-    top:-30
-  },
   container: {
     backgroundColor: '#696969',
-    // alignItems: 'center',
     flex: 1 // 布局
   },
   background: {
-    // justifyContent:'center',
-    // alignContent:'center',
-    // alignItems:'center',
     flex: 1
   },
-
+  searchBar: {
+    width: '85%',
+  }
 })
+
 export default Search

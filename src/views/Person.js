@@ -21,7 +21,7 @@ const ListItem = (props) => {
             case '用户名':
                 props.navigation.navigate('EditUsername')
                 break
-            case '描述':
+            case '密码':
                 props.navigation.navigate('EditPassword')
                 break
             default: break
@@ -53,12 +53,13 @@ const Person = (props) => {
           // 使用AsyncStorage清空本地存储的用户登录信息
           await AsyncStorage.removeItem('userData');
           console.log('User token has been cleared!');
+          props.navigation.navigate('Home')
         } catch (error) {
           // 如果清空本地存储的用户登录信息失败，打印错误信息
           console.error(`Failed to remove user token: ${error}`);
           return;
         }
-        BackHandler.exitApp();
+        
       }, []);
     return (
         <View>
@@ -66,13 +67,13 @@ const Person = (props) => {
                 <Appbar.BackAction onPress={() => props.navigation.goBack()} />
                 <Appbar.Content title="Title" />
             </Appbar.Header>
-            <Text>账户信息</Text>
+            <Text style={styles.inputStyle}>账户信息</Text>
             <View style={styles.list}>
                 <ListItem title="用户名" content={fakeUserInfo.username} navigation={props.navigation} />
                 <ListItem title="密码" content={fakeUserInfo.userInfo} navigation={props.navigation} />
-                <View style = {styles.buttonStyle}>
-                    <Button title="退出登录"  borderColor= '#fffaf0' onPress={handleLogout} />
-                </View>
+            </View>
+            <View style = {styles.buttonStyle}>
+                <Button title="退出登录"   onPress={handleLogout} />
             </View>
         </View>
     )
@@ -80,6 +81,11 @@ const Person = (props) => {
 }
 
 const styles = StyleSheet.create({
+    inputStyle:{
+        top: 10,
+        fontSize: 20,
+        left:10
+    },
     list: {
         alignItems: 'center'
     }, 
@@ -89,7 +95,7 @@ const styles = StyleSheet.create({
         width: '90%',
         paddingLeft: '5%',
         paddingRight: '5%',
-        paddingTop: 10,
+        paddingTop: 30,
         paddingBottom: 10,
         borderBottomColor: '#ccc',
         borderBottomWidth: 1,
@@ -100,6 +106,7 @@ const styles = StyleSheet.create({
     },
     buttonStyle: {
         top: 30,
+        left: 20,
         width: '90%',
         borderRadius: 10,
         color:'#fffaf0',

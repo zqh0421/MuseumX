@@ -4,33 +4,42 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { Appbar, List, MD3Colors,TextInput} from 'react-native-paper';
 import { editUsername } from '../api/editUsername';
 import AsyncStorage from '@react-native-async-storage/async-storage'
+
 const EditUsername = (props) => {
     const [newname, setnewname] = useState('');
     const [oldname, setoldname] = useState('');
     const [password, setpassword] = useState('');
-    const onPressSave = async() => {
+    const getData = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem('userData')
+        console.log('json', jsonValue)
+        return jsonValue !== null ? JSON.parse(jsonValue) : null
+      } catch (e) {
+        // error reading value
+      }
+    }
+    const onPressSave = () => {
         // 提交到后端
         //alert(newname)
-        console.log(newname)
-        const userData = await AsyncStorage.getItem('userData')
-        if(userData){
-          editUsername(JSON.parse(userData).data, newname, oldname, password).then(async res => {
-            if (res.message === 'ok') { 
-              try {
-                console.log(res.data.data)
-                console.log("修改名字成功")
-                props.navigation.goBack()
-              } catch (e) {
-                // saving error
-                console.log(error)
-                console.log(res.data.data)
-              }
+      //alert(newname)
+      console.log('test')
+      getData().then(userData => {
+        console.log(userData)
+        if (userData) {
+          editUsername(userData.data, newname, oldname, password).then(res => {
+            if (res.code === 0) { // 数据获取成功
+              console.log(res.data.data)
+              console.log('修改用户名成功')
+              props.navigation.goBack()
+            } else { // 获取失败
             }
           }).catch(err => {
             alert(err)
           })
+        } else {
+          props.navigation.navigate('Login')
         }
-        
+    })
         
     }
     

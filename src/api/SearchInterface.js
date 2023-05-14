@@ -29,7 +29,7 @@ export async function pickDocument() {
 }
 //关键词搜索
 export async function KeySearch(currPage, keyword, pageSize) {
-  const Item = {
+  const options = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -42,10 +42,10 @@ export async function KeySearch(currPage, keyword, pageSize) {
   }
   const response = await fetch(
     'http://101.200.148.39:3599/api/artifact/searchArtifact',
-    Item
+    options
   )
   if (response.ok) {
-    console.log('Request successful')
+    console.log('Request keysearch successful')
   }
   const data = response.json()
   console.log(data)
@@ -53,13 +53,3 @@ export async function KeySearch(currPage, keyword, pageSize) {
 }
 //KeySearch(1,'jay',10)
 //KeySearch('青花瓷')
-
-//热门榜
-// export async function HotList() {
-//   const response = await fetch('appartifact/all.do')
-//   if (response.ok) {
-//     console.log('Request successful')
-//   }
-//   const data = response.json()
-//   return data
-// }

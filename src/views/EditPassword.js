@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { Appbar, List, MD3Colors,TextInput} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { editPassword } from '../api/editPassword';
+
 const EditPassword= (props) => {
   const [newpassword, setnewpassword] = useState('');
   const [oldname, setoldname] = useState('');
@@ -19,43 +20,26 @@ const EditPassword= (props) => {
   }
   const onPressSave = async() => {
       // 提交到后端
+      alert(newpassword)
       console.log('test')
       getData().then(userData => {
-      console.log(userData)
-      if (userData) {
-        
-        editPassword(JSON.parse(userData).data, newpassword, oldname, password).then(res => {
-          if (res.code === 0) { // 数据获取成功
-            console.log(res.data.data)
-            console.log('修改密码成功')
-            props.navigation.goBack()
-          } else { // 获取失败
-          }
-        }).catch(err => {
-          alert(err)
-        })
-      } else {
-        props.navigation.navigate('Login')
-      }
+        console.log(userData)
+        if (userData) {
+          editPassword(userData.data, newpassword, oldname, password).then(res => {
+            if (res && res.code && res.code === 0) { // 数据获取成功
+              console.log(res.data.data)
+              console.log('修改密码成功')
+              props.navigation.goBack()
+            } else { // 获取失败
+            }
+          }).catch(err => {
+            alert(err)
+          })
+        } else {
+          props.navigation.navigate('Login')
+        }
     })
-  
-      //alert(newpassword)
-      // try {
-      //   const userData = await AsyncStorage.getItem('userData')
-      //   if (userData) {
-          // editPassword(JSON.parse(userData).data, newpassword, oldname, password).then(res => {
-          //   if (res.code === 0) { // 数据获取成功
-          //     console.log(res.data.data)
-          //     console.log('修改密码成功')
-          //     props.navigation.goBack()            
-      //       } 
-      //     }).catch(err => {
-      //       alert('err')
-      //     })
-      //   } 
-      // } catch {
-      //   alert('err')
-      // }
+     
     }
     return (
       <View style={styles.container}>
@@ -145,7 +129,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     color: '#CCCCCC',
     top: 20,
-    left: 150,
+    left: 125,
     alignItems: 'center'
   },
   save: {

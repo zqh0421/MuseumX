@@ -1,17 +1,18 @@
-export async function editUsername(token, newPassword, userAccount, userPassword) {
+
+export async function editUsername(token, newAccount, userAccount, userPassword){
     const options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'token': token
       },
-      body: JSON.stringify({
-      'newPassword': newPassword,
-      'userAccount': userAccount,
-      'userPassword': userPassword
-     })
+      body:'newAccount=newAccount1&userAccount=userAccount&userPassword=userPassword&userPassword=userPassword'
+      // body: JSON.stringify({
+      //   'newAccount': newAccount,
+      //   'userAccount': userAccount,
+      //   'userPassword': userPassword
+      // })
     }
-  
     try {
        const response = await fetch(
       'http://101.200.148.39:3599/api/controller/all/user/updateAccount',

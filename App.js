@@ -11,9 +11,8 @@ import EditPassword from'./src/views/EditPassword'
 import TabBar from './src/components/TabBar'
 import HeritageDetails from './src/views/HeritageDetails'
 import HeritageDiscover from './src/views/HeritageDiscover'
-// import LoginScreen from './src/views/My/HomeScreen'
-// import { Provider as PaperProvider } from 'react-native-paper'
-
+import Result from './src/views/Result'
+import Post from './src/views/Post'
 const Stack = createNativeStackNavigator()
 
 const App = () => {
@@ -30,6 +29,8 @@ const App = () => {
           <Stack.Screen name="EditUsername" component={EditUsername} />
           <Stack.Screen name="EditPassword" component={EditPassword} />
           <Stack.Screen name="Publish" component={Publish} />
+          <Stack.Screen name="Result" component={Result} />
+          <Stack.Screen name="Post" component={Post} />
         </Stack.Group>
         <Stack.Group
           screenOptions={{
