@@ -1,23 +1,38 @@
 import { View, Text,Image,StyleSheet, Pressable, Dimensions } from 'react-native'
 import React , { useState, useEffect } from 'react'
-import { IconButton,MD3Colors, Surface} from 'react-native-paper'
-import Pic from '../../assets/pic.png'
+import { IconButton, MD3Colors } from 'react-native-paper'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { collect } from '../api/Collect'
 
 const HomeListItem = (props) => {
   const { item } = props
-  const [color, setColor] = useState(props.isCollected ? MD3Colors.error60 : MD3Colors.error0)
-  // TODO: 用户是否收藏
-  // TODO：ScrollView
+  const [collectNum, setCollectNum] = useState(item.collectNum)
+  const [color, setColor] = useState(new Set(props.collectSet).has(item.id) ? '#E7A960' : '#ccc')
+  console.log('collectset', props.collectSet)
 
-  const onPressCollect = () => {
-    // 1. 收藏按钮样式变化
-    if (color === MD3Colors.error60) setColor(MD3Colors.error0)
-    else if (color === MD3Colors.error0) setColor(MD3Colors.error60)
-    // 2. 向后端发送请求，修改
-    try{
-      Collect(item.id)
-    }catch(error){
-      console.log(error)
+  const onPressCollect = async () => {
+    // 判断是否登录
+    const jsonValue = await AsyncStorage.getItem('userData')
+    if (jsonValue) {
+      // 向后端发送请求，修改
+      collect(JSON.parse(jsonValue).data, item.id).then(res => {
+        console.log(res)
+        if (res.message === 'ok') {
+          // 收藏按钮样式变化
+          if (color === '#E7A960') {
+            setColor('#ccc')
+            setCollectNum(collectNum - 1)
+          }
+          else if (color === '#ccc') {
+            setColor('#E7A960')
+            setCollectNum(collectNum + 1)
+          }
+        }
+      }).catch(err => {
+        alert(err)
+      })
+    } else {
+      props.navigation.navigate('Login')
     }
   }
 
@@ -28,8 +43,7 @@ const HomeListItem = (props) => {
     <Pressable onPress={onPressItem}>
       <View style={styles.surface}>
         <View style={{ position: 'absolute', top: 0, left: 0, width: Dimensions.get('window').width * 0.88, height: 170, backgroundColor: 'black', opacity: 0.4, borderRadius: 15 }}></View>
-        {/* <Image style={styles.image} source={{ uri: item.imageUrl }}/> TODO: 图片显示问题 */}
-        <Image style={styles.image} source={Pic}/>
+        {item && item.imageUrl && <Image style={styles.image} source={{ uri: item.imageUrl }}/>}
         <View style={{ margin: '3%', justifyContent: 'space-between', width: '55%'}}>
           <Text style={styles.title}>{item.artifactName}</Text>
           {/* <Text style={styles.desc}>{props.desc}</Text> */}
@@ -41,7 +55,7 @@ const HomeListItem = (props) => {
               onPress={onPressCollect}
               style={{height: 24, width: 24}}
             />
-            <Text style={{ fontSize: 20, color: '#fff' }}>{item.collectNum}</Text>
+            <Text style={{ fontSize: 20, color: '#fff' }}>{collectNum}</Text>
           </View>
         </View>
       </View>

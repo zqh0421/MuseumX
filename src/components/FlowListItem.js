@@ -3,48 +3,63 @@ import { Surface,IconButton,MD3Colors} from 'react-native-paper'
 import { useEffect, useState } from 'react'
 import Pic from '../../assets/pic.png'
 import { like } from '../api/discover/likeInterface'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 const FlowListItem = (props) => {
   const { item } = props
-  const [color, setColor] = useState(props.isLoved ? MD3Colors.error60 : '#ccc') // TODO: 收藏状态
-  const [height, setHeight] = useState(80)
+  const [likeNum, setLikeNum] = useState(item.likeNum)
+  const [color, setColor] = useState(new Set(props.likeSet).has(item.id) ? MD3Colors.error60 : '#ccc') // TODO: 收藏状态
+  const [height, setHeight] = useState(180)
+  console.log('likeset', props.likeSet)
+
   // useEffect(() => {
   //   Image.getSize(item.imgUrl, (w, h) => {
   //     setHeight(h / w * 0.93 * 0.45 * Dimensions.get('window').width)
   //   },
-  //     (failure) => { console.log('failure', failure) }
+  //   (failure) => { console.log('failure', failure) }
   //   );
   // }, [])
+
+  useEffect(() => {
+    console.log('likeset', props.likeSet)
+    setColor(new Set(props.likeSet).has(item.id) ? MD3Colors.error60 : '#ccc')
+  }, [props.likeSet])
   const onPressFlowListItem = () => {
     props.navigation.navigate('HeritageDiscover', {item: item})
   }
 
-  const onPressLove = () => {
-    // 1. 点赞按钮样式变化
-    if (color === MD3Colors.error60) {
-      setColor('#ccc')
-      item.likeNum--
+  const onPressLove = async () => {
+    // 判断是否登录
+    const jsonValue = await AsyncStorage.getItem('userData')
+    if (jsonValue) {
+      // 向后端发送请求，修改
+      like(JSON.parse(jsonValue).data, item.id).then(res => {
+        if (res.message === 'ok') {
+          // 点赞按钮样式变化
+          if (color === MD3Colors.error60) {
+            setColor('#ccc')
+            setLikeNum(likeNum-1)
+          }
+          else if (color === '#ccc') {
+            setColor(MD3Colors.error60)
+            setLikeNum(likeNum+1)
+          }
+        }
+      }).catch(err => {
+        alert(err)
+      })
+    } else {
+      props.navigation.navigate('Login')
     }
-    else if (color === '#ccc'){
-      setColor(MD3Colors.error60)
-      item.likeNum++
-    }
-
-    // 2. 向后端发送请求，修改
-    like(1).then(res => {
-      console.log(res)
-    }).catch(res => {
-
-    })
   }
 
   return (
     <Pressable style={styles.itemContainer} onPress={onPressFlowListItem}>
       <View style={styles.bg}></View>
       <View style={styles.itemPic}>
-        <Image
-          source={{uri: item.imgUrl} || Pic}
+        {item && item.imgUrl && <Image
+          source={{uri: item.imgUrl}}
           style={[styles.image, { width: Dimensions.get('screen').width * 0.93 * 0.45, height: height}]}
-        />
+        />}
       </View>
       <Text style={styles.itemTitle}>{item.title}</Text>
       <View
@@ -68,7 +83,7 @@ const FlowListItem = (props) => {
             size={17}
             onPress={onPressLove}
           />
-          <Text style={styles.LoveNumber}>{item.likeNum}</Text>
+          <Text style={styles.LoveNumber}>{likeNum}</Text>
         </View>
       </View>
     </Pressable>

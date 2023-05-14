@@ -2,7 +2,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   Dimensions,
   KeyboardAvoidingView,
   ScrollView,
@@ -18,15 +17,35 @@ import {
   MD3Colors,
   SegmentedButtons,
   TextInput,
-  IconButton
+  IconButton,
+  Button,
 } from 'react-native-paper'
 import { render } from 'react-dom'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-// import { collect_number } from '../api/CollectNumber'
-// import { collect } from '../api/Collect'
-// import { artifact } from '../api/ArtifactInfo'
-// import { artifactComment } from '../api/ArtifactComment'
-// import { publishComment } from '../api/PublishComment'
+import { collect_number } from '../api/CollectNumber'
+import { collect } from '../api/Collect'
+import { artifact } from '../api/ArtifactInfo'
+import { artifactComment } from '../api/ArtifactComment'
+import { publishArtifactComment } from '../api/PublishArtifactComment'
+
+const CommentItem = (props) =>{
+  return(
+    <View style={{marginTop:15, }}>
+      <Text style={styles.textStyle}>userId:{props.userId}</Text>
+      <Text >{props.content}</Text>
+    </View>
+  )
+}
+
+const MyComponent = () => {
+  const [value, setValue] = React.useState('left');
+  return (
+    <ToggleButton.Row onValueChange={value => setValue(value)} value={value}>
+      <ToggleButton icon="format-align-left" value="left" />
+      <ToggleButton icon="format-align-right" value="right" />
+    </ToggleButton.Row>
+  );
+};
 
 const ListItem = (props) => {
   const [value, setValue] = useState('')
@@ -34,44 +53,81 @@ const ListItem = (props) => {
   const [artifactName, setArtifactname] = useState('')
   const [author, setAuthor] = useState('')
   const [relicTime, setRelicTime] = useState('')
-  const [iamgeUrl, setImageUrl] = useState('')
+  const [imageUrl, setImageUrl] = useState('')
   const [description, setDescription] = useState('')
-  const [collectNum, setCollectNum] = useState(50)
+  const [collectNum, setCollectNum] = useState(0)
   const [color, setColor] = useState(
     props.isCollected ? MD3Colors.error60 : MD3Colors.neutral100
   )
-  const [commentInfo, setCommentList] = useState([])
-  const [userList, setuserList] = useState([])
+  const [comments, setComments] = useState([])
   const [comment, setComment] = useState('')
-  useEffect(() => {
+  const [list, setList] = useState([])
+
+  const getData = async () => {
+    try{
+      const jsonValue = await AsyncStorage.getItem('userData')
+      return jsonValue !== null ? JSON.parse(jsonValue) : null
+      console.log('userData')
+    }catch(e){
+
+    }
+  }
+
+  // const [isRefreshing, setIsRefreshing] = useState(false) // 正在加载数据
+  // const [isError, setIsError] = useState(true) // 数据加载错误
+  // const [list, setList] = useState([]) // 列表数据初始状态
+
+  const loadData = () => {
     // 获取当前文物信息，请求参数：id
-    artifact(1)
+    // setIsError(false)
+    // setIsRefreshing(true)
+    artifact(props.id)
       .then(async (res) => {
         if (res.message === 'ok') {
           // TODO: 判断登录成功的条件根据实际接口修改！
-          setArtifactID(res.data.records.id)
-          setArtifactname(res.data.records.artifactName)
-          setAuthor(res.data.records.author)
-          setRelicTime(res.data.records.relicTime)
-          setDescription(res.data.records.description)
-          setImageUrl(res.data.records.iamgeUrl)
-          setCollectNum(res.data.records.collectNum)
+          // setIsRefreshing(false)
+          setArtifactID(res.data.id)
+          setArtifactname(res.data.artifactName)
+          setAuthor(res.data.author)
+          setRelicTime(res.data.relicTime)
+          setDescription(res.data.description)
+          setImageUrl(res.data.imageUrl)
+          setCollectNum(res.data.collectNum)
         }
+        //else{
+        //   setIsError(true)
+        //   setIsRefreshing(false)
+        // }
       })
       .catch((err) => {
         alert(err)
+        // setIsError(true)
+        // setIsRefreshing(false)
       })
 
     // 获取当前文物所有评论和发表评论的用户信息,请求参数：id, 修改
     // 评论的呈现方式：头像和文本
-    artifactComment(artifactID).then(async (res) => {
+    artifactComment(props.id).then(async (res) => {
       if (res.message === 'ok') {
-        setCommentList(res.data.records.comment)
-        setuserList(res.data.records.comment)
+        setComments(res.data.data)
       }
     })
-  }, [])
+  }
 
+  useEffect(() => {
+    getData().then(res => {
+      console.log('res:')
+      console.log(res)
+      if(res === undefined || res === null){
+        props.navigation.navigate('Login')
+      }else{
+        loadData()
+      }
+    }).catch((err) => {
+    })
+  },[])
+  
+  
   // 收藏
   const onPressCollect = () => {
     console.log('PressedCollect')
@@ -85,9 +141,10 @@ const ListItem = (props) => {
       setCollectNum(collectNum + 1)
     }
 
+
+
     // 2. 向后端发送请求，修改
-    // 请求参数：id
-    collect(artifactID)
+    collect(props.id)
       .then(async (res) => {
         if (res.message === 'ok') {
           // TODO: 判断登录成功的条件根据实际接口修改！
@@ -101,14 +158,12 @@ const ListItem = (props) => {
 
   // 发表评论
   const publishComment = () => {
-    console.log(comment)
-
     // 向后端发送请求
-    publishComment(artifactID, comment)
+    publishArtifactComment(props.id, comment)
       .then(async (res) => {
         if (res.message === 'ok') {
           // TODO: 判断登录成功的条件根据实际接口修改！
-          console.log('PressedCollect')
+          console.log('Send')
         }
       })
       .catch((err) => {
@@ -116,8 +171,6 @@ const ListItem = (props) => {
       })
   }
 
-  // 用户头像，用户名和评论
-  const arr = [{}]
 
   return (
     <SafeAreaView style={styles.container}>
@@ -127,11 +180,7 @@ const ListItem = (props) => {
           colors={['#727480', '#454653']}
         >
           {/* 文物图片 */}
-          {/* <Image
-            source={require('../../assets/pic.jpg')}
-            style={styles.imageStyle}
-          /> */}
-          {/* <Image source={iamgeUrl} style={styles.imageStyle}/> */}
+          <Image source={{uri:imageUrl}}style={styles.imageStyle}/>
 
           {/* 跳转按钮 */}
           <SegmentedButtons
@@ -156,38 +205,26 @@ const ListItem = (props) => {
 
           {/* 文字显示 */}
           <Text style={styles.Titlefont}>
-            汝窑天青釉盘
-            {/* {artifactName} */}
-            <Text style={styles.textStyle}>
-              {'\r\n\n'}北宋(公元960—1127年)
-              汝窑窑址在今河南宝丰清凉寺，以烧造青釉瓷器著称，是继定窑之后又一为宫廷烧造贡瓷的窑场。
-              其产品胎体细洁如香灰色，多为“裹足支烧”。釉色主要为天青色，釉层薄而莹润，釉泡大而稀疏，
-              有“寥若晨星”之称。釉面有细小的开片纹，称为“冰裂纹”。
-              {/* {author}
-                        {relicTime} */}
-            </Text>
+            {artifactName}
+            <Text style={styles.textStyle}>{'\r\n\n'}Author: {author}</Text>
+            <Text style={styles.textStyle}>{'\r\n\n'}Age: {relicTime}</Text>
           </Text>
 
           <Text style={styles.Titlefont}>
-            讲解
-            <Text style={styles.textStyle}>
-              {'\r\n\n'}北宋(公元960—1127年)
-              汝窑窑址在今河南宝丰清凉寺，以烧造青釉瓷器著称，是继定窑之后又一为宫廷烧造贡瓷的窑场。
-              其产品胎体细洁如香灰色，多为“裹足支烧”。釉色主要为天青色，釉层薄而莹润，釉泡大而稀疏，
-              有“寥若晨星”之称。釉面有细小的开片纹，称为“冰裂纹”。
-              {/* [description] */}
-            </Text>
+            Description
+            <Text style={styles.textStyle}>{'\r\n\n'}{description}</Text>
           </Text>
 
           <Text style={styles.Titlefont}>
-            留言
-            <Text style={styles.textStyle}>
-              {'\r\n\n'}北宋(公元960—1127年)
-              汝窑窑址在今河南宝丰清凉寺，以烧造青釉瓷器著称，是继定窑之后又一为宫廷烧造贡瓷的窑场。
-              其产品胎体细洁如香灰色，多为“裹足支烧”。釉色主要为天青色，釉层薄而莹润，釉泡大而稀疏，
-              有“寥若晨星”之称。釉面有细小的开片纹，称为“冰裂纹”。
-            </Text>
+            Comments
           </Text>
+          <View style={{justifyContent:'center',left:70 }}>
+              {comments.map(item =>{
+                return(
+                  <CommentItem userId={item.userId} content={item.content}/>
+                )
+              })}
+            </View>
           <View style={{ backgroundColor: '#3a3a3a', height: 80 }}></View>
         </LinearGradient>
       </ScrollView>
@@ -203,8 +240,17 @@ const ListItem = (props) => {
           outlineColor={'#CCCCCC'}
           activeOutlineColor={'#CCCCCC'}
           value={comment}
-          onChangeText={(comment) => publishComment(comment)}
+          onChangeText={(val) => setComment(val)}
         />
+
+        <Button
+          mode='contained'
+          buttonColor='#808080'
+          style={{top:-5,left:10}}
+          onPress={() => publishComment()}>
+          <Text style={styles.buttonTxt}>Send</Text>
+        </Button>
+
         {/* 收藏 */}
         <IconButton
           icon="star-outline"
@@ -212,20 +258,23 @@ const ListItem = (props) => {
           size={30}
           // onPress={() => console.log('Pressed')}
           onPress={onPressCollect}
-          style={{ top: -8 }}
+          style={{ top: -8 , left: 5 }}
         />
         {/* 显示收藏数量 */}
-        {/* id = 16 */}
         <Text style={{ color: '#EEEEEE', top: -8 }}>{collectNum}</Text>
+
       </View>
     </SafeAreaView>
   )
 }
 
 const HeritageDetails = (props) => {
+  //接收Home页面参数
+  const id = props.route.params.id
+  // console.log("props:", id)
   return (
     <View>
-      <ListItem />
+      <ListItem id={id}/>
     </View>
   )
 }
@@ -239,7 +288,6 @@ const styles = StyleSheet.create({
   },
   backgroud: {
     width: Dimensions.get('window').width,
-    // height:Dimensions.get('window').heigth-50,
     flex: 1
   },
   imageStyle: {
@@ -262,11 +310,11 @@ const styles = StyleSheet.create({
     marginLeft: 65,
     marginRight: 65,
     marginTop: 20,
-    marginVertical: 20
+    marginVertical: 20,
   },
   textStyle: {
     fontSize: 12,
-    color: '#d3d3d3'
+    color: '#d3d3d3',
   },
   bottombar: {
     position: 'absolute',
