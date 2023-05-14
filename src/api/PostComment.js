@@ -3,11 +3,8 @@ export async function postComment(mid) {
     const options = {
       method: 'GET',
       headers: {
-        'Content-Type':'application/json',
+        'Content-Type':'application/x-www-form-urlencoded',
       },
-      body: JSON.stringify({
-        mid: mid
-      })
     }
   
     try {

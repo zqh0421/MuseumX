@@ -30,22 +30,12 @@ import { publishArtifactComment } from '../api/PublishArtifactComment'
 
 const CommentItem = (props) =>{
   return(
-    <View style={{marginTop:15, }}>
+    <View style={{marginTop:'5%'}}>
       <Text style={styles.textStyle}>userId:{props.userId}</Text>
       <Text >{props.content}</Text>
     </View>
   )
 }
-
-const MyComponent = () => {
-  const [value, setValue] = React.useState('left');
-  return (
-    <ToggleButton.Row onValueChange={value => setValue(value)} value={value}>
-      <ToggleButton icon="format-align-left" value="left" />
-      <ToggleButton icon="format-align-right" value="right" />
-    </ToggleButton.Row>
-  );
-};
 
 const ListItem = (props) => {
   const [value, setValue] = useState('')
@@ -79,13 +69,9 @@ const ListItem = (props) => {
 
   const loadData = () => {
     // 获取当前文物信息，请求参数：id
-    // setIsError(false)
-    // setIsRefreshing(true)
     artifact(props.id)
       .then(async (res) => {
         if (res.message === 'ok') {
-          // TODO: 判断登录成功的条件根据实际接口修改！
-          // setIsRefreshing(false)
           setArtifactID(res.data.id)
           setArtifactname(res.data.artifactName)
           setAuthor(res.data.author)
@@ -94,19 +80,12 @@ const ListItem = (props) => {
           setImageUrl(res.data.imageUrl)
           setCollectNum(res.data.collectNum)
         }
-        //else{
-        //   setIsError(true)
-        //   setIsRefreshing(false)
-        // }
       })
       .catch((err) => {
         alert(err)
-        // setIsError(true)
-        // setIsRefreshing(false)
       })
 
-    // 获取当前文物所有评论和发表评论的用户信息,请求参数：id, 修改
-    // 评论的呈现方式：头像和文本
+    // 获取当前文物所有评论和发表评论的用户信息,加token
     artifactComment(props.id).then(async (res) => {
       if (res.message === 'ok') {
         setComments(res.data.data)
@@ -141,34 +120,38 @@ const ListItem = (props) => {
       setCollectNum(collectNum + 1)
     }
 
-
-
-    // 2. 向后端发送请求，修改
-    collect(props.id)
-      .then(async (res) => {
-        if (res.message === 'ok') {
-          // TODO: 判断登录成功的条件根据实际接口修改！
-          console.log('PressedCollect')
-        }
-      })
-      .catch((err) => {
+    getData().then(userData => {
+      if(userData){
+          collect(userData.data, artifactID).then(async (res) => {
+            if (res.message === 'ok') {
+              console.log('Like')
+            }
+          })
+      }else{
+        console.log("failed.")
+      }
+    }).catch((err) => {
         alert(err)
-      })
+    })
+
   }
 
   // 发表评论
   const publishComment = () => {
     // 向后端发送请求
-    publishArtifactComment(props.id, comment)
-      .then(async (res) => {
-        if (res.message === 'ok') {
-          // TODO: 判断登录成功的条件根据实际接口修改！
-          console.log('Send')
-        }
-      })
-      .catch((err) => {
-        alert(err)
-      })
+    getData().then(userData => {
+      if(userData){
+        publishArtifactComment(userData.data, artifactID, comment).then(async (res) =>{
+          if(res.message === "ok"){
+            console.log('Send')
+          }
+        })
+      }else{
+        console.log("failed")
+      }
+    }).catch((err) => {
+      alert(err)
+    })
   }
 
 
@@ -180,7 +163,7 @@ const ListItem = (props) => {
           colors={['#727480', '#454653']}
         >
           {/* 文物图片 */}
-          <Image source={{uri:imageUrl}}style={styles.imageStyle}/>
+          {imageUrl && <Image source={{uri:imageUrl}}style={styles.imageStyle}/>}
 
           {/* 跳转按钮 */}
           <SegmentedButtons
@@ -218,16 +201,18 @@ const ListItem = (props) => {
           <Text style={styles.Titlefont}>
             Comments
           </Text>
-          <View style={{justifyContent:'center',left:70 }}>
+          <View style={{left:'14%'}}>
               {comments.map(item =>{
                 return(
-                  <CommentItem userId={item.userId} content={item.content}/>
+                  <CommentItem userId={item.userId} content={item.content} key={item.id}/>
                 )
               })}
             </View>
-          <View style={{ backgroundColor: '#3a3a3a', height: 80 }}></View>
+            <View style={{height:100}}></View> 
         </LinearGradient>
-      </ScrollView>
+        
+        </ScrollView>
+        
 
       {/* 评论输入框 */}
       <View style={styles.bottombar}>
@@ -256,14 +241,14 @@ const ListItem = (props) => {
           icon="star-outline"
           iconColor={color}
           size={30}
-          // onPress={() => console.log('Pressed')}
           onPress={onPressCollect}
           style={{ top: -8 , left: 5 }}
         />
         {/* 显示收藏数量 */}
         <Text style={{ color: '#EEEEEE', top: -8 }}>{collectNum}</Text>
-
       </View>
+     {/* 设置高度位100后，底部评论输入框被遮盖，但所有评论可见 */}
+       
     </SafeAreaView>
   )
 }
@@ -271,7 +256,6 @@ const ListItem = (props) => {
 const HeritageDetails = (props) => {
   //接收Home页面参数
   const id = props.route.params.id
-  // console.log("props:", id)
   return (
     <View>
       <ListItem id={id}/>
@@ -284,33 +268,31 @@ export default HeritageDetails
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   backgroud: {
     width: Dimensions.get('window').width,
-    flex: 1
+    flex:1
   },
   imageStyle: {
-    width: 300,
+    width: '80%',
     height: 300,
     alignContent: 'center',
-    marginLeft: 50, //页边距
-    marginRight: 50,
-    top: 50, //和页面顶部的距离
+    marginLeft: '10%', //页边距
+    top: '2%', //和页面顶部的距离
     borderRadius: 10
   },
   buttonsStyle: {
-    marginTop: 80,
-    marginLeft: 65,
-    marginRight: 65
+    marginTop: '15%',
+    marginLeft: '8%',
+    marginRight: '8%'
   },
   Titlefont: {
     fontSize: 20,
     color: '#FFFFFF',
-    marginLeft: 65,
-    marginRight: 65,
-    marginTop: 20,
-    marginVertical: 20,
+    marginLeft: '13%',
+    marginRight: '13%',
+    marginVertical: '5%',
   },
   textStyle: {
     fontSize: 12,
@@ -320,7 +302,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: Dimensions.get('window').width,
-    height: 80,
+    height: 70,
     backgroundColor: '#3A3A3A',
     flexDirection: 'row', //子组件水平排列，默认水平居中
     justifyContent: 'center',
