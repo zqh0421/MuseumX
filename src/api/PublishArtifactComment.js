@@ -1,5 +1,5 @@
 //发表文物评论
-export async function publishArtifactComment(id, content, token) {
+export async function publishArtifactComment(token, id, content) {
     const options = {
       method: 'POST',
       headers: {

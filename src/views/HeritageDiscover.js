@@ -9,7 +9,7 @@ import {
   } from 'react-native'
 import React, { useState, useRef, useEffect } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
-import { List, MD3Colors, SegmentedButtons,TextInput,IconButton,Button } from 'react-native-paper';
+import { List, MD3Colors, SegmentedButtons,TextInput,IconButton,Button, Chip } from 'react-native-paper';
 import { render } from 'react-dom';
 import { like } from '../api/Like';
 import { postComment } from '../api/PostComment';
@@ -29,14 +29,15 @@ const CommentItem = (props) =>{
 const HeritageDiscover = (props) => {
 
     const [comments, setComments] = useState([])
-    const [list, setList] = useState([])
     const [comment, setComment] = useState('')
     const [value, setValue] = useState('')
-    const [LikeN, setLikeN] = useState(0)
+    const [height, setHeight] = useState(180)
+    const [likeN, setLikeNum] = useState(0)
     const [color, setColor] = useState(
         props.isCollected ? MD3Colors.error60 : MD3Colors.neutral100
     )
 
+ 
     const getData = async () => {
         try{
           const jsonValue = await AsyncStorage.getItem('userData')
@@ -48,11 +49,12 @@ const HeritageDiscover = (props) => {
     }
 
     // 接收参数
-    const { id, imgUrl, title, likeNum, content } = props.route.params.item 
+    const { id, imgUrl, title, likeNum, content, moodCategory } = props.route.params.item 
     
+
     // 获取帖子评论
     const loadData = () => {
-        postComment(1)
+        postComment(id)
           .then(async (res) => {
             if (res.message === 'ok') {
                 console.log("comment-res:",res.data.data)
@@ -63,33 +65,32 @@ const HeritageDiscover = (props) => {
             console.log(err)
             alert(err)
           })
+        
     }
 
     useEffect(() => {
-        getData().then(userData => {
-            console.log(userData.data, 'userData')
-            if(userData){
-                console.log(userData.data)
-                loadData()
-            }else{
-                props.navigation.navigate('Login')
-            }
-          }).catch((err) => {
-        })
+        loadData()
+        Image.getSize(imgUrl, (w, h) => {
+            setHeight(h / w * 0.93 * 0.45 * Dimensions.get('window').width)
+        },
+        (failure) => { console.log('failure', failure) }
+        );
+        setLikeNum(likeNum)
     },[])
     
-    // 发表评论
+    // 评论帖子
     const Publish = () => {
         // 向后端发送请求,加token
         getData().then(userData => {
             if(userData){   
                 publishComment(userData.data, comment, id).then(async (res) => {
                     if (res.message === 'ok') {
-                        console.log('Send')
+                        console.log('评论成功')
                     }
                 })
             }else{
-                console.log("failed")
+                console.log("无法评论，先登录")
+                props.navigation.navigate('Login')
             }
         }).catch((err) => {
             alert(err)
@@ -98,31 +99,27 @@ const HeritageDiscover = (props) => {
     
     // 点赞帖子
     const PressLike = () => {
-        console.log("Like")          
-        // 1. 点赞按钮样式变化
-        if(color === MD3Colors.error60) {
-            setColor(MD3Colors.neutral100)
-            setLikeN(likeNum - 1)
-        } else if (color === MD3Colors.neutral100) {
-            setColor(MD3Colors.error60)
-            setLikeN(LikeN + 1)
-        }
-
         getData().then(userData => {
             if(userData){
+                if(color === MD3Colors.error60) {
+                    setColor(MD3Colors.neutral100)
+                    setLikeNum(likeN-1)
+                } else if (color === MD3Colors.neutral100) {
+                    setColor(MD3Colors.error60)
+                    setLikeNum(likeN+1)
+                }
                 like(userData.data,id).then(async (res) => {
                     if (res.message === 'ok') {
-                        console.log('Like')
+                        console.log('点赞成功')
                     }
                 })
             }else{
-                console.log("failed.")
+                console.log("无法点赞，先登录")
+                props.navigation.navigate('Login')
             }
         }).catch((err) => {
             alert(err)
         })
-
-        
     }
 
     return (
@@ -159,8 +156,13 @@ const HeritageDiscover = (props) => {
                     <Text style={styles.textStyle}>{'\r\n\n'}{content}</Text>
                 </Text>
 
+                <Chip 
+                    mode='contained'
+                    icon = "book-open-page-variant-outline"
+                    style={{marginLeft:'12%',marginRight:'45%',marginBottom:'5%',backgroundColor:"#c0c0c0"}}
+                    onPress={() => console.log('Pressed')}>{moodCategory}</Chip>
                 <Text style={styles.Titlefont}>
-                    Comments
+                    留 言
                     </Text>
                     <View style={{left:'14%'}}>
                         {comments.map(item =>{
@@ -169,7 +171,7 @@ const HeritageDiscover = (props) => {
                             )
                         })}
                     </View>
-                    <View style={{height:100}}></View> 
+                <View style={{height:200}}></View> 
                 </LinearGradient>
             </ScrollView>
         
@@ -202,14 +204,14 @@ const HeritageDiscover = (props) => {
                     style={{top:-8 ,left:5}}
                     onPress={() => PressLike()}
                 />
-                <Text style={{top:-8,color:'#EEEEEE'}}>{LikeN}</Text>
+                <Text style={{top:-8,color:'#EEEEEE'}}>{likeN}</Text>
                 
             </View>
         </View>
     )
   }
   
-  const styles = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         justifyContent:'center',
@@ -241,6 +243,7 @@ const HeritageDiscover = (props) => {
     textStyle: {
         fontSize: 12,
         color: '#d3d3d3',
+        whiteSpace:'pre-wrap',
     },
     bottombar: {
         position: 'absolute',
@@ -262,7 +265,7 @@ const HeritageDiscover = (props) => {
         borderRadius: 5,
         top: -10
     }
-  })
+})
 
-  export default HeritageDiscover
+export default HeritageDiscover
 
