@@ -45,7 +45,9 @@ const ItemBar = (props) => {
       })}
     >
       <Surface style={styles.surface} elevation={4}>
-        <Image style={styles.image} source={{ uri: props.url }} />
+        {props && props.url && (
+          <Image style={styles.image} source={{ uri: props.url }} />
+        )}
         <Text style={styles.text}>{props.name}</Text>
         <Text style={styles.text_2}>{props.desc}</Text>
         <View style={styles.button}>

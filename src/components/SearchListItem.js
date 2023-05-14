@@ -1,5 +1,12 @@
-import { View, Text,Image,StyleSheet, Pressable, Dimensions } from 'react-native'
-import React , { useState, useEffect } from 'react'
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Pressable,
+  Dimensions
+} from 'react-native'
+import React, { useState, useEffect } from 'react'
 import { IconButton, MD3Colors } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { collect } from '../api/Collect'
@@ -13,9 +20,28 @@ const SearchListItem = (props) => {
   return (
     <Pressable onPress={onPressItem}>
       <View style={styles.surface}>
-        <View style={{ position: 'absolute', top: 0, left: 0, width: Dimensions.get('window').width * 0.88, height: 170, backgroundColor: 'black', opacity: 0.4, borderRadius: 15 }}></View>
-        {item && item.imageUrl && <Image style={styles.image} source={{ uri: item.imageUrl }}/>}
-        <View style={{ margin: '3%', justifyContent: 'space-between', width: '60%'}}>
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: Dimensions.get('window').width * 0.88,
+            height: 170,
+            backgroundColor: 'black',
+            opacity: 0.4,
+            borderRadius: 15
+          }}
+        ></View>
+        {item && item.imageUrl && (
+          <Image style={styles.image} source={{ uri: item.imageUrl }} />
+        )}
+        <View
+          style={{
+            margin: '3%',
+            justifyContent: 'space-between',
+            width: '60%'
+          }}
+        >
           <Text style={styles.title}>{item.artifactName}</Text>
           <Text style={{ color: 'white' }}>Relic Time: {item.relicTime}</Text>
           <Text style={{ color: 'white' }}>Author: {item.author}</Text>
@@ -40,23 +66,23 @@ const styles = StyleSheet.create({
     width: '88%',
     flexDirection: 'row',
     borderRadius: 15,
-    marginBottom: '6%',
+    marginBottom: '6%'
   },
-  image:{
-    width:'40%',
-    height:'88%',
+  image: {
+    width: '40%',
+    height: '88%',
     alignSelf: 'center',
-    borderRadius: 15,
+    borderRadius: 15
   },
-  title:{
+  title: {
     width: '100%',
     fontWeight: 'bold',
     color: '#fff',
-    fontSize:20,
+    fontSize: 20
   },
   desc: {
-    width:'100%',
-    color: '#fff',
+    width: '100%',
+    color: '#fff'
   }
 })
 

@@ -4,9 +4,8 @@ export async function current(token) {
     method: 'GET',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      'token': token
-    },
-
+      token: token
+    }
   }
 
   try {

@@ -3,7 +3,7 @@ export async function post(token, formData) {
     method: 'POST',
     headers: {
       'Content-Type': 'multipart/form-data',
-      'token': token
+      token: token
     },
     body: formData
   }
@@ -24,28 +24,28 @@ export async function post(token, formData) {
     console.log(err)
   }
   try {
-  //   const result = await DocumentPicker.pick({
-  //     type: [DocumentPicker.types.allFiles]
-  //   })
-  //   console.log(result.uri)
-  //   const formData = new FormData()
-  //   formData.append('file', {
-  //     uri: result.uri
-  //   })
-  //   const response = await fetch('http://101.200.148.39:3599/api/file', {
-  //     method: 'POST',
-  //     body: formData
-  //   })
-  //   const data = await response.json()
-  //   console.log(data)
-  // } catch (err) {
-  //   if (DocumentPicker.isCancel(err)) {
-  //     // User cancelled the picker?
-  //   } else {
-  //     // Error occurred
-  //     console.log(err)
-  //   }
-  }catch(error){
+    //   const result = await DocumentPicker.pick({
+    //     type: [DocumentPicker.types.allFiles]
+    //   })
+    //   console.log(result.uri)
+    //   const formData = new FormData()
+    //   formData.append('file', {
+    //     uri: result.uri
+    //   })
+    //   const response = await fetch('http://101.200.148.39:3599/api/file', {
+    //     method: 'POST',
+    //     body: formData
+    //   })
+    //   const data = await response.json()
+    //   console.log(data)
+    // } catch (err) {
+    //   if (DocumentPicker.isCancel(err)) {
+    //     // User cancelled the picker?
+    //   } else {
+    //     // Error occurred
+    //     console.log(err)
+    //   }
+  } catch (error) {
     console.log(error)
   }
 }

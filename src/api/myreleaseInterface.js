@@ -4,8 +4,8 @@ export async function myrelease(token) {
     method: 'GET',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      'token' : token
-    },
+      token: token
+    }
   }
   try {
     const response = await fetch(

@@ -10,7 +10,7 @@ const EmptyContent = (props) => {
       }}
     >
       <AntDesign name="frowno" color="white" size={50} />
-      <Text style={{ color: 'white', marginTop: 15 }} >暂无内容~</Text>
+      <Text style={{ color: 'white', marginTop: 15 }}>暂无内容~</Text>
     </View>
   )
 }

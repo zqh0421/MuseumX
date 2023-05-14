@@ -4,34 +4,34 @@ import {
   View,
   Dimensions,
   Pressable,
-  Image,
+  Image
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
 import { TextInput, Checkbox } from 'react-native-paper'
 import * as ImagePicker from 'expo-image-picker'
-import { publishInterface }  from '../api/publishInterface'
+import { publishInterface } from '../api/publishInterface'
 import { getCategory } from '../api/getCategory'
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 const Publish = (props) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [file, setFile] = useState();
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
+  const [file, setFile] = useState()
   const [categories, setCategories] = useState([])
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null)
   useEffect(() => {
-    getCategory(1, 224).then(res => {
+    getCategory(1, 224).then((res) => {
       console.log(res.data.data.records)
-      if(res.message==='ok') {
+      if (res.message === 'ok') {
         setCategories(res.data.data.records)
       }
     })
   }, [])
   useEffect(() => {
-    getCategory(1, 224).then(res => {
+    getCategory(1, 224).then((res) => {
       console.log(res.data.data.records)
-      if(res.message==='ok') {
+      if (res.message === 'ok') {
         setCategories(res.data.data.records)
       }
     })
@@ -48,27 +48,29 @@ const Publish = (props) => {
 
   const onPressSubmit = () => {
     // 提交到后端
-    getData().then(userData => {
-      console.log(userData.data, 'userData')
-      console.log(selectedItem, title, description, file)
-      if (userData && title && description && file && selectedItem) {
-        const formData = new FormData()
-        formData.append('file', file)
-        formData.append('description', description)
-        formData.append('title', title)
-        formData.append('moodCategoryId', selectedItem.id)
-        formData.append('moodCategory', selectedItem.title)
-        publishInterface(userData.data, formData)
-        .then(res => {
-          console.log(res)
-        })
-        .catch(err => {
-          alert(err)
-        })
-      }
-    }).catch(err => {
-      console.log(err)
-    })
+    getData()
+      .then((userData) => {
+        console.log(userData.data, 'userData')
+        console.log(selectedItem, title, description, file)
+        if (userData && title && description && file && selectedItem) {
+          const formData = new FormData()
+          formData.append('file', file)
+          formData.append('description', description)
+          formData.append('title', title)
+          formData.append('moodCategoryId', selectedItem.id)
+          formData.append('moodCategory', selectedItem.title)
+          publishInterface(userData.data, formData)
+            .then((res) => {
+              console.log(res)
+            })
+            .catch((err) => {
+              alert(err)
+            })
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   const takeImageHandler = async () => {
@@ -76,38 +78,50 @@ const Publish = (props) => {
       allowsEditing: true,
       aspect: [16, 9],
       quality: 0.5
-    });
+    })
     setFile({
       uri: image.assets[0].uri,
-      name: image.assets[0].uri.toString().split('/ImagePicker/')[1].split('.')[0],
+      name: image.assets[0].uri
+        .toString()
+        .split('/ImagePicker/')[1]
+        .split('.')[0],
       type: 'image/jpeg'
     })
   }
 
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors = {['#3A3A3A','#525161']}
-        style={styles.background}>
-        <Text style={styles.back} onPress={() => props.navigation.goBack()}>返回</Text>
-        <Text style={styles.submit} onPress={onPressSubmit}>提交</Text>
+      <LinearGradient colors={['#3A3A3A', '#525161']} style={styles.background}>
+        <Text style={styles.back} onPress={() => props.navigation.goBack()}>
+          返回
+        </Text>
+        <Text style={styles.submit} onPress={onPressSubmit}>
+          提交
+        </Text>
         <View>
           <Pressable style={styles.uploadPic} onPress={takeImageHandler}>
-            {!file ? <Text>+</Text> : <Image style={{ width: '100%', height: '100%'}} source={{ uri: file.uri }}/> }
+            {!file ? (
+              <Text>+</Text>
+            ) : (
+              <Image
+                style={{ width: '100%', height: '100%' }}
+                source={{ uri: file.uri }}
+              />
+            )}
           </Pressable>
         </View>
         <TextInput
           label="Title"
           value={title}
-          onChangeText={title => setTitle(title)}
+          onChangeText={(title) => setTitle(title)}
           style={styles.input}
         />
         <TextInput
           label="Description"
           value={description}
           multiline={true}
-          onChangeText={description => setDescription(description)}
-          style={[styles.input, {marginBottom: 30}]}
+          onChangeText={(description) => setDescription(description)}
+          style={[styles.input, { marginBottom: 30 }]}
         />
         <AutocompleteDropdown
           clearOnFocus={false}
@@ -115,12 +129,11 @@ const Publish = (props) => {
           closeOnSubmit={false}
           initialValue={{ id: '2' }} // or just '2'
           onSelectItem={setSelectedItem}
-          dataSet={categories.map(item => ({
+          dataSet={categories.map((item) => ({
             id: item.artifactId,
             title: item.categoryName
-          })
-          )}
-          direction='up'
+          }))}
+          direction="up"
           textInputProps={{
             placeholder: 'Select relevant artifact',
             autoCorrect: false,
@@ -129,14 +142,14 @@ const Publish = (props) => {
               borderRadius: 25,
               backgroundColor: '#383b42',
               color: '#fff',
-              paddingLeft: 18,
-            },
+              paddingLeft: 18
+            }
           }}
         />
       </LinearGradient>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -145,10 +158,10 @@ const styles = StyleSheet.create({
     flex: 1 // 布局
   },
   background: {
-    justifyContent:'center',
+    justifyContent: 'center',
     // alignContent:'center',
-    alignItems:'center',
-    flex:1
+    alignItems: 'center',
+    flex: 1
   },
   back: {
     color: '#fff',
@@ -182,7 +195,7 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '70%',
-    marginTop: 30,
+    marginTop: 30
   },
   image: {
     width: '100%',
@@ -191,8 +204,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 10
   }
 })
 
-export default Publish;
+export default Publish

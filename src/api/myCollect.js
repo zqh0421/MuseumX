@@ -4,7 +4,7 @@ export async function myCollect(token) {
     method: 'GET',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      'token': token
+      token: token
     }
   }
 

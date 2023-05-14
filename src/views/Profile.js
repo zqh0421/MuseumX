@@ -1,8 +1,16 @@
-import { View, Text ,StyleSheet, Pressable, Dimensions, ScrollView, Image} from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Dimensions,
+  ScrollView,
+  Image
+} from 'react-native'
 import { useEffect, useState } from 'react'
 import { TabActions } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { Surface,IconButton,MD3Colors} from 'react-native-paper'
+import { Surface, IconButton, MD3Colors } from 'react-native-paper'
 import WaterfallFlow from 'react-native-waterfall-flow'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { AntDesign } from '@expo/vector-icons'
@@ -60,30 +68,37 @@ const Profile = (props) => {
     try {
       const userData = await AsyncStorage.getItem('userData')
       if (userData) {
-        mylike(JSON.parse(userData).data).then(res => {
-          if (res.code === 0) { // 数据获取成功
-            console.log('profile-res:')
-            console.log(res.data.data)
-            let temp = []
-            res && res.data && res.data.data && res.data.data.forEach(item => {
-              console.log(item.id)
-              temp = [...temp, item.id]
-            })
-            setLikeSet(temp)
-            setListData(res.data.data)
-            setNum0(res.data.data?.length || 0)
-            setIsRefreshing(false)
-          } else { // 获取失败
+        mylike(JSON.parse(userData).data)
+          .then((res) => {
+            if (res.code === 0) {
+              // 数据获取成功
+              console.log('profile-res:')
+              console.log(res.data.data)
+              let temp = []
+              res &&
+                res.data &&
+                res.data.data &&
+                res.data.data.forEach((item) => {
+                  console.log(item.id)
+                  temp = [...temp, item.id]
+                })
+              setLikeSet(temp)
+              setListData(res.data.data)
+              setNum0(res.data.data?.length || 0)
+              setIsRefreshing(false)
+            } else {
+              // 获取失败
+              setIsError(true)
+              setIsRefreshing(false)
+              setListData([])
+            }
+          })
+          .catch((err) => {
             setIsError(true)
             setIsRefreshing(false)
             setListData([])
-          }
-        }).catch(err => {
-          setIsError(true)
-          setIsRefreshing(false)
-          setListData([])
-          alert(err)
-        })
+            alert(err)
+          })
       } else {
         props.navigation.navigate('Login')
       }
@@ -98,35 +113,43 @@ const Profile = (props) => {
     try {
       const userData = await AsyncStorage.getItem('userData')
       if (userData) {
-        myCollect(JSON.parse(userData).data).then(res => {
-          console.log(res)
-          if (res.code === 0) { // 数据获取成功
-            console.log('profile-res:')
-            console.log(res.data.data)
-            if (res.data.data === '收藏为空') {
-              setCollectSet([])
-              setListData([])
+        myCollect(JSON.parse(userData).data)
+          .then((res) => {
+            console.log(res)
+            if (res.code === 0) {
+              // 数据获取成功
+              console.log('profile-res:')
+              console.log(res.data.data)
+              if (res.data.data === '收藏为空') {
+                setCollectSet([])
+                setListData([])
+              } else {
+                let temp = []
+                res &&
+                  res.data &&
+                  res.data.data &&
+                  res.data.data !== '收藏为空' &&
+                  res.data.data.forEach((item) => {
+                    console.log(item.id)
+                    temp = [...temp, item.id]
+                  })
+                setCollectSet(temp)
+                setListData(res.data.data)
+              }
+              setIsRefreshing(false)
             } else {
-              let temp = []
-              res && res.data && res.data.data && res.data.data !== '收藏为空' && res.data.data.forEach(item => {
-                console.log(item.id)
-                temp = [...temp, item.id]
-              })
-              setCollectSet(temp)
-              setListData(res.data.data)
+              // 获取失败
+              setIsError(true)
+              setIsRefreshing(false)
+              setListData([])
             }
-            setIsRefreshing(false)
-          } else { // 获取失败
+          })
+          .catch((err) => {
             setIsError(true)
             setIsRefreshing(false)
             setListData([])
-          }
-        }).catch(err => {
-          setIsError(true)
-          setIsRefreshing(false)
-          setListData([])
-          alert(err)
-        })
+            alert(err)
+          })
       } else {
         props.navigation.navigate('Login')
       }
@@ -141,24 +164,28 @@ const Profile = (props) => {
     try {
       const userData = await AsyncStorage.getItem('userData')
       if (userData) {
-        myrelease(JSON.parse(userData).data).then(res => {
-          if (res.code === 0) { // 数据获取成功
-            console.log('profile-res:')
-            console.log(res.data.data)
-            setListData(res.data.data)
-            setNum2(res.data.data?.length || 0)
-            setIsRefreshing(false)
-          } else { // 获取失败
+        myrelease(JSON.parse(userData).data)
+          .then((res) => {
+            if (res.code === 0) {
+              // 数据获取成功
+              console.log('profile-res:')
+              console.log(res.data.data)
+              setListData(res.data.data)
+              setNum2(res.data.data?.length || 0)
+              setIsRefreshing(false)
+            } else {
+              // 获取失败
+              setIsError(true)
+              setIsRefreshing(false)
+              setListData([])
+            }
+          })
+          .catch((err) => {
             setIsError(true)
             setIsRefreshing(false)
             setListData([])
-          }
-        }).catch(err => {
-          setIsError(true)
-          setIsRefreshing(false)
-          setListData([])
-          alert(err)
-        })
+            alert(err)
+          })
       } else {
         props.navigation.navigate('Login')
       }
@@ -170,90 +197,94 @@ const Profile = (props) => {
   useEffect(() => {
     // 打开应用后首次进入该页面时，执行如下操作
     // 添加这一段是因为后面包含unsubscribe的代码在第一次点击进入页面时，仅绑定事件，不生效
-    getData().then(res => {
-      console.log('res: ')
-      console.log(res)
-      if (res === undefined || res === null) {
-        // 没有登录
-        // alert('请先登录')
-        props.navigation.navigate('Home')
-        props.navigation.navigate('Login') // 跳转登录页面
-      } else {
-        // 已登录，加载数据
-        console.log('currentUser')
-        console.log(res)
-        current(res.data).then(resp => {
-          console.log('current-res:')
-          console.log(resp.data)
-          setId(resp.data.userAccount)
-          setUsername(resp.data.username || 'momo')
-          setAvatarUrl(resp.data.avatarUrl)
-        })
-        loadDataMylike()
-      }
-    }).catch(err => {
-      // error
-    })
-  }, [])
-
-  useEffect(() => {
-    const unsubscribe = props.navigation.addListener('tabPress', (e) => {
-      // 试图通过点击下方导航栏进入本页面时，执行下面的语句
-      e.preventDefault() // 阻止默认行为，在下方重新定义
-      getData().then(res => {
+    getData()
+      .then((res) => {
         console.log('res: ')
         console.log(res)
         if (res === undefined || res === null) {
           // 没有登录
           // alert('请先登录')
+          props.navigation.navigate('Home')
           props.navigation.navigate('Login') // 跳转登录页面
         } else {
-          // 已登录，正常进入该页面
-          const jumpToAction = TabActions.jumpTo('Profile')
-          props.navigation.dispatch(jumpToAction)
+          // 已登录，加载数据
           console.log('currentUser')
-          current(res.data).then(resp => {
+          console.log(res)
+          current(res.data).then((resp) => {
             console.log('current-res:')
             console.log(resp.data)
             setId(resp.data.userAccount)
             setUsername(resp.data.username || 'momo')
             setAvatarUrl(resp.data.avatarUrl)
           })
-          // 已登录，加载数据
-          setToggleSelected('0')
           loadDataMylike()
         }
-      }).catch(err => {
+      })
+      .catch((err) => {
         // error
       })
+  }, [])
+
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('tabPress', (e) => {
+      // 试图通过点击下方导航栏进入本页面时，执行下面的语句
+      e.preventDefault() // 阻止默认行为，在下方重新定义
+      getData()
+        .then((res) => {
+          console.log('res: ')
+          console.log(res)
+          if (res === undefined || res === null) {
+            // 没有登录
+            // alert('请先登录')
+            props.navigation.navigate('Login') // 跳转登录页面
+          } else {
+            // 已登录，正常进入该页面
+            const jumpToAction = TabActions.jumpTo('Profile')
+            props.navigation.dispatch(jumpToAction)
+            console.log('currentUser')
+            current(res.data).then((resp) => {
+              console.log('current-res:')
+              console.log(resp.data)
+              setId(resp.data.userAccount)
+              setUsername(resp.data.username || 'momo')
+              setAvatarUrl(resp.data.avatarUrl)
+            })
+            // 已登录，加载数据
+            setToggleSelected('0')
+            loadDataMylike()
+          }
+        })
+        .catch((err) => {
+          // error
+        })
     })
     return unsubscribe
   }, [props.navigation])
 
   useEffect(() => {
     switch (toggleSelected) {
-    case '0':
-      setToggleBar0Style([styles.toggleBar])
-      setToggleBar1Style([styles.toggleBar, { opacity: 0 }])
-      setToggleBar2Style([styles.toggleBar, { opacity: 0 }])
-      break
-    case '1':
-      setToggleBar0Style([styles.toggleBar, { opacity: 0 }])
-      setToggleBar1Style([styles.toggleBar])
-      setToggleBar2Style([styles.toggleBar, { opacity: 0 }])
-      break
-    case '2':
-      setToggleBar0Style([styles.toggleBar, { opacity: 0 }])
-      setToggleBar1Style([styles.toggleBar, { opacity: 0 }])
-      setToggleBar2Style([styles.toggleBar])
-      break
-    default:
-      break
+      case '0':
+        setToggleBar0Style([styles.toggleBar])
+        setToggleBar1Style([styles.toggleBar, { opacity: 0 }])
+        setToggleBar2Style([styles.toggleBar, { opacity: 0 }])
+        break
+      case '1':
+        setToggleBar0Style([styles.toggleBar, { opacity: 0 }])
+        setToggleBar1Style([styles.toggleBar])
+        setToggleBar2Style([styles.toggleBar, { opacity: 0 }])
+        break
+      case '2':
+        setToggleBar0Style([styles.toggleBar, { opacity: 0 }])
+        setToggleBar1Style([styles.toggleBar, { opacity: 0 }])
+        setToggleBar2Style([styles.toggleBar])
+        break
+      default:
+        break
     }
   }, [toggleSelected])
 
   useEffect(() => {
-    switch(toggleSelected) {
+    switch (toggleSelected) {
       case '0':
         setNum0(listData?.length || 0)
         break
@@ -281,9 +312,9 @@ const Profile = (props) => {
   }
 
   const onPressRefresh = () => {
-    if (toggleSelected==='0') {
+    if (toggleSelected === '0') {
       loadDataMylike()
-    } else if (toggleSelected==='1') {
+    } else if (toggleSelected === '1') {
       loadDataMyCollect()
     } else {
       loadDataMyrelease()
@@ -292,19 +323,35 @@ const Profile = (props) => {
 
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors = {['#727480','#454653']}
-        style={styles.background}>
-        <View style={{ flexDirection: 'row', marginTop: 50, marginLeft: '8%', marginRight: '8%', marginBottom: 30, justifyContent: 'space-between' }}>
-          <View style={{ flexDirection: 'row'}}>
-            <Image style={styles.image} source={{uri: avatarUrl}}/>
+      <LinearGradient colors={['#727480', '#454653']} style={styles.background}>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 50,
+            marginLeft: '8%',
+            marginRight: '8%',
+            marginBottom: 30,
+            justifyContent: 'space-between'
+          }}
+        >
+          <View style={{ flexDirection: 'row' }}>
+            {avatarUrl && (
+              <Image style={styles.image} source={{ uri: avatarUrl }} />
+            )}
             <View style={{ marginLeft: 20, justifyContent: 'center' }}>
               <Text style={styles.nickname}>{username}</Text>
               <Text style={styles.userid}>ID: {id}</Text>
             </View>
           </View>
-          <Pressable style={[styles.edit, { alignSelf: 'center' }]} onPress={onPressEdit}>
-            <MaterialCommunityIcons name="account-edit" color="white" size={20} />
+          <Pressable
+            style={[styles.edit, { alignSelf: 'center' }]}
+            onPress={onPressEdit}
+          >
+            <MaterialCommunityIcons
+              name="account-edit"
+              color="white"
+              size={20}
+            />
           </Pressable>
         </View>
         <View style={styles.toggle}>
@@ -324,36 +371,43 @@ const Profile = (props) => {
             <View style={toggleBar2Style}></View>
           </Pressable>
         </View>
-        {!isError && !isRefreshing && listData && listData?.length > 0 && (toggleSelected ==='0' || toggleSelected === '2') && (
-          <WaterfallFlow
-            style={{ paddingTop: 10 }}
-            contentContainerStyle={{
-              paddingLeft: '2%',
-              paddingRight: '2%'
-            }}
-            data={listData}
-            numColumns={2}
-            renderItem={({ item, index, columnIndex }) => (
-              <FlowListItem
-                ket={item.id}
-                item={item}
-                likeSet={likeSet}
-                navigation={props.navigation}
-              />
-            )}
-          />
-        )}
-        {
-          !isError && !isRefreshing && listData && listData?.length > 0 && toggleSelected ==='1' &&
-          <ScrollView style={{
-            height: Dimensions.get('window').height - 305,
-            paddingLeft: '2%',
-            paddingRight: '2%',
-            paddingTop: 10,
-          }}
-          >
-            {
-              listData.map(item => {
+        {!isError &&
+          !isRefreshing &&
+          listData &&
+          listData?.length > 0 &&
+          (toggleSelected === '0' || toggleSelected === '2') && (
+            <WaterfallFlow
+              style={{ paddingTop: 10 }}
+              contentContainerStyle={{
+                paddingLeft: '2%',
+                paddingRight: '2%'
+              }}
+              data={listData}
+              numColumns={2}
+              renderItem={({ item, index, columnIndex }) => (
+                <FlowListItem
+                  ket={item.id}
+                  item={item}
+                  likeSet={likeSet}
+                  navigation={props.navigation}
+                />
+              )}
+            />
+          )}
+        {!isError &&
+          !isRefreshing &&
+          listData &&
+          listData?.length > 0 &&
+          toggleSelected === '1' && (
+            <ScrollView
+              style={{
+                height: Dimensions.get('window').height - 305,
+                paddingLeft: '2%',
+                paddingRight: '2%',
+                paddingTop: 10
+              }}
+            >
+              {listData.map((item) => {
                 return (
                   // eslint-disable-next-line react/jsx-key
                   <HomeListItem
@@ -363,13 +417,14 @@ const Profile = (props) => {
                     collectSet={collectSet}
                   />
                 )
-              })
-            }
-          </ScrollView>
-        }
-        { !isError && isRefreshing && <RefreshingContent /> }
-        { !isError && !isRefreshing && (!listData || listData?.length <= 0) && <EmptyContent /> }
-        { isError && <ErrorContent onPressRefresh={() => onPressRefresh()}/> }
+              })}
+            </ScrollView>
+          )}
+        {!isError && isRefreshing && <RefreshingContent />}
+        {!isError && !isRefreshing && (!listData || listData?.length <= 0) && (
+          <EmptyContent />
+        )}
+        {isError && <ErrorContent onPressRefresh={() => onPressRefresh()} />}
       </LinearGradient>
     </View>
   )
@@ -381,12 +436,12 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     flex: 1 // 布局
   },
-  background:{
+  background: {
     // justifyContent:'center',
     // alignContent:'center',
     // alignItems:'center',
 
-    flex:1
+    flex: 1
   },
   image: {
     width: 80,
@@ -396,21 +451,21 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#CCCCCC',
+    backgroundColor: '#CCCCCC'
     // position: 'absolute',
     // top: 70,
     // left: 35,
   },
   nickname: {
     fontSize: 23,
-    color: '#fff',
+    color: '#fff'
     // position: 'absolute',
     // top: 85,
     // left: 135,
   },
   userid: {
     fontSize: 16,
-    color: '#fff',
+    color: '#fff'
     // position: 'absolute',
     // top: 120,
     // left: 135,
@@ -482,34 +537,34 @@ const styles = StyleSheet.create({
     height: 170,
     width: 350,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-  image1:{
-    width:140,
-    height:140,
-    right:100,
-    top:60
+  image1: {
+    width: 140,
+    height: 140,
+    right: 100,
+    top: 60
   },
-  text:{
-    right:-30,
-    top:-80,
+  text: {
+    right: -30,
+    top: -80,
     fontWeight: 'black',
-    fontSize:20,
+    fontSize: 20
   },
-  text_2:{
-    top:-80,
-    right:-20
+  text_2: {
+    top: -80,
+    right: -20
   },
-  button:{
-    right:-100,
-    hight:20,
-    width:5,
-    top:-25,
+  button: {
+    right: -100,
+    hight: 20,
+    width: 5,
+    top: -25
   },
-  num:{
-    top:-60,
-    right:-180,
-    width:100,
+  num: {
+    top: -60,
+    right: -180,
+    width: 100
   }
   // toggleBar1: {
   //   left: '47%',

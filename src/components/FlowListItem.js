@@ -1,5 +1,12 @@
-import { View, Text, StyleSheet, Image, Dimensions, Pressable } from 'react-native'
-import { Surface,IconButton,MD3Colors} from 'react-native-paper'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Dimensions,
+  Pressable
+} from 'react-native'
+import { Surface, IconButton, MD3Colors } from 'react-native-paper'
 import { useEffect, useState } from 'react'
 import Pic from '../../assets/pic.png'
 import { like } from '../api/discover/likeInterface'
@@ -7,7 +14,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 const FlowListItem = (props) => {
   const { item } = props
   const [likeNum, setLikeNum] = useState(item.likeNum)
-  const [color, setColor] = useState(new Set(props.likeSet).has(item.id) ? MD3Colors.error60 : '#ccc')
+  const [color, setColor] = useState(
+    new Set(props.likeSet).has(item.id) ? MD3Colors.error60 : '#ccc'
+  )
   const [height, setHeight] = useState(180)
   console.log('likeset', props.likeSet)
 
@@ -24,7 +33,7 @@ const FlowListItem = (props) => {
     setColor(new Set(props.likeSet).has(item.id) ? MD3Colors.error60 : '#ccc')
   }, [props.likeSet])
   const onPressFlowListItem = () => {
-    props.navigation.navigate('HeritageDiscover', {item: item})
+    props.navigation.navigate('HeritageDiscover', { item: item })
   }
 
   const onPressLove = async () => {
@@ -32,21 +41,22 @@ const FlowListItem = (props) => {
     const jsonValue = await AsyncStorage.getItem('userData')
     if (jsonValue) {
       // 向后端发送请求，修改
-      like(JSON.parse(jsonValue).data, item.id).then(res => {
-        if (res.message === 'ok') {
-          // 点赞按钮样式变化
-          if (color === MD3Colors.error60) {
-            setColor('#ccc')
-            setLikeNum(likeNum-1)
+      like(JSON.parse(jsonValue).data, item.id)
+        .then((res) => {
+          if (res.message === 'ok') {
+            // 点赞按钮样式变化
+            if (color === MD3Colors.error60) {
+              setColor('#ccc')
+              setLikeNum(likeNum - 1)
+            } else if (color === '#ccc') {
+              setColor(MD3Colors.error60)
+              setLikeNum(likeNum + 1)
+            }
           }
-          else if (color === '#ccc') {
-            setColor(MD3Colors.error60)
-            setLikeNum(likeNum+1)
-          }
-        }
-      }).catch(err => {
-        alert(err)
-      })
+        })
+        .catch((err) => {
+          alert(err)
+        })
     } else {
       props.navigation.navigate('Login')
     }
@@ -56,10 +66,18 @@ const FlowListItem = (props) => {
     <Pressable style={styles.itemContainer} onPress={onPressFlowListItem}>
       <View style={styles.bg}></View>
       <View style={styles.itemPic}>
-        {item && item.imgUrl && <Image
-          source={{uri: item.imgUrl}}
-          style={[styles.image, { width: Dimensions.get('screen').width * 0.93 * 0.45, height: height}]}
-        />}
+        {item && item.imgUrl && (
+          <Image
+            source={{ uri: item.imgUrl }}
+            style={[
+              styles.image,
+              {
+                width: Dimensions.get('screen').width * 0.93 * 0.45,
+                height: height
+              }
+            ]}
+          />
+        )}
       </View>
       <Text style={styles.itemTitle}>{item.title}</Text>
       <View
@@ -73,7 +91,12 @@ const FlowListItem = (props) => {
         }}
       >
         <View style={{ flexDirection: 'row' }}>
-          <Image style={styles.HeadSculpture} source={{uri: 'https://pic3.zhimg.com/80/v2-4aff13816be5ec5a81f744b88dbda6ee_1440w.webp'}} />
+          <Image
+            style={styles.HeadSculpture}
+            source={{
+              uri: 'https://pic3.zhimg.com/80/v2-4aff13816be5ec5a81f744b88dbda6ee_1440w.webp'
+            }}
+          />
           <Text style={styles.itemUsername}>{item.userId}</Text>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -115,7 +138,7 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
   image: {
-    borderRadius: 5,
+    borderRadius: 5
   },
   itemTitle: {
     top: 5,

@@ -6,8 +6,8 @@ export async function allNew(page, size) {
       'Content-Type': 'application/x-www-form-urlencoded'
     }
   }
-  try{
-    const response = await fetch (
+  try {
+    const response = await fetch(
       `http://101.200.148.39:3599/api/mood/allbytime.do?page=${page}&size=${size}`,
       options
     )

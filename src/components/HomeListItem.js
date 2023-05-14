@@ -1,5 +1,12 @@
-import { View, Text,Image,StyleSheet, Pressable, Dimensions } from 'react-native'
-import React , { useState, useEffect } from 'react'
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Pressable,
+  Dimensions
+} from 'react-native'
+import React, { useState, useEffect } from 'react'
 import { IconButton, MD3Colors } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { collect } from '../api/Collect'
@@ -7,7 +14,9 @@ import { collect } from '../api/Collect'
 const HomeListItem = (props) => {
   const { item } = props
   const [collectNum, setCollectNum] = useState(item.collectNum)
-  const [color, setColor] = useState(new Set(props.collectSet).has(item.id) ? '#E7A960' : '#ccc')
+  const [color, setColor] = useState(
+    new Set(props.collectSet).has(item.id) ? '#E7A960' : '#ccc'
+  )
   console.log('collectset', props.collectSet)
 
   const onPressCollect = async () => {
@@ -15,22 +24,23 @@ const HomeListItem = (props) => {
     const jsonValue = await AsyncStorage.getItem('userData')
     if (jsonValue) {
       // 向后端发送请求，修改
-      collect(JSON.parse(jsonValue).data, item.id).then(res => {
-        console.log(res)
-        if (res.message === 'ok') {
-          // 收藏按钮样式变化
-          if (color === '#E7A960') {
-            setColor('#ccc')
-            setCollectNum(collectNum - 1)
+      collect(JSON.parse(jsonValue).data, item.id)
+        .then((res) => {
+          console.log(res)
+          if (res.message === 'ok') {
+            // 收藏按钮样式变化
+            if (color === '#E7A960') {
+              setColor('#ccc')
+              setCollectNum(collectNum - 1)
+            } else if (color === '#ccc') {
+              setColor('#E7A960')
+              setCollectNum(collectNum + 1)
+            }
           }
-          else if (color === '#ccc') {
-            setColor('#E7A960')
-            setCollectNum(collectNum + 1)
-          }
-        }
-      }).catch(err => {
-        alert(err)
-      })
+        })
+        .catch((err) => {
+          alert(err)
+        })
     } else {
       props.navigation.navigate('Login')
     }
@@ -42,17 +52,43 @@ const HomeListItem = (props) => {
   return (
     <Pressable onPress={onPressItem}>
       <View style={styles.surface}>
-        <View style={{ position: 'absolute', top: 0, left: 0, width: Dimensions.get('window').width * 0.88, height: 170, backgroundColor: 'black', opacity: 0.4, borderRadius: 15 }}></View>
-        {item && item.imageUrl && <Image style={styles.image} source={{ uri: item.imageUrl }}/>}
-        <View style={{ margin: '3%', justifyContent: 'space-between', width: '60%'}}>
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: Dimensions.get('window').width * 0.88,
+            height: 170,
+            backgroundColor: 'black',
+            opacity: 0.4,
+            borderRadius: 15
+          }}
+        ></View>
+        {item && item.imageUrl && (
+          <Image style={styles.image} source={{ uri: item.imageUrl }} />
+        )}
+        <View
+          style={{
+            margin: '3%',
+            justifyContent: 'space-between',
+            width: '60%'
+          }}
+        >
           <Text style={styles.title}>{item.artifactName}</Text>
-          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginRight: 15}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              marginRight: 15
+            }}
+          >
             <IconButton
               icon="star"
               iconColor={color}
               size={24}
               onPress={onPressCollect}
-              style={{height: 24, width: 24}}
+              style={{ height: 24, width: 24 }}
             />
             <Text style={{ fontSize: 20, color: '#fff' }}>{collectNum}</Text>
           </View>
@@ -61,7 +97,6 @@ const HomeListItem = (props) => {
     </Pressable>
   )
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -78,23 +113,23 @@ const styles = StyleSheet.create({
     width: '88%',
     flexDirection: 'row',
     borderRadius: 15,
-    marginBottom: '6%',
+    marginBottom: '6%'
   },
-  image:{
-    width:'40%',
-    height:'88%',
+  image: {
+    width: '40%',
+    height: '88%',
     alignSelf: 'center',
-    borderRadius: 15,
+    borderRadius: 15
   },
-  title:{
+  title: {
     width: '100%',
     fontWeight: 'bold',
     color: '#fff',
-    fontSize:20,
+    fontSize: 20
   },
   desc: {
-    width:'100%',
-    color: '#fff',
+    width: '100%',
+    color: '#fff'
   }
 })
 
