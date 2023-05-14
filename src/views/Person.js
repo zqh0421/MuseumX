@@ -4,10 +4,12 @@ import {
     View,
     Button,
     Dimensions,
-    Pressable
+    Pressable,
+    BackHandler
   } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback} from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Appbar, List, MD3Colors } from 'react-native-paper';
 
 const ListItem = (props) => {
@@ -20,12 +22,11 @@ const ListItem = (props) => {
                 props.navigation.navigate('EditUsername')
                 break
             case '描述':
-                props.navigation.navigate('EditDescription')
+                props.navigation.navigate('EditPassword')
                 break
             default: break
         }
     }
-
     return (
         <Pressable style={styles.listItem} onPress={onPressEdit}>
             <Text>{props.title}</Text>
@@ -47,6 +48,18 @@ const Person = (props) => {
     useEffect(() => {
         setCurrentUser(fakeUserInfo)
     }, [])
+    const handleLogout = useCallback(async () => {
+        try {
+          // 使用AsyncStorage清空本地存储的用户登录信息
+          await AsyncStorage.removeItem('userData');
+          console.log('User token has been cleared!');
+        } catch (error) {
+          // 如果清空本地存储的用户登录信息失败，打印错误信息
+          console.error(`Failed to remove user token: ${error}`);
+          return;
+        }
+        BackHandler.exitApp();
+      }, []);
     return (
         <View>
             <Appbar.Header> 
@@ -56,7 +69,10 @@ const Person = (props) => {
             <Text>账户信息</Text>
             <View style={styles.list}>
                 <ListItem title="用户名" content={fakeUserInfo.username} navigation={props.navigation} />
-                <ListItem title="描述" content={fakeUserInfo.userInfo} navigation={props.navigation} />
+                <ListItem title="密码" content={fakeUserInfo.userInfo} navigation={props.navigation} />
+                <View style = {styles.buttonStyle}>
+                    <Button title="退出登录"  borderColor= '#fffaf0' onPress={handleLogout} />
+                </View>
             </View>
         </View>
     )
@@ -81,6 +97,13 @@ const styles = StyleSheet.create({
     listItemRight: {
         flexDirection: 'row',
         justifyContent: 'space-between'
+    },
+    buttonStyle: {
+        top: 30,
+        width: '90%',
+        borderRadius: 10,
+        color:'#fffaf0',
+       // borderColor: '#dcdcdc'
     }
 })
 

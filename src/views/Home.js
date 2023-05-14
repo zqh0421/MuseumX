@@ -117,6 +117,12 @@ const Home = (props) => {
         colors={['#727480', '#454653']}
       >
         <Text style={styles.pageTitle}>发现</Text>
+        <Text onPress={() => props.navigation.navigate('Person')} style={{marginBottom: 50}}>
+         点击弹出资料页面
+        </Text>
+        <Text onPress={() => props.navigation.navigate('Publish') } style={{marginBottom: 50}}>
+          点击弹出发表动态页面
+        </Text>
         {!isError && !isRefreshing && list.length > 0 && (
           <ScrollView style={{ marginTop: 30}}>
             {
