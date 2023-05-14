@@ -2,39 +2,22 @@ import { View, Text, StyleSheet, AppRegistry, Dimensions } from 'react-native'
 import React, { useState } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Appbar, List, MD3Colors,TextInput} from 'react-native-paper';
-<<<<<<< Updated upstream
-import { editUsername } from '../api/editUsername';
-const EditUsername = (props) => {
-    const [title, setTitle] = useState('');
-    const onPressSave = () => {
-        // 提交到后端
-        if (title) {
-          editUsername(title)
-          .then(res => {
-            console.log(res)
-          })
-          .catch(err => {
-            alert(err)
-          })
-        }
-
-        alert(title)
-=======
-import { editnameInterface } from '../api/editnameInterface';
+import { editpasswordInterface } from '../api/editpasswordInterface';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const EditUsername = (props) => {
+const EditPassword = (props) => {
+    const [newpassword, setnewpassword] = useState('');
     const [oldname, setoldname] = useState('');
-    const [newname, setnewname] = useState('');
     const [password, setpassword] = useState('');
     const onPressSave = async () => {
       // 提交到后端
-      // console.log(newname)
-      // console.log(oldname)
-      // console.log(password)
+      //alert(newname)
+      console.log(newpassword)
+      console.log(oldname)
+      console.log(password)
       const userData = await AsyncStorage.getItem('userData')
-      // console.log("userData", JSON.parse(userData)?.data)
+      console.log("userData", JSON.parse(userData)?.data)
       if (userData) {
-        editnameInterface(JSON.parse(userData).data, newname, oldname, password).then(res => {
+        editpasswordInterface(JSON.parse(userData).data, newpassword, oldname, password).then(res => {
           if (res.message === 'ok') {
             // TODO: 弹出修改成功提示，返回profile页
             console.log('修改成功')
@@ -46,7 +29,6 @@ const EditUsername = (props) => {
       } else {
         // 跳转登录
         props.navigation.navigate('Login')
->>>>>>> Stashed changes
       }
     }
     return (
@@ -54,36 +36,21 @@ const EditUsername = (props) => {
           <LinearGradient
             colors = {['#727480','#454653']}
             style={styles.backgroud}>
-<<<<<<< Updated upstream
-           
             <Text style={styles.back} onPress={() => props.navigation.goBack()}>Cancel</Text>
-            <Text style={styles.Name}> Edit Name</Text>
-            <Text style={styles.save} onPress={onPressSave}>Save</Text> 
-              
-             <Text style={styles.lab}> You can only change your name once in seven days</Text>
-             <TextInput
-                style={styles.input}
-                value={title}
-                onChangeText={handleonChangeTex}
-                maxLength={14}
-             />
-             <Text style={styles.length}> {title.length}/14 </Text>
-=======
-            <Text style={styles.back} onPress={() => props.navigation.goBack()}>Cancel</Text>
-            <Text style={styles.Name}> Edit Name</Text>
+            <Text style={styles.Name}> Edit Password</Text>
             <Text style={styles.save} onPress={onPressSave}>Save</Text> 
             <TextInput
                 mode='outlined'
                 style={styles.inputStyle}
-                placeholder="新的用户名"
+                placeholder="新的密码"
                 placeholderTextColor={'#808080'}
                 textColor='#CCCCCC'
                 outlineStyle={{borderRadius:7}}
                 contentStyle={{paddingLeft:15}}
                 outlineColor={'#CCCCCC'}
                 activeOutlineColor={'#CCCCCC'}
-                value={newname}
-                onChangeText={(value) => setnewname(value)}
+                value={newpassword}
+                onChangeText={(value) => setnewpassword(value)}
             />
             <TextInput
                 mode='outlined'
@@ -112,7 +79,6 @@ const EditUsername = (props) => {
                 onChangeText={(value) => setpassword(value)}
             />
             
->>>>>>> Stashed changes
           </LinearGradient>
             
         </View>
@@ -143,12 +109,12 @@ const styles = StyleSheet.create({
       
     }, 
     Name: {
-      fontSize: 15,
       justifyContent: 'center',
+      fontSize: 15,
       position: 'absolute',
       color: '#CCCCCC',
       top: 20,
-      left: 150,
+      left: 130,
       alignItems: 'center'
     },
     save: {
@@ -158,18 +124,7 @@ const styles = StyleSheet.create({
       top: 20,
       right: 20
     }, 
-<<<<<<< Updated upstream
-    lab: {
-      fontSize: 10,
-      position: 'absolute',
-      top: 80,
-      left: 10,
-      color: '#CCCCCC'
-    },
-    input: {
-=======
     inputStyle: {
->>>>>>> Stashed changes
       top: 100,
       width: Dimensions.get('window').width -20,
       margin: 10,
@@ -185,4 +140,4 @@ const styles = StyleSheet.create({
       color: '#CCCCCC'
     }
 })
-export default EditUsername
+export default EditPassword;
