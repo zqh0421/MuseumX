@@ -1,4 +1,4 @@
-export async function editpasswordInterface(token, newPassword, userAccount, userPassword) {
+export async function editPassword(token, newPassword, userAccount, userPassword) {
     console.log(token, newPassword, userAccount, userPassword)
       const options = {
         method: 'POST',

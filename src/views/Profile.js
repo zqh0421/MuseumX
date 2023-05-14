@@ -19,7 +19,7 @@ import { allNew } from '../api/discover/newInterface'
 import { current } from '../api/currentUserInterface'
 
 const Profile = (props) => {
-  const [id, setId] = useState()
+  const [id, setId] = useState('')
   const [username, setUsername] = useState('momo')
   const [avatarUrl, setAvatarUrl] = useState()
   const [num0, setNum0] = useState(0)
@@ -215,7 +215,7 @@ const Profile = (props) => {
           current(res.data).then(resp => {
             console.log('current-res:')
             console.log(resp.data)
-            setId(resp.data.id)
+            setId(resp.data.userAccount)
             setUsername(resp.data.username || 'momo')
             setAvatarUrl(resp.data.avatarUrl)
           })
@@ -254,7 +254,7 @@ const Profile = (props) => {
 
   useEffect(() => {
     switch(toggleSelected) {
-      case '0': 
+      case '0':
         setNum0(listData?.length || 0)
         break
       case '1':
@@ -263,7 +263,7 @@ const Profile = (props) => {
       case '2':
         setNum2(listData?.length || 0)
     }
-  }, listData)
+  }, [listData])
 
   const onPressLike = () => {
     setToggleSelected('0')
