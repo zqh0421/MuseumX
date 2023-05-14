@@ -1,7 +1,7 @@
 import { View, Text,StyleSheet,FlatList, Image, Pressable, Dimensions, Linking, TouchableOpacity } from 'react-native'
 import React , {useEffect, useState} from 'react'
 import { Searchbar,Button, MD3Colors } from 'react-native-paper'
-import { pickDocument, KeySearch } from '../api/SearchInterface'
+import { searchPhoto, KeySearch } from '../api/SearchInterface'
 import { Show } from '../api/HomeInterface'
 import { AntDesign } from '@expo/vector-icons'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
@@ -26,7 +26,6 @@ const HotItem = (props) => {
 const Search = (props) => {
   const[SearchQuery,setSearchQuery]=React.useState('')
   const[hotitem,setHotItem]=useState([]) //热门榜
-  const [pickedImage, setPickedImage] = useState();
   const [isRefreshing, setIsRefreshing] = useState(false) // 正在加载数据
   const [isError, setIsError] = useState(true) // 数据加载错误
   useEffect(() => {
@@ -39,32 +38,48 @@ const Search = (props) => {
     return unsubscribe
   }, [props.navigation])
 
+
   const handleSearch=()=>{ // 关键词搜索
-    console.log(currPage, SearchQuery, pageSize)
-    KeySearch(currPage, SearchQuery, pageSize).then(res => {
-      if(res.message==='ok'){
-        try{
-          props.navigation.navigate('Result', {
-            list: res.data.list
-          })
-        }catch(error){
-          console.log(error)
+    if (SearchQuery) {
+      KeySearch(1, SearchQuery, 30).then(res => {
+        if(res.message==='ok'){
+          try{
+            props.navigation.navigate('Result', {
+              list: res.data.list
+            })
+          }catch(error){
+            console.log(error)
+          }
         }
-      }
-    })
+      })
+    }
   }
-  useEffect(() => {
-    console.log(pickedImage)
-  }, [pickedImage])
 
   const takeImageHandler = async () => {
-    console.log('test')
     const image = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [16, 9],
       quality: 0.5
+    });
+    const file = {
+      uri: image.assets[0].uri,
+      name: image.assets[0].uri.toString().split('/ImagePicker/')[1].split('.')[0],
+      type: 'image/jpeg'
+    }
+    const formData = new FormData()
+    formData.append('file', file)
+    searchPhoto(formData).then(res => {
+      console.log(res)
+      if (res.code === 0) { // 数据获取成功
+        console.log(res.data) // TODO: 跳转结果页
+        props.navigation.navigate('Result', {
+          list: res.data
+        })
+      } else { // 获取失败
+      }
+    }).catch(err => {
+      alert(err)
     })
-    setPickedImage(image.assets[0].uri)
   }
 
   const loadData = () => {
@@ -101,14 +116,23 @@ const Search = (props) => {
             value={SearchQuery}
             style={styles.searchBar}
           />
-          <View style={{flexDirection: 'row', marginTop: 30, justifyContent: 'space-between', width: '70%'}}>
-            <Button icon="file" mode="contained" onPress={() => Linking.openURL('http://ccrp-gpt.live')}>
+          <View style={{flexDirection: 'row', marginTop: 30, justifyContent: 'space-between', width: '75%'}}>
+            <Button
+              icon="file"
+              mode="contained"
+              onPress={() => Linking.openURL('http://ccrp-gpt.live')}
+              buttonColor='#E7A960'
+            >
               智能问答
             </Button>
             <Button
               icon="camera"
               mode="contained"
-              onPress={takeImageHandler}>以图搜图</Button>
+              onPress={takeImageHandler}
+              buttonColor='#E7A960'
+            >
+              以图搜图
+            </Button>
           </View>
         </View>
         {!isError && !isRefreshing && hotitem.length > 0 && (

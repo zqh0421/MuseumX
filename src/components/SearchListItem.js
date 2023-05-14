@@ -4,37 +4,8 @@ import { IconButton, MD3Colors } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { collect } from '../api/Collect'
 
-const HomeListItem = (props) => {
+const SearchListItem = (props) => {
   const { item } = props
-  const [collectNum, setCollectNum] = useState(item.collectNum)
-  const [color, setColor] = useState(new Set(props.collectSet).has(item.id) ? '#E7A960' : '#ccc')
-  console.log('collectset', props.collectSet)
-
-  const onPressCollect = async () => {
-    // 判断是否登录
-    const jsonValue = await AsyncStorage.getItem('userData')
-    if (jsonValue) {
-      // 向后端发送请求，修改
-      collect(JSON.parse(jsonValue).data, item.id).then(res => {
-        console.log(res)
-        if (res.message === 'ok') {
-          // 收藏按钮样式变化
-          if (color === '#E7A960') {
-            setColor('#ccc')
-            setCollectNum(collectNum - 1)
-          }
-          else if (color === '#ccc') {
-            setColor('#E7A960')
-            setCollectNum(collectNum + 1)
-          }
-        }
-      }).catch(err => {
-        alert(err)
-      })
-    } else {
-      props.navigation.navigate('Login')
-    }
-  }
 
   const onPressItem = () => {
     props.navigation.navigate('HeritageDetails', { id: item.id })
@@ -46,22 +17,13 @@ const HomeListItem = (props) => {
         {item && item.imageUrl && <Image style={styles.image} source={{ uri: item.imageUrl }}/>}
         <View style={{ margin: '3%', justifyContent: 'space-between', width: '60%'}}>
           <Text style={styles.title}>{item.artifactName}</Text>
-          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginRight: 15}}>
-            <IconButton
-              icon="star"
-              iconColor={color}
-              size={24}
-              onPress={onPressCollect}
-              style={{height: 24, width: 24}}
-            />
-            <Text style={{ fontSize: 20, color: '#fff' }}>{collectNum}</Text>
-          </View>
+          <Text style={{ color: 'white' }}>Relic Time: {item.relicTime}</Text>
+          <Text style={{ color: 'white' }}>Author: {item.author}</Text>
         </View>
       </View>
     </Pressable>
   )
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -98,4 +60,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default HomeListItem
+export default SearchListItem

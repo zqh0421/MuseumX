@@ -19,6 +19,9 @@ import { allNew } from '../api/discover/newInterface'
 import { current } from '../api/currentUserInterface'
 
 const Profile = (props) => {
+  const [id, setId] = useState()
+  const [username, setUsername] = useState()
+  const [avatarUrl, setAvatarUrl] = useState()
   const [num0, setNum0] = useState(0)
   const [num1, setNum1] = useState(0)
   const [num2, setNum2] = useState(0)
@@ -68,7 +71,7 @@ const Profile = (props) => {
             })
             setLikeSet(temp)
             setListData(res.data.data)
-            setNum0(res.data.data.length)
+            setNum0(res.data.data?.length || 0)
             setIsRefreshing(false)
           } else { // 获取失败
             setIsError(true)
@@ -111,7 +114,7 @@ const Profile = (props) => {
               })
               setCollectSet(temp)
               setListData(res.data.data)
-              setNum1(res.data.data.length)
+              setNum1(res.data.data?.length || 0)
             }
             setIsRefreshing(false)
           } else { // 获取失败
@@ -144,7 +147,7 @@ const Profile = (props) => {
             console.log('profile-res:')
             console.log(res.data.data)
             setListData(res.data.data)
-            setNum2(res.data.data.length)
+            setNum2(res.data.data?.length || 0)
             setIsRefreshing(false)
           } else { // 获取失败
             setIsError(true)
@@ -178,11 +181,14 @@ const Profile = (props) => {
         props.navigation.navigate('Login') // 跳转登录页面
       } else {
         // 已登录，加载数据
-        // TODO: getCurrentUser()
-        console.log("getcurrentuser")
-        current(JSON.parse(res).data).then(ressponse => {
+        console.log('currentUser')
+        console.log(res)
+        current(res.data).then(resp => {
           console.log('current-res:')
-          console.log(ressponse)
+          console.log(resp.data)
+          setId(resp.data.userAccount)
+          setUsername(resp.data.username || 'momo')
+          setAvatarUrl(resp.data.avatarUrl)
         })
         loadDataMylike()
       }
@@ -206,11 +212,14 @@ const Profile = (props) => {
           // 已登录，正常进入该页面
           const jumpToAction = TabActions.jumpTo('Profile')
           props.navigation.dispatch(jumpToAction)
-          // TODO: 加载用户数据
-          // current(JSON.parse(res).data).then(response => {
-          //   console.log('current-res:')
-          //   console.log(response)
-          // })
+          console.log('currentUser')
+          current(res.data).then(resp => {
+            console.log('current-res:')
+            console.log(resp.data)
+            setId(resp.data.id)
+            setUsername(resp.data.username)
+            setAvatarUrl(resp.data.avatarUrl)
+          })
           // 已登录，加载数据
           setToggleSelected('0')
           loadDataMylike()
@@ -276,10 +285,10 @@ const Profile = (props) => {
         style={styles.background}>
         <View style={{ flexDirection: 'row', marginTop: 50, marginLeft: '8%', marginRight: '8%', marginBottom: 30, justifyContent: 'space-between' }}>
           <View style={{ flexDirection: 'row'}}>
-            <Text style={styles.image}>{props.avatarUrl}</Text>
+            <Image style={styles.image} source={{uri: avatarUrl}}/>
             <View style={{ marginLeft: 20, justifyContent: 'center' }}>
-              <Text style={styles.nickname}>{props.username}</Text>
-              <Text style={styles.userid}>ID: {props.id}</Text>
+              <Text style={styles.nickname}>{username}</Text>
+              <Text style={styles.userid}>ID: {id}</Text>
             </View>
           </View>
           <Pressable style={[styles.edit, { alignSelf: 'center' }]} onPress={onPressEdit}>
@@ -303,7 +312,7 @@ const Profile = (props) => {
             <View style={toggleBar2Style}></View>
           </Pressable>
         </View>
-        {!isError && !isRefreshing && listData && listData.length > 0 && (toggleSelected ==='0' || toggleSelected === '2') && (
+        {!isError && !isRefreshing && listData && listData?.length > 0 && (toggleSelected ==='0' || toggleSelected === '2') && (
           <WaterfallFlow
             style={{ paddingTop: 10 }}
             contentContainerStyle={{
@@ -323,7 +332,7 @@ const Profile = (props) => {
           />
         )}
         {
-          !isError && !isRefreshing && listData && listData.length > 0 && toggleSelected ==='1' &&
+          !isError && !isRefreshing && listData && listData?.length > 0 && toggleSelected ==='1' &&
           <ScrollView style={{
             height: Dimensions.get('window').height - 305,
             paddingLeft: '2%',
@@ -347,7 +356,7 @@ const Profile = (props) => {
           </ScrollView>
         }
         { !isError && isRefreshing && <RefreshingContent /> }
-        { !isError && !isRefreshing && (!listData || listData.length <= 0) && <EmptyContent /> }
+        { !isError && !isRefreshing && (!listData || listData?.length <= 0) && <EmptyContent /> }
         { isError && <ErrorContent onPressRefresh={() => onPressRefresh()}/> }
       </LinearGradient>
     </View>

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { post } from '../api/discover/post'
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable'
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from 'expo-image-picker'
 
 const Post = (props) => {
   const [file, setFile] = useState()

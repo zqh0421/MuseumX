@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Show, getMore } from '../api/HomeInterface'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Appbar } from 'react-native-paper';
-import HomeListItem from '../components/HomeListItem'
+import SearchListItem from '../components/SearchListItem'
 import ErrorContent from '../components/ErrorContent'
 import RefreshingContent from '../components/RefreshingContent'
 import EmptyContent from '../components/EmptyContent'
@@ -14,7 +14,7 @@ import { myCollect } from '../api/myCollect'
 const Result = (props) => {
   const { list } = props.route.params
   const [isRefreshing, setIsRefreshing] = useState(false) // 正在加载数据
-  const [isError, setIsError] = useState(true) // 数据加载错误
+  const [isError, setIsError] = useState(false) // 数据加载错误
   const [collectSet, setCollectSet] = useState([])
   const getData = async () => {
     try {
@@ -52,6 +52,7 @@ const Result = (props) => {
       }
     })
   }
+
   return (
     <View style={styles.container}>
       <Appbar.Header>
@@ -67,7 +68,7 @@ const Result = (props) => {
             {
               list.map(item => {
                 return (
-                  <HomeListItem key={item.id} item={item} navigation={props.navigation} collectSet={collectSet} />
+                  <SearchListItem key={item.id} item={item} navigation={props.navigation} />
                 )
               })
             }
