@@ -1,13 +1,13 @@
 import { View, Text,Image,StyleSheet, Pressable, Dimensions } from 'react-native'
 import React , { useState, useEffect } from 'react'
-import { IconButton,MD3Colors } from 'react-native-paper'
+import { IconButton, MD3Colors } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { collect } from '../api/Collect'
 
 const HomeListItem = (props) => {
   const { item } = props
   const [collectNum, setCollectNum] = useState(item.collectNum)
-  const [color, setColor] = useState(new Set(props.collectSet).has(item.id) ? MD3Colors.error60 : '#ccc')
+  const [color, setColor] = useState(new Set(props.collectSet).has(item.id) ? '#E7A960' : '#ccc')
   console.log('collectset', props.collectSet)
 
   const onPressCollect = async () => {
@@ -19,12 +19,12 @@ const HomeListItem = (props) => {
         console.log(res)
         if (res.message === 'ok') {
           // 收藏按钮样式变化
-          if (color === MD3Colors.error60) {
+          if (color === '#E7A960') {
             setColor('#ccc')
             setCollectNum(collectNum - 1)
           }
           else if (color === '#ccc') {
-            setColor(MD3Colors.error60)
+            setColor('#E7A960')
             setCollectNum(collectNum + 1)
           }
         }

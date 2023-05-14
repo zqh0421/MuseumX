@@ -19,6 +19,9 @@ import { allNew } from '../api/discover/newInterface'
 import { current } from '../api/currentUserInterface'
 
 const Profile = (props) => {
+  const [num0, setNum0] = useState(0)
+  const [num1, setNum1] = useState(0)
+  const [num2, setNum2] = useState(0)
   const [toggleSelected, setToggleSelected] = useState('0')
   const [toggleBar0Style, setToggleBar0Style] = useState(styles.toggleBar)
   const [likeSet, setLikeSet] = useState([])
@@ -65,6 +68,7 @@ const Profile = (props) => {
             })
             setLikeSet(temp)
             setListData(res.data.data)
+            setNum0(res.data.data.length)
             setIsRefreshing(false)
           } else { // 获取失败
             setIsError(true)
@@ -107,6 +111,7 @@ const Profile = (props) => {
               })
               setCollectSet(temp)
               setListData(res.data.data)
+              setNum1(res.data.data.length)
             }
             setIsRefreshing(false)
           } else { // 获取失败
@@ -139,6 +144,7 @@ const Profile = (props) => {
             console.log('profile-res:')
             console.log(res.data.data)
             setListData(res.data.data)
+            setNum2(res.data.data.length)
             setIsRefreshing(false)
           } else { // 获取失败
             setIsError(true)
@@ -282,17 +288,17 @@ const Profile = (props) => {
         </View>
         <View style={styles.toggle}>
           <Pressable onPress={onPressLike} style={styles.toggleItem}>
-            <Text style={styles.toggleNumber}>3</Text>
+            <Text style={styles.toggleNumber}>{num0}</Text>
             <Text style={styles.toggleTitle}>喜 欢</Text>
             <View style={toggleBar0Style}></View>
           </Pressable>
           <Pressable onPress={onPressCollect} style={styles.toggleItem}>
-            <Text style={styles.toggleNumber}>123</Text>
+            <Text style={styles.toggleNumber}>{num1}</Text>
             <Text style={styles.toggleTitle}>收 藏</Text>
             <View style={toggleBar1Style}></View>
           </Pressable>
           <Pressable onPress={onPressActivity} style={styles.toggleItem}>
-            <Text style={styles.toggleNumber}>123</Text>
+            <Text style={styles.toggleNumber}>{num2}</Text>
             <Text style={styles.toggleTitle}>动 态</Text>
             <View style={toggleBar2Style}></View>
           </Pressable>
