@@ -73,7 +73,7 @@ const Person = (props) => {
                 <ListItem title="密码" content={fakeUserInfo.userInfo} navigation={props.navigation} />
             </View>
             <View style = {styles.buttonStyle}>
-                <Button title="退出登录"   onPress={handleLogout} />
+                <Button title="退出登录"  onPress={handleLogout} />
             </View>
         </View>
     )
