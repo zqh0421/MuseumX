@@ -1,12 +1,11 @@
-export async function publishInterface(file) {
+export async function publishInterface(token, formData) {
     const options = {
         method: 'POST',
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          'token': token
         },
-        body: JSON.stringify({
-          file: file
-        })
+        body: formData
       }
 
       try {

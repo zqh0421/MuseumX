@@ -20,7 +20,7 @@ import { current } from '../api/currentUserInterface'
 
 const Profile = (props) => {
   const [id, setId] = useState()
-  const [username, setUsername] = useState()
+  const [username, setUsername] = useState('momo')
   const [avatarUrl, setAvatarUrl] = useState()
   const [num0, setNum0] = useState(0)
   const [num1, setNum1] = useState(0)
@@ -217,7 +217,7 @@ const Profile = (props) => {
             console.log('current-res:')
             console.log(resp.data)
             setId(resp.data.id)
-            setUsername(resp.data.username)
+            setUsername(resp.data.username || 'momo')
             setAvatarUrl(resp.data.avatarUrl)
           })
           // 已登录，加载数据
