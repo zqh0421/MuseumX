@@ -5,7 +5,7 @@ export async function collect_number(token, id) {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'token': token
-      }
+      },
     }
   
     try {

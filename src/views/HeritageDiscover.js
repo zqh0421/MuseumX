@@ -2,24 +2,24 @@ import {
     StyleSheet,
     Text,
     View,
-    Button,
     Dimensions,
     KeyboardAvoidingView,
     ScrollView,
     Image,
   } from 'react-native'
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
-import { List, MD3Colors, SegmentedButtons,TextInput,IconButton, } from 'react-native-paper';
+import { List, MD3Colors, SegmentedButtons,TextInput,IconButton,Button } from 'react-native-paper';
 import { render } from 'react-dom';
 import { like } from '../api/Like';
 import { postComment } from '../api/PostComment';
 import { publishComment } from '../api/PublishPostComment';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const CommentItem = (props) =>{
     const[list, setList] = useState([])
     return(
-      <View style={{marginTop:15, }}>
+      <View style={{marginTop:'5%'}}>
         <Text style={styles.textStyle}>userId:{props.userId}</Text>
         <Text >{props.content}</Text>
       </View>
@@ -31,6 +31,11 @@ const HeritageDiscover = (props) => {
     const [comments, setComments] = useState([])
     const [list, setList] = useState([])
     const [comment, setComment] = useState('')
+    const [value, setValue] = useState('')
+    const [LikeN, setLikeN] = useState(0)
+    const [color, setColor] = useState(
+        props.isCollected ? MD3Colors.error60 : MD3Colors.neutral100
+    )
 
     const getData = async () => {
         try{
@@ -43,83 +48,92 @@ const HeritageDiscover = (props) => {
     }
 
     // 接收参数
-    const { mid, imageUrl, title, likeNum, content } = props.route.params.item 
+    const { id, imgUrl, title, likeNum, content } = props.route.params.item 
     
     // 获取帖子评论
     const loadData = () => {
-        postComment(mid)
+        postComment(1)
           .then(async (res) => {
             if (res.message === 'ok') {
-              setComments(res.data.data)
+                console.log("comment-res:",res.data.data)
+                setComments(res.data.data)
             }
           })
           .catch((err) => {
+            console.log(err)
             alert(err)
           })
     }
 
     useEffect(() => {
-        getData().then(res => {
-          console.log('res:')
-          console.log(res)
-          if(res === undefined || res === null){
-            props.navigation.navigate('Login')
-          }else{
-            loadData()
-          }
-        }).catch((err) => {
+        getData().then(userData => {
+            console.log(userData.data, 'userData')
+            if(userData){
+                console.log(userData.data)
+                loadData()
+            }else{
+                props.navigation.navigate('Login')
+            }
+          }).catch((err) => {
         })
     },[])
     
     // 发表评论
-    const publishComment = () => {
-        // 向后端发送请求
-        publishComment(comment, mid)
-            .then(async (res) => {
-            if (res.message === 'ok') {
-                console.log('Send')
+    const Publish = () => {
+        // 向后端发送请求,加token
+        getData().then(userData => {
+            if(userData){   
+                publishComment(userData.data, comment, id).then(async (res) => {
+                    if (res.message === 'ok') {
+                        console.log('Send')
+                    }
+                })
+            }else{
+                console.log("failed")
             }
-        })
-        .catch((err) => {
+        }).catch((err) => {
             alert(err)
         })
     }
     
     // 点赞帖子
     const PressLike = () => {
-        console.log("Like")  
-        
+        console.log("Like")          
         // 1. 点赞按钮样式变化
         if(color === MD3Colors.error60) {
             setColor(MD3Colors.neutral100)
-            setCollectNum(likeNum - 1)
+            setLikeN(likeNum - 1)
         } else if (color === MD3Colors.neutral100) {
             setColor(MD3Colors.error60)
-            setCollectNum(likeNum + 1)
+            setLikeN(LikeN + 1)
         }
 
-        // 2. 向后端发送请求，修改
-        like(mid)
-            getData().then(async (res) => {
-                if (res.message === 'ok') {
-                    console.log('Like')
-        }
-        })
-        .catch((err) => {
+        getData().then(userData => {
+            if(userData){
+                like(userData.data,id).then(async (res) => {
+                    if (res.message === 'ok') {
+                        console.log('Like')
+                    }
+                })
+            }else{
+                console.log("failed.")
+            }
+        }).catch((err) => {
             alert(err)
-        }) 
+        })
+
+        
     }
 
     return (
         <View style={styles.container}>
-            <ScrollView ref={scrollViewRef}>  
+            <ScrollView>  
                 <LinearGradient 
                 colors={['#727480','#454653']} 
                 style={styles.backgroud}>
 
                 {/* 文物图片 */}
-                <Image source={require('../../assets/2.jpg')} style={styles.imageStyle}/>
-                {/* <Image source={{uri:imageUrl}} style={styles.imageStyle}/> */}
+                {imgUrl && <Image source={{uri:imgUrl}} style={styles.imageStyle}/>}
                  
                 {/* 跳转按钮*/}
                 <SegmentedButtons
@@ -141,16 +155,21 @@ const HeritageDiscover = (props) => {
 
                 {/* 文字显示 */}
                 <Text style={styles.Titlefont}>
-                    Title
-                    {/* {title} */}
-                    <Text style={styles.textStyle}>
-                        {/* {pcontent}  */}
-                        {'\r\n\n'}北宋(公元960—1127年)
-                        汝窑窑址在今河南宝丰清凉寺，以烧造青釉瓷器著称，是继定窑之后又一为宫廷烧造贡瓷的窑场。
-                        其产品胎体细洁如香灰色，多为“裹足支烧”。釉色主要为天青色，釉层薄而莹润，釉泡大而稀疏，
-                        有“寥若晨星”之称。釉面有细小的开片纹，称为“冰裂纹”。
-                    </Text>
+                    {title}
+                    <Text style={styles.textStyle}>{'\r\n\n'}{content}</Text>
                 </Text>
+
+                <Text style={styles.Titlefont}>
+                    Comments
+                    </Text>
+                    <View style={{left:'14%'}}>
+                        {comments.map(item =>{
+                            return(
+                                <CommentItem userId={item.userId} content={item.content} key={item.id}/>
+                            )
+                        })}
+                    </View>
+                    <View style={{height:100}}></View> 
                 </LinearGradient>
             </ScrollView>
         
@@ -164,7 +183,7 @@ const HeritageDiscover = (props) => {
                     outlineColor={'#CCCCCC'}
                     activeOutlineColor={'#CCCCCC'}
                     contentStyle={{color:'#fffaf0'}}
-                    value={commment}
+                    value={comment}
                     onChangeText={(val) => setComment(val)}
                 />
 
@@ -172,18 +191,18 @@ const HeritageDiscover = (props) => {
                     mode='contained'
                     buttonColor='#808080'
                     style={{top:-5,left:10}}
-                    onPress={() => publishComment()}>
+                    onPress={() => Publish()}>
                     <Text style={styles.buttonTxt}>Send</Text>
                 </Button>
 
                 <IconButton
                     icon='heart-outline'
-                    iconColor='#EEEEEE'
+                    iconColor={color}
                     size={30}
-                    style={styles.iconStyle}
+                    style={{top:-8 ,left:5}}
                     onPress={() => PressLike()}
                 />
-                <Text style={{top:-22,color:'#EEEEEE'}}>{props.likeNum}</Text>
+                <Text style={{top:-8,color:'#EEEEEE'}}>{LikeN}</Text>
                 
             </View>
         </View>
@@ -197,55 +216,51 @@ const HeritageDiscover = (props) => {
     },
     backgroud:{
         width:Dimensions.get('window').width,
-        // height:Dimensions.get('window').heigth-50,
-        flex:1,
+        flex:1
     },
     imageStyle:{
-        width:300,
-        height:300,
+        width: '80%',
+        height: 300,
         alignContent: 'center',
-        marginLeft:50,   //页边距
-        marginRight:50,
-        top: 50,         //和页面顶部的距离
-        borderRadius: 10,
+        marginLeft: '10%', //页边距
+        top: '2%', //和页面顶部的距离
+        borderRadius: 10
     },
     buttonsStyle: {
-        marginTop:80,
-        marginLeft:65,
-        marginRight:65,
+        marginTop: '15%',
+        marginLeft: '10%',
+        marginRight: '10%'
     },
     Titlefont: {
         fontSize: 20,
         color: '#FFFFFF',
-        marginLeft:65,
-        marginRight:65,
-        marginTop:20,  
-        marginVertical:20,
+        marginLeft: '13%',
+        marginRight: '13%',
+        marginVertical: '5%',
     },
     textStyle: {
-        fontSize:12,
-        color:'#d3d3d3',
+        fontSize: 12,
+        color: '#d3d3d3',
     },
-    bottombar:{
-        width:Dimensions.get('window').width,
-        height:110,
-        backgroundColor:'#3A3A3A',
-        flexDirection:'row',   //子组件水平排列，默认水平居中
-        justifyContent:'center',  //子组件之间有间隔 
-        alignItems:'center'   
+    bottombar: {
+        position: 'absolute',
+        bottom: 0,
+        width: Dimensions.get('window').width,
+        height: 70,
+        backgroundColor: '#3A3A3A',
+        flexDirection: 'row', //子组件水平排列，默认水平居中
+        justifyContent: 'center',
+        alignItems: 'center'
     },
-    inputStyle: {  //这里指的是输入内容的样式
-        top:-22,
-        width:200,
-        backgroundColor:'#c0c0c0',
-        textColor:'#696969',
-        height:35,   //height设置过小导致文字显示不全，添加paddingVertical=0也无效,改小字体大小
-        fontSize:12,
-        borderRadius:5,
-        boderColor:'#c0c0c0'
-    },
-    iconStyle:{
-        top:-22,
+    inputStyle: {
+        //这里指的是输入内容的样式
+        width: 200,
+        backgroundColor: '#c0c0c0',
+        textColor: '#696969',
+        height: 35, //height设置过小导致文字显示不全，添加paddingVertical=0也无效,改小字体大小
+        fontSize: 12,
+        borderRadius: 5,
+        top: -10
     }
   })
 

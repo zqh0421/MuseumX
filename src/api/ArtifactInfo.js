@@ -1,4 +1,4 @@
-//文物
+//获取文物
 export async function artifact(id) {
     const options = {
       method: 'POST',
