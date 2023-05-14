@@ -11,6 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Appbar, Button } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { current } from '../api/currentUserInterface'
 const ListItem = (props) => {
 
   const onPressEdit = () => {
@@ -39,13 +40,31 @@ const ListItem = (props) => {
 
 const Person = (props) => {
   const [currentUser, setCurrentUser] = useState({})
-  const fakeUserInfo = {
-    username: '123',
-    userInfo: '123456'
+
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('userData')
+      return jsonValue !== null ? JSON.parse(jsonValue) : null
+    } catch (e) {
+      // error reading value
+    }
   }
 
   useEffect(() => {
-    setCurrentUser(fakeUserInfo)
+    getData().then(res => {
+      console.log('res: ')
+      console.log(res)
+      if (res) {
+        current(res.data).then(resp => {
+          console.log('current-res:')
+          console.log(resp.data)
+          setCurrentUser({
+            username: resp.data.userAccount,
+            userInfo: '*******'
+          })
+        })
+      }
+    })
   }, [])
   const handleLogout = useCallback(async () => {
     try {
@@ -70,11 +89,11 @@ const Person = (props) => {
         colors={['#727480', '#454653']}
       >
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={styles.inputStyle}>账户信息</Text>
+          <Text style={styles.inputStyle}>编辑账户信息</Text>
         </View>
         <View style={styles.list}>
-          <ListItem title="用户名" content={fakeUserInfo.username} navigation={props.navigation}/>
-          <ListItem title="密码" content={fakeUserInfo.userInfo} navigation={props.navigation} />
+          <ListItem title="用户名" content={currentUser.username} navigation={props.navigation}/>
+          <ListItem title="密码" content={currentUser.userInfo} navigation={props.navigation} />
         </View>
         <View style = {styles.buttonStyle}>
           <Button mode={'elevated'}  onPress={handleLogout}>退出登录</Button>
