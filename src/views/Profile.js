@@ -114,7 +114,6 @@ const Profile = (props) => {
               })
               setCollectSet(temp)
               setListData(res.data.data)
-              setNum1(res.data.data?.length || 0)
             }
             setIsRefreshing(false)
           } else { // 获取失败
@@ -252,6 +251,19 @@ const Profile = (props) => {
       break
     }
   }, [toggleSelected])
+
+  useEffect(() => {
+    switch(toggleSelected) {
+      case '0': 
+        setNum0(listData?.length || 0)
+        break
+      case '1':
+        setNum1(listData?.length || 0)
+        break
+      case '2':
+        setNum2(listData?.length || 0)
+    }
+  }, listData)
 
   const onPressLike = () => {
     setToggleSelected('0')
