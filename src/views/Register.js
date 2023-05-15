@@ -30,7 +30,8 @@ const Register = (props) => {
           await AsyncStorage.setItem('userData', jsonValue)
           console.log('userData')
           console.log(await AsyncStorage.getItem('userData'))
-          props.navigation.goBack()
+          // props.navigation.goBack()
+          props.navigation.navigate("Login")  ///跳转到登录
         } catch (e) {
           // saving error
         }
@@ -128,7 +129,7 @@ const Register = (props) => {
           // style = {styles.buttonStyle}
           mode='contained'
           buttonColor='#808080'
-        style={styles.buttonStyle}
+          style={styles.buttonStyle}
           onPress={() => onRegister()}>
         <Text style={styles.buttonTxt}>注    册</Text>
         </Button>

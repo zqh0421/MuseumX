@@ -122,6 +122,11 @@ const HeritageDiscover = (props) => {
         })
     }
 
+    //跳转到文物详情
+    const goDetails = () => {
+        props.navigation.navigate('HeritageDetails', { id: id })
+    }
+
     return (
         <View style={styles.container}>
             <ScrollView>  
@@ -160,7 +165,9 @@ const HeritageDiscover = (props) => {
                     mode='contained'
                     icon = "book-open-page-variant-outline"
                     style={{marginLeft:'12%',marginRight:'45%',marginBottom:'5%',backgroundColor:"#c0c0c0"}}
-                    onPress={() => console.log('Pressed')}>{moodCategory}</Chip>
+                    onPress={() => goDetails()}>
+                {moodCategory}</Chip>
+                
                 <Text style={styles.Titlefont}>
                     留 言
                     </Text>
