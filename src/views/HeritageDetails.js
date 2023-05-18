@@ -55,6 +55,7 @@ import {
     
     //接收Home页面参数
     const id = props.route.params.id
+    console.log("详情页,文物id:",id)
 
     //从数据库中取数据
     const getData = async () => {
@@ -79,11 +80,11 @@ import {
               setDescription(res.data.description)
               setImageUrl(res.data.imageUrl)
               setCollectNum(res.data.collectNum)
+              
             }
-          })
-          .catch((err) => {
+        }).catch((err) => {
             alert(err)
-          })
+        })
     
         // 获取当前文物所有评论和发表评论的用户信息,加token
         artifactComment(id).then(async (res) => {
@@ -94,7 +95,7 @@ import {
       }
     
     useEffect(() => {
-        loadData()
+        {id && loadData()}
     },[])
 
 

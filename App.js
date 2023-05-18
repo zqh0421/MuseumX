@@ -12,6 +12,7 @@ import TabBar from './src/components/TabBar'
 import HeritageDetails from './src/views/HeritageDetails'
 import HeritageDiscover from './src/views/HeritageDiscover'
 import Result from './src/views/Result'
+
 const Stack = createNativeStackNavigator()
 
 const App = () => {

@@ -161,6 +161,8 @@ const Home = (props) => {
 
 
   return (
+    
+
     <View style={styles.container}>
       <LinearGradient
         style={styles.background}

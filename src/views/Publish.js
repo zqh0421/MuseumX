@@ -113,7 +113,7 @@ const Publish = (props) => {
           clearOnFocus={false}
           closeOnBlur={true}
           closeOnSubmit={false}
-          initialValue={{ id: '2' }} // or just '2'
+          // initialValue={{ id: '2' }} // or just '2'
           onSelectItem={setSelectedItem}
           dataSet={categories.map(item => ({
             id: item.artifactId,

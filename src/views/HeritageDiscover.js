@@ -49,9 +49,8 @@ const HeritageDiscover = (props) => {
     }
 
     // 接收参数
-    const { id, imgUrl, title, likeNum, content, moodCategory } = props.route.params.item 
+    const { id, imgUrl, title, likeNum, content, moodCategory, moodCategoryId } = props.route.params.item 
     
-
     // 获取帖子评论
     const loadData = () => {
         postComment(id)
@@ -122,9 +121,9 @@ const HeritageDiscover = (props) => {
         })
     }
 
-    //跳转到文物详情
+    // 跳转到详情页
     const goDetails = () => {
-        props.navigation.navigate('HeritageDetails', { id: id })
+        props.navigation.navigate('HeritageDetails', { id:  moodCategoryId })  
     }
 
     return (
