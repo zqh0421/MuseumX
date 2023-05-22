@@ -188,6 +188,8 @@ const Home = (props) => {
   }
 
   return (
+    
+
     <View style={styles.container}>
       <LinearGradient style={styles.background} colors={['#727480', '#454653']}>
         <Text

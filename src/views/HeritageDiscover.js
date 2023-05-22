@@ -54,24 +54,24 @@ const HeritageDiscover = (props) => {
     }
   }
 
-  // 接收参数
-  const { id, imgUrl, title, likeNum, content, moodCategory } =
-    props.route.params.item
-
-  // 获取帖子评论
-  const loadData = () => {
-    postComment(id)
-      .then(async (res) => {
-        if (res.message === 'ok') {
-          console.log('comment-res:', res.data.data)
-          setComments(res.data.data)
-        }
-      })
-      .catch((err) => {
-        console.log(err)
-        alert(err)
-      })
-  }
+    // 接收参数
+    const { id, imgUrl, title, likeNum, content, moodCategory, moodCategoryId } = props.route.params.item 
+    
+    // 获取帖子评论
+    const loadData = () => {
+        postComment(id)
+          .then(async (res) => {
+            if (res.message === 'ok') {
+                console.log("comment-res:",res.data.data)
+                setComments(res.data.data)
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+            alert(err)
+          })
+        
+    }
 
   useEffect(() => {
     loadData()
@@ -135,35 +135,38 @@ const HeritageDiscover = (props) => {
       })
   }
 
-  return (
-    <View style={styles.container}>
-      <ScrollView>
-        <LinearGradient
-          colors={['#727480', '#454653']}
-          style={styles.backgroud}
-        >
-          {/* 文物图片 */}
-          {imgUrl && (
-            <Image source={{ uri: imgUrl }} style={styles.imageStyle} />
-          )}
+    // 跳转到详情页
+    const goDetails = () => {
+        props.navigation.navigate('HeritageDetails', { id:  moodCategoryId })  
+    }
 
-          {/* 跳转按钮*/}
-          <SegmentedButtons
-            value={value}
-            onValueChange={setValue}
-            style={styles.buttonsStyle}
-            buttons={[
-              {
-                value: '文物描述',
-                label: '发 现'
-              },
-              {
-                value: '文物详解',
-                label: '留 言'
-              }
-            ]}
-            onSegmentBtnPress={(btn, index) => {}}
-          />
+    return (
+        <View style={styles.container}>
+            <ScrollView>  
+                <LinearGradient 
+                colors={['#727480','#454653']} 
+                style={styles.backgroud}>
+
+                {/* 文物图片 */}
+                {imgUrl && <Image source={{uri:imgUrl}} style={styles.imageStyle}/>}
+                 
+                {/* 跳转按钮*/}
+                <SegmentedButtons
+                    value={value}
+                    onValueChange={setValue}
+                    style={styles.buttonsStyle}
+                    buttons={[
+                        {
+                            value:'文物描述',
+                            label:'发 现',
+                        },
+                        {
+                            value:'文物详解',
+                            label:'留 言',
+                        }
+                    ]}
+                    onSegmentBtnPress={(btn,index)=>{}}
+                /> 
 
           {/* 文字显示 */}
           <Text style={styles.Titlefont}>
@@ -174,48 +177,40 @@ const HeritageDiscover = (props) => {
             </Text>
           </Text>
 
-          <Chip
-            mode="contained"
-            icon="book-open-page-variant-outline"
-            style={{
-              marginLeft: '12%',
-              marginRight: '45%',
-              marginBottom: '5%',
-              backgroundColor: '#c0c0c0'
-            }}
-            onPress={() => console.log('Pressed')}
-          >
-            {moodCategory}
-          </Chip>
-          <Text style={styles.Titlefont}>留 言</Text>
-          <View style={{ left: '14%' }}>
-            {comments.map((item) => {
-              return (
-                <CommentItem
-                  userId={item.userId}
-                  content={item.content}
-                  key={item.id}
+                <Chip 
+                    mode='contained'
+                    icon = "book-open-page-variant-outline"
+                    style={{marginLeft:'12%',marginRight:'45%',marginBottom:'5%',backgroundColor:"#c0c0c0"}}
+                    onPress={() => goDetails()}>
+                {moodCategory}</Chip>
+                
+                <Text style={styles.Titlefont}>
+                    留 言
+                    </Text>
+                    <View style={{left:'14%'}}>
+                        {comments.map(item =>{
+                            return(
+                                <CommentItem userId={item.userId} content={item.content} key={item.id}/>
+                            )
+                        })}
+                    </View>
+                <View style={{height:200}}></View> 
+                </LinearGradient>
+            </ScrollView>
+        
+            {/* 评论输入框 */}
+            <View style={styles.bottombar}>
+                <TextInput
+                    mode="outlined"
+                    style={styles.inputStyle}
+                    placeholder="发表评论..."
+                    placeholderTextColor={'#ffffff'}
+                    outlineColor={'#CCCCCC'}
+                    activeOutlineColor={'#CCCCCC'}
+                    contentStyle={{color:'#fffaf0'}}
+                    value={comment}
+                    onChangeText={(val) => setComment(val)}
                 />
-              )
-            })}
-          </View>
-          <View style={{ height: 200 }}></View>
-        </LinearGradient>
-      </ScrollView>
-
-      {/* 评论输入框 */}
-      <View style={styles.bottombar}>
-        <TextInput
-          mode="outlined"
-          style={styles.inputStyle}
-          placeholder="发表评论..."
-          placeholderTextColor={'#ffffff'}
-          outlineColor={'#CCCCCC'}
-          activeOutlineColor={'#CCCCCC'}
-          contentStyle={{ color: '#fffaf0' }}
-          value={comment}
-          onChangeText={(val) => setComment(val)}
-        />
 
         <Button
           mode="contained"
