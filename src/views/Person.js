@@ -4,7 +4,6 @@ import {
   View,
   Dimensions,
   Pressable,
-  BackHandler
 } from 'react-native'
 import React, { useState, useEffect, useCallback } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -12,19 +11,20 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Appbar, Button } from 'react-native-paper'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { current } from '../api/currentUserInterface'
+import RNExitApp from 'react-native-exit-app'
 const ListItem = (props) => {
   const onPressEdit = () => {
     // alert(props.title)
     // props.navigation.navigate('')
     switch (props.title) {
-      case '用户名':
-        props.navigation.navigate('EditUsername')
-        break
-      case '密码':
-        props.navigation.navigate('EditPassword')
-        break
-      default:
-        break
+    case '用户名':
+      props.navigation.navigate('EditUsername')
+      break
+    case '密码':
+      props.navigation.navigate('EditPassword')
+      break
+    default:
+      break
     }
   }
   return (
@@ -72,6 +72,7 @@ const Person = (props) => {
       await AsyncStorage.removeItem('userData')
       console.log('User token has been cleared!')
       props.navigation.navigate('Home')
+      RNExitApp.exitApp()
     } catch (error) {
       // 如果清空本地存储的用户登录信息失败，打印错误信息
       console.error(`Failed to remove user token: ${error}`)
@@ -105,7 +106,7 @@ const Person = (props) => {
         </View>
         <View style={styles.buttonStyle}>
           <Button mode={'elevated'} onPress={handleLogout}>
-            退出登录
+            退出登录并退出应用
           </Button>
         </View>
       </LinearGradient>

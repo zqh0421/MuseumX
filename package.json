@@ -51,6 +51,7 @@
     "husky": "^8.0.3",
     "lint-staged": "^13.2.1",
     "prettier": "^2.8.7",
+    "react-native-exit-app": "^1.1.0",
     "react-native-vector-icons": "^9.2.0"
   },
   "private": true,

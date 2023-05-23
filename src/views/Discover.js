@@ -21,7 +21,7 @@ import Waterfall from '../components/Waterfall'
 
 const Discover = (props) => {
   const [togglePopular, setTogglePopular] = useState(false)
-  const [toggleStyle, setToggleStyle] = useState([styles.toggleSelected, styles.togglePopular])
+  const [toggleStyle, setToggleStyle] = useState([styles.toggleSelected])
   const [toggleHotColor, setToggleHotColor] = useState({ color: '#ccc' })
   const [toggleNewColor, setToggleNewColor] = useState({ color: '#333' })
   const [listData, setListData] = useState([]) // 存储当前显示的数据列表
