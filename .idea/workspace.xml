@@ -7,7 +7,7 @@
     <list default="true" id="88e302ea-a052-4f35-9f90-5175e05cb3d6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/editUserName.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/editUserName.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/editUsername.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/editUsername.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/views/HeritageDetails.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/HeritageDetails.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/views/HeritageDiscover.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/HeritageDiscover.js" afterDir="false" />
     </list>
