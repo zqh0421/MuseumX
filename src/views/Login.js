@@ -26,13 +26,12 @@ const Login = (props) => {
     login(username, pwd)
       .then(async (res) => {
         if (res.message === 'ok') {
-          // TODO: 判断登录成功的条件根据实际接口修改！
           try {
             const jsonValue = JSON.stringify(res)
             await AsyncStorage.setItem('userData', jsonValue)
             console.log('userData')
             console.log(await AsyncStorage.getItem('userData'))
-            props.navigation.goBack()
+            props.navigation.navigate('Home')
           } catch (e) {
             // saving error
           }
@@ -45,7 +44,7 @@ const Login = (props) => {
 
   return (
     <View style={styles.container}>
-      <LinearGradient colors={['#3A3A3A', '#525161']} style={styles.backgroud}>
+      <LinearGradient colors={['#3A3A3A', '#525161']} style={styles.background}>
         <MaterialCommunityIcons
           onPress={() => props.navigation.goBack()}
           name="close"
@@ -120,7 +119,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1 // 布局
   },
-  backgroud: {
+  background: {
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1

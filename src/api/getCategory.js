@@ -14,9 +14,9 @@ export async function getCategory(page, size) {
     )
     if (response.ok) {
       //请求成功,使用 ===
-      console.log('Request successful')
+      console.log('Request getCategory successful')
     } else {
-      console.log('Request failed')
+      console.log('Request getCategory failed')
     }
     const data = await response.json()
     console.log(data)

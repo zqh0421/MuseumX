@@ -8,10 +8,8 @@ import {
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useEffect, useState } from 'react'
-import WaterfallFlow from 'react-native-waterfall-flow'
 import { AntDesign } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import FlowListItem from '../components/FlowListItem'
 import { like } from '../api/discover/likeInterface'
 import { allNew } from '../api/discover/newInterface'
 import { mylike } from '../api/mylike'
@@ -19,21 +17,21 @@ import { allPopular } from '../api/discover/popularInterface'
 import ErrorContent from '../components/ErrorContent'
 import EmptyContent from '../components/EmptyContent'
 import RefreshingContent from '../components/RefreshingContent'
+import Waterfall from '../components/Waterfall'
 
 const Discover = (props) => {
-  const [toggleNew, setToggleNew] = useState(false)
-  const [toggleStyle, setToggleStyle] = useState(styles.toggleSelected)
-  const [toggleHotColor, setToggleHotColor] = useState({ color: '#333' })
-  const [toggleNewColor, setToggleNewColor] = useState({ color: '#ccc' })
+  const [togglePopular, setTogglePopular] = useState(false)
+  const [toggleStyle, setToggleStyle] = useState([styles.toggleSelected, styles.togglePopular])
+  const [toggleHotColor, setToggleHotColor] = useState({ color: '#ccc' })
+  const [toggleNewColor, setToggleNewColor] = useState({ color: '#333' })
   const [listData, setListData] = useState([]) // 存储当前显示的数据列表
-  const [likeSet, setLikeSet] = useState([])
   const [isRefreshing, setIsRefreshing] = useState(false) // 正在加载数据
   const [isError, setIsError] = useState(true) // 数据加载错误
-
+  const [myLike, setMyLike] = useState([])
   useEffect(() => {
     // 当toggleNew为false，显示“热门”内容；否则显示“最新”内容。
-    setIsError(false)
     setIsRefreshing(true)
+    setIsError(false)
     getData()
       .then((userData) => {
         if (userData) {
@@ -43,45 +41,42 @@ const Discover = (props) => {
                 // 数据获取成功
                 // console.log('profile-res:')
                 // console.log(res.data.data)
-                let temp = []
                 res &&
                   res.data &&
                   res.data.data &&
-                  res.data.data.forEach((item) => {
-                    console.log(item.id)
-                    temp = [...temp, item.id]
-                  })
-                setLikeSet(temp)
-                if (toggleNew) {
+                  setMyLike(res.data.data)
+                if (!togglePopular) {
                   loadDataNew()
-                  setToggleStyle([styles.toggleSelected, styles.toggleNew])
-                  setToggleNewColor({ color: '#333' })
-                  setToggleHotColor({ color: '#ccc' })
-                } else {
-                  loadDataPopular()
                   setToggleStyle(styles.toggleSelected)
                   setToggleNewColor({ color: '#ccc' })
                   setToggleHotColor({ color: '#333' })
+                } else {
+                  loadDataPopular()
+                  setToggleStyle([styles.toggleSelected, styles.togglePopular])
+                  setToggleNewColor({ color: '#333' })
+                  setToggleHotColor({ color: '#ccc' })
                 }
                 setIsRefreshing(false)
               } else {
                 // 获取失败
                 setIsRefreshing(false)
+                setIsError(true)
               }
             })
             .catch((err) => {
               setIsRefreshing(false)
+              setIsError(true)
               alert(err)
             })
         } else {
-          if (toggleNew) {
-            setToggleStyle([styles.toggleSelected, styles.toggleNew])
-            setToggleNewColor({ color: '#333' })
-            setToggleHotColor({ color: '#ccc' })
-          } else {
+          if (!togglePopular) {
             setToggleStyle(styles.toggleSelected)
             setToggleNewColor({ color: '#ccc' })
             setToggleHotColor({ color: '#333' })
+          } else {
+            setToggleStyle([styles.toggleSelected, styles.togglePopular])
+            setToggleNewColor({ color: '#333' })
+            setToggleHotColor({ color: '#ccc' })
           }
         }
       })
@@ -90,7 +85,7 @@ const Discover = (props) => {
         setIsError(true)
         setIsRefreshing(false)
       })
-  }, [toggleNew])
+  }, [togglePopular])
 
   const loadDataNew = () => {
     allNew(1, 30)
@@ -103,13 +98,11 @@ const Discover = (props) => {
         } else {
           // 获取失败
           setIsError(true)
-          setIsRefreshing(false)
           setListData([])
         }
       })
       .catch((err) => {
         setIsError(true)
-        setIsRefreshing(false)
         setListData([])
         alert(err)
       })
@@ -130,13 +123,11 @@ const Discover = (props) => {
         } else {
           // 获取失败
           setIsError(true)
-          setIsRefreshing(false)
           setListData([])
         }
       })
       .catch((err) => {
         setIsError(true)
-        setIsRefreshing(false)
         setListData([])
         alert(err)
       })
@@ -164,27 +155,24 @@ const Discover = (props) => {
                 // 数据获取成功
                 // console.log('profile-res:')
                 // console.log(res.data.data)
-                let temp = []
                 res &&
                   res.data &&
                   res.data.data &&
-                  res.data.data.forEach((item) => {
-                    // console.log(item.id)
-                    temp = [...temp, item.id]
-                  })
-                setLikeSet(temp)
-                loadDataNew()
+                  setMyLike(res.data.data)
+                loadDataNew() // TODO
               } else {
                 // 获取失败
                 setIsRefreshing(false)
+                setIsError(true)
               }
             })
             .catch((err) => {
               setIsRefreshing(false)
+              setIsError(true)
               alert(err)
             })
         } else {
-          loadDataPopular()
+          loadDataNew()
         }
       })
       .catch((err) => {
@@ -201,7 +189,6 @@ const Discover = (props) => {
 
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
-      setToggleNew(false)
       initialize()
     })
     return unsubscribe
@@ -210,7 +197,7 @@ const Discover = (props) => {
   const onPressPublish = () => {
     getData()
       .then((userData) => {
-        console.log(userData)
+        // console.log(userData)
         if (userData) {
           props.navigation.navigate('Publish')
         } else {
@@ -228,38 +215,27 @@ const Discover = (props) => {
         <Text style={styles.title}>发现</Text>
         <Pressable
           style={styles.toggle}
-          onPress={() => setToggleNew(!toggleNew)}
+          onPress={() => setTogglePopular(!togglePopular)}
         >
           <View style={toggleStyle}></View>
           <Text style={toggleHotColor}>最新</Text>
           <Text style={toggleNewColor}>热门</Text>
         </Pressable>
         {!isError && !isRefreshing && listData && listData.length > 0 && (
-          <WaterfallFlow
+          <Waterfall
             style={{
               transform: [{ translateY: 75 }],
               maxHeight: Dimensions.get('window').height - 175
             }}
-            contentContainerStyle={{
-              justifyContent: 'space-evenly',
-              paddingLeft: '2%',
-              paddingRight: '2%'
-            }}
             data={listData}
-            numColumns={2}
-            renderItem={({ item, index, columnIndex }) => (
-              <FlowListItem
-                item={item}
-                navigation={props.navigation}
-                likeSet={likeSet}
-              />
-            )}
+            navigation={props.navigation}
+            myLike={myLike}
           />
         )}
         {!isError && isRefreshing && (
           <RefreshingContent
             onPressRefresh={() =>
-              toggleNew ? loadDataNew() : loadDataPopular()
+              !togglePopular ? loadDataNew() : loadDataPopular()
             }
           />
         )}
@@ -315,7 +291,7 @@ const styles = StyleSheet.create({
     left: 1,
     borderRadius: 25
   },
-  toggleNew: {
+  togglePopular: {
     transform: [{ translateX: 48 }]
   },
   publish: {

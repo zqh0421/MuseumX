@@ -42,10 +42,10 @@ export async function Collect(id) {
       options
     )
     if (response.ok) {
-      console.log('Request successful')
+      console.log('Request Collect successful')
     }
     const data = await response.json()
-    console.log(data)
+    // console.log(data)
     return data
   } catch (err) {
     console.log(err)

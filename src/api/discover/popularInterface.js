@@ -14,9 +14,9 @@ export async function allPopular(page, size) {
     // console.log("response: ")
     // console.log(response)
     if (response.ok) {
-      console.log('Request successful')
+      console.log('Request allPopular successful')
     } else {
-      console.log('Request failed')
+      console.log('Request allPopular failed')
     }
     const data = await response.json()
     //console.log(data)

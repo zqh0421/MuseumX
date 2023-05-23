@@ -17,14 +17,14 @@ export async function login(username, password) {
       options
     )
     if (response.ok) {
-      console.log('Request successful')
+      console.log('Request login successful')
     } else {
       if (response.status === '1') console.log('wrong username')
       else if (response.err === '2') console.log('wrong password')
-      else console.log('Request failed')
+      else console.log('Request login failed')
     }
     const data = await response.json()
-    console.log(data)
+    // console.log(data)
     return data
   } catch (err) {
     console.log(err)
@@ -51,13 +51,13 @@ export async function register(checkpassword, username, password) {
       options
     )
     if (response.ok) {
-      console.log('Request successful')
+      console.log('Request register successful')
     } else {
       if (response.err === '3') console.log('the username alreadly exists')
-      else console.log('Request failed')
+      else console.log('Request register failed')
     }
     const data = await response.json()
-    console.log(data)
+    // console.log(data)
     return data
   } catch (err) {
     console.log(err)

@@ -14,12 +14,12 @@ export async function myCollect(token) {
       options
     )
     if (response.ok) {
-      console.log('Request successful')
+      console.log('Request myCollect successful')
     } else {
-      console.log('Request failed')
+      console.log('Request myCollect failed')
     }
     const data = await response.json()
-    console.log(data)
+    // console.log(data)
     return data
   } catch (err) {
     console.log(err)

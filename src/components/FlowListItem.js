@@ -12,28 +12,28 @@ import Pic from '../../assets/pic.png'
 import { like } from '../api/discover/likeInterface'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 const FlowListItem = (props) => {
-  const { item } = props
+  const { item, myLike } = props
   const [likeNum, setLikeNum] = useState(item.likeNum)
-  const [color, setColor] = useState(
-    new Set(props.likeSet).has(item.id) ? MD3Colors.error60 : '#ccc'
-  )
+  const [color, setColor] = useState('#ccc')
   const [height, setHeight] = useState(180)
-  console.log('likeset', props.likeSet)
-
-  // useEffect(() => {
-  //   Image.getSize(item.imgUrl, (w, h) => {
-  //     setHeight(h / w * 0.93 * 0.45 * Dimensions.get('window').width)
-  //   },
-  //   (failure) => { console.log('failure', failure) }
-  //   );
-  // }, [])
-
   useEffect(() => {
-    console.log('likeset', props.likeSet)
-    setColor(new Set(props.likeSet).has(item.id) ? MD3Colors.error60 : '#ccc')
-  }, [props.likeSet])
+    Image.getSize(item.imgUrl, (w, h) => {
+      setHeight(h / w * 0.93 * 0.45 * Dimensions.get('window').width)
+    },
+    (failure) => { console.log('failure', failure) }
+    );
+  }, [])
+  useEffect(() => {
+    let flag = false
+    myLike.forEach(u => {
+      if (item.id === u.id) {
+        flag = true
+      }
+    })
+    setColor(flag ? MD3Colors.error60 : '#ccc')
+  }, [myLike])
   const onPressFlowListItem = () => {
-    props.navigation.navigate('HeritageDiscover', { item: item })
+    props.navigation.navigate('HeritageDiscover', { item: item, likeNum: likeNum, isLiked: color===MD3Colors.error60 })
   }
 
   const onPressLove = async () => {

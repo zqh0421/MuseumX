@@ -39,9 +39,9 @@ const HeritageDiscover = (props) => {
   const [comment, setComment] = useState('')
   const [value, setValue] = useState('')
   const [height, setHeight] = useState(180)
-  const [likeN, setLikeNum] = useState(0)
+  const [likeNum, setLikeNum] = useState(props.route.params.likeNum)
   const [color, setColor] = useState(
-    props.isCollected ? MD3Colors.error60 : MD3Colors.neutral100
+    props.route.params.isLiked ? MD3Colors.error60 : MD3Colors.neutral100
   )
 
   const getData = async () => {
@@ -55,7 +55,7 @@ const HeritageDiscover = (props) => {
   }
 
   // 接收参数
-  const { id, imgUrl, title, likeNum, content, moodCategory, moodCategoryId } =
+  const { id, imgUrl, title, content, moodCategory, moodCategoryId } =
     props.route.params.item
 
   // 获取帖子评论
@@ -75,16 +75,15 @@ const HeritageDiscover = (props) => {
 
   useEffect(() => {
     loadData()
-    Image.getSize(
+    imgUrl && Image.getSize(
       imgUrl,
       (w, h) => {
-        setHeight((h / w) * 0.93 * 0.45 * Dimensions.get('window').width)
+        setHeight((h / w) * 0.8 * Dimensions.get('window').width)
       },
       (failure) => {
         console.log('failure', failure)
       }
     )
-    setLikeNum(likeNum)
   }, [])
 
   // 评论帖子
@@ -113,16 +112,16 @@ const HeritageDiscover = (props) => {
     getData()
       .then((userData) => {
         if (userData) {
-          if (color === MD3Colors.error60) {
-            setColor(MD3Colors.neutral100)
-            setLikeNum(likeN - 1)
-          } else if (color === MD3Colors.neutral100) {
-            setColor(MD3Colors.error60)
-            setLikeNum(likeN + 1)
-          }
           like(userData.data, id).then(async (res) => {
             if (res.message === 'ok') {
               console.log('点赞成功')
+              if (color === MD3Colors.error60) {
+                setColor(MD3Colors.neutral100)
+                setLikeNum(likeNum - 1)
+              } else if (color === MD3Colors.neutral100) {
+                setColor(MD3Colors.error60)
+                setLikeNum(likeNum + 1)
+              }
             }
           })
         } else {
@@ -145,11 +144,11 @@ const HeritageDiscover = (props) => {
       <ScrollView>
         <LinearGradient
           colors={['#727480', '#454653']}
-          style={styles.backgroud}
+          style={styles.background}
         >
           {/* 文物图片 */}
           {imgUrl && (
-            <Image source={{ uri: imgUrl }} style={styles.imageStyle} />
+            <Image source={{ uri: imgUrl }} style={[styles.imageStyle, { height: height }]} />
           )}
 
           {/* 跳转按钮*/}
@@ -233,13 +232,13 @@ const HeritageDiscover = (props) => {
         </Button>
 
         <IconButton
-          icon="heart-outline"
+          icon="heart"
           iconColor={color}
-          size={30}
+          size={24}
           style={{ top: -8, left: 5 }}
           onPress={() => PressLike()}
         />
-        <Text style={{ top: -8, color: '#EEEEEE' }}>{likeN}</Text>
+        <Text style={{ top: -8, color: '#EEEEEE' }}>{likeNum}</Text>
       </View>
     </View>
   )
@@ -248,18 +247,17 @@ const HeritageDiscover = (props) => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    flex: 1,
   },
-  backgroud: {
+  background: {
     width: Dimensions.get('window').width,
     flex: 1
   },
   imageStyle: {
     width: '80%',
-    height: 300,
-    alignContent: 'center',
     marginLeft: '10%', //页边距
-    top: '2%', //和页面顶部的距离
+    marginTop: 30, //和页面顶部的距离
     borderRadius: 10
   },
   buttonsStyle: {

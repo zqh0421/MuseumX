@@ -10,8 +10,6 @@ import {
 import { useEffect, useState } from 'react'
 import { TabActions } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { Surface, IconButton, MD3Colors } from 'react-native-paper'
-import WaterfallFlow from 'react-native-waterfall-flow'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { AntDesign } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -19,7 +17,7 @@ import ErrorContent from '../components/ErrorContent'
 import EmptyContent from '../components/EmptyContent'
 import RefreshingContent from '../components/RefreshingContent'
 import HomeListItem from '../components/HomeListItem'
-import FlowListItem from '../components/FlowListItem'
+import Waterfall from '../components/Waterfall'
 import { mylike } from '../api/mylike'
 import { myCollect } from '../api/myCollect'
 import { myrelease } from '../api/myreleaseInterface'
@@ -35,8 +33,8 @@ const Profile = (props) => {
   const [num2, setNum2] = useState(0)
   const [toggleSelected, setToggleSelected] = useState('0')
   const [toggleBar0Style, setToggleBar0Style] = useState(styles.toggleBar)
-  const [likeSet, setLikeSet] = useState([])
   const [collectSet, setCollectSet] = useState([])
+  const [myLike, setMyLike] = useState([])
   const [toggleBar1Style, setToggleBar1Style] = useState([
     styles.toggleBar,
     { opacity: 0 }
@@ -72,18 +70,10 @@ const Profile = (props) => {
           .then((res) => {
             if (res.code === 0) {
               // 数据获取成功
-              console.log('profile-res:')
-              console.log(res.data.data)
-              let temp = []
-              res &&
-                res.data &&
-                res.data.data &&
-                res.data.data.forEach((item) => {
-                  console.log(item.id)
-                  temp = [...temp, item.id]
-                })
-              setLikeSet(temp)
-              setListData(res.data.data)
+              // console.log('profile-res:')
+              // console.log(res.data.data)
+              setListData(res?.data?.data || [])
+              setMyLike(res?.data?.data || [])
               setNum0(res.data.data?.length || 0)
               setIsRefreshing(false)
             } else {
@@ -107,6 +97,10 @@ const Profile = (props) => {
     }
   }
 
+  useEffect(() => {
+    console.log(myLike.length)
+  }, [myLike])
+
   const loadDataMyCollect = async () => {
     setIsError(false)
     setIsRefreshing(true)
@@ -115,11 +109,11 @@ const Profile = (props) => {
       if (userData) {
         myCollect(JSON.parse(userData).data)
           .then((res) => {
-            console.log(res)
+            // console.log(res)
             if (res.code === 0) {
               // 数据获取成功
-              console.log('profile-res:')
-              console.log(res.data.data)
+              // console.log('profile-res:')
+              // console.log(res.data.data)
               if (res.data.data === '收藏为空') {
                 setCollectSet([])
                 setListData([])
@@ -130,7 +124,7 @@ const Profile = (props) => {
                   res.data.data &&
                   res.data.data !== '收藏为空' &&
                   res.data.data.forEach((item) => {
-                    console.log(item.id)
+                    // console.log(item.id)
                     temp = [...temp, item.id]
                   })
                 setCollectSet(temp)
@@ -168,8 +162,8 @@ const Profile = (props) => {
           .then((res) => {
             if (res.code === 0) {
               // 数据获取成功
-              console.log('profile-res:')
-              console.log(res.data.data)
+              // console.log('profile-res:')
+              // console.log(res.data.data)
               setListData(res.data.data)
               setNum2(res.data.data?.length || 0)
               setIsRefreshing(false)
@@ -199,8 +193,8 @@ const Profile = (props) => {
     // 添加这一段是因为后面包含unsubscribe的代码在第一次点击进入页面时，仅绑定事件，不生效
     getData()
       .then((res) => {
-        console.log('res: ')
-        console.log(res)
+        // console.log('res: ')
+        // console.log(res)
         if (res === undefined || res === null) {
           // 没有登录
           // alert('请先登录')
@@ -208,16 +202,17 @@ const Profile = (props) => {
           props.navigation.navigate('Login') // 跳转登录页面
         } else {
           // 已登录，加载数据
-          console.log('currentUser')
-          console.log(res)
+          // console.log('currentUser')
+          // console.log(res)
           current(res.data).then((resp) => {
-            console.log('current-res:')
-            console.log(resp.data)
-            setId(resp.data.userAccount)
-            setUsername(resp.data.username || 'momo')
-            setAvatarUrl(resp.data.avatarUrl)
+            // console.log('current-res:')
+            // console.log(resp.data)
+            setId(resp?.data?.userAccount || '')
+            setUsername(resp?.data?.username || 'momo')
+            setAvatarUrl(resp?.data?.avatarUrl || 'https://pic3.zhimg.com/80/v2-4aff13816be5ec5a81f744b88dbda6ee_1440w.webp')
           })
           loadDataMylike()
+          initialize()
         }
       })
       .catch((err) => {
@@ -225,14 +220,52 @@ const Profile = (props) => {
       })
   }, [])
 
+  const initialize = async () => {
+    // 除喜欢外，加载收藏&动态数
+    try {
+      const userData = await AsyncStorage.getItem('userData')
+      if (userData) {
+        myCollect(JSON.parse(userData).data)
+          .then((res) => {
+            if (res.code === 0) {
+            // 数据获取成功
+            // console.log('profile-res:')
+            // console.log(res.data.data)
+              res &&
+              res.data &&
+              res.data.data &&
+              res.data.data !== '收藏为空' &&
+              setNum1(res?.data?.data?.length || 0)
+            }
+          })
+          .catch((err) => {
+            alert(err)
+          })
+
+        myrelease(JSON.parse(userData).data)
+          .then((res) => {
+            if (res.code === 0) {
+            // 数据获取成功
+              setNum2(res?.data?.data?.length || 0)
+            }
+          })
+          .catch((err) => {
+            alert(err)
+          })
+      }
+    } catch {
+      alert('err')
+    }
+  }
+
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('tabPress', (e) => {
       // 试图通过点击下方导航栏进入本页面时，执行下面的语句
       e.preventDefault() // 阻止默认行为，在下方重新定义
       getData()
         .then((res) => {
-          console.log('res: ')
-          console.log(res)
+          // console.log('res: ')
+          // console.log(res)
           if (res === undefined || res === null) {
             // 没有登录
             // alert('请先登录')
@@ -241,17 +274,18 @@ const Profile = (props) => {
             // 已登录，正常进入该页面
             const jumpToAction = TabActions.jumpTo('Profile')
             props.navigation.dispatch(jumpToAction)
-            console.log('currentUser')
+            // console.log('currentUser')
             current(res.data).then((resp) => {
-              console.log('current-res:')
-              console.log(resp.data)
-              setId(resp.data.userAccount)
-              setUsername(resp.data.username || 'momo')
-              setAvatarUrl(resp.data.avatarUrl)
+              // console.log('current-res:')
+              // console.log(resp.data)
+              setId(resp?.data?.userAccount || '')
+              setUsername(resp?.data?.username || 'momo')
+              setAvatarUrl(resp?.data?.avatarUrl || 'https://pic3.zhimg.com/80/v2-4aff13816be5ec5a81f744b88dbda6ee_1440w.webp')
             })
             // 已登录，加载数据
             setToggleSelected('0')
             loadDataMylike()
+            initialize()
           }
         })
         .catch((err) => {
@@ -314,6 +348,7 @@ const Profile = (props) => {
   const onPressRefresh = () => {
     if (toggleSelected === '0') {
       loadDataMylike()
+      initialize()
     } else if (toggleSelected === '1') {
       loadDataMyCollect()
     } else {
@@ -376,22 +411,11 @@ const Profile = (props) => {
           listData &&
           listData?.length > 0 &&
           (toggleSelected === '0' || toggleSelected === '2') && (
-          <WaterfallFlow
+          <Waterfall
             style={{ paddingTop: 10 }}
-            contentContainerStyle={{
-              paddingLeft: '2%',
-              paddingRight: '2%'
-            }}
             data={listData}
-            numColumns={2}
-            renderItem={({ item, index, columnIndex }) => (
-              <FlowListItem
-                ket={item.id}
-                item={item}
-                likeSet={likeSet}
-                navigation={props.navigation}
-              />
-            )}
+            navigation={props.navigation}
+            myLike={toggleSelected === '0' ? listData : myLike}
           />
         )}
         {!isError &&

@@ -46,7 +46,7 @@ const EditPassword = (props) => {
   }
   return (
     <View style={styles.container}>
-      <LinearGradient colors={['#727480', '#454653']} style={styles.backgroud}>
+      <LinearGradient colors={['#727480', '#454653']} style={styles.background}>
         <Text style={styles.back} onPress={() => props.navigation.goBack()}>
           Cancel
         </Text>
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1
   },
-  backgroud: {
+  background: {
     // justifyContent:'center',
     // alignContent:'center',
     // alignItems:'center',

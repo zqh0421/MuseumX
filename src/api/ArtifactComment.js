@@ -14,12 +14,12 @@ export async function artifactComment(id) {
     )
     if (response.ok) {
       //请求成功,使用 ===
-      console.log('Request successful')
+      console.log('Request artifactComment successful')
     } else {
-      console.log('Request failed')
+      console.log('Request artifactComment failed')
     }
     const data = await response.json()
-    console.log(data)
+    // console.log(data)
     return data // 返回请求到的数据
   } catch (err) {
     console.log(err)

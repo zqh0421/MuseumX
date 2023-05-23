@@ -13,12 +13,12 @@ export async function myrelease(token) {
       options
     )
     if (response.ok) {
-      console.log('Request successful')
+      console.log('Request myrelease successful')
     } else {
-      console.log('Request failed')
+      console.log('Request myrelease failed')
     }
     const data = await response.json()
-    console.log(data)
+    // console.log(data)
     return data
   } catch (err) {
     console.log(err)

@@ -25,6 +25,7 @@ const Home = (props) => {
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       setpage(1)
+      loadData()
     })
     return unsubscribe
   }, [props.navigation])
@@ -36,7 +37,7 @@ const Home = (props) => {
   const getData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('userData')
-      console.log('json', jsonValue)
+      // console.log('json', jsonValue)
       return jsonValue !== null ? JSON.parse(jsonValue) : null
     } catch (e) {
       // error reading value
@@ -44,27 +45,26 @@ const Home = (props) => {
   }
 
   const loadData = () => {
-    console.log('load')
     setIsError(false)
     setIsRefreshing(true)
     getData()
       .then((userData) => {
-        console.log('user')
-        console.log(userData)
+        // console.log('user')
+        // console.log(userData)
         if (userData) {
-          console.log(userData.data)
+          // console.log(userData.data)
           myCollect(userData.data)
             .then((res) => {
               if (res.code === 0) {
                 // 数据获取成功
-                console.log(res.data.data)
+                // console.log(res.data.data)
                 let temp = []
                 res &&
                   res.data &&
                   res.data.data &&
                   res.data.data !== '收藏为空' &&
                   res.data.data.forEach((item) => {
-                    console.log(item.id)
+                    // console.log(item.id)
                     temp = [...temp, item.id]
                   })
                 setCollectSet(temp)
@@ -81,7 +81,7 @@ const Home = (props) => {
                     }
                   })
                   .catch((err) => {
-                    console.log(err)
+                    // console.log(err)
                     setIsError(true)
                     setIsRefreshing(false)
                     setList([])
@@ -89,10 +89,12 @@ const Home = (props) => {
               } else {
                 // 获取失败
                 setIsRefreshing(false)
+                setIsError(true)
               }
             })
             .catch((err) => {
               setIsRefreshing(false)
+              setIsError(true)
               alert(err)
             })
         } else {
@@ -109,7 +111,7 @@ const Home = (props) => {
               }
             })
             .catch((err) => {
-              console.log(err)
+              // console.log(err)
               setIsError(true)
               setIsRefreshing(false)
               setList([])
@@ -117,7 +119,7 @@ const Home = (props) => {
         }
       })
       .catch((err) => {
-        console.log(err)
+        // console.log(err)
         setIsError(true)
         setIsRefreshing(false)
       })
@@ -132,14 +134,14 @@ const Home = (props) => {
             .then((res) => {
               if (res.code === 0) {
                 // 数据获取成功
-                console.log(res.data.data)
+                // console.log(res.data.data)
                 let temp = []
                 res &&
                   res.data &&
                   res.data.data &&
                   res.data.data !== '收藏为空' &&
                   res.data.data.forEach((item) => {
-                    console.log(item.id)
+                    // console.log(item.id)
                     temp = [...temp, item.id]
                   })
                 setCollectSet([...collectSet, ...temp])

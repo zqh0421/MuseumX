@@ -1,5 +1,5 @@
 //文物收藏数量
-export async function collect_number(token, id) {
+export async function collectNumber(token, id) {
   const options = {
     method: 'GET',
     headers: {
@@ -14,12 +14,12 @@ export async function collect_number(token, id) {
       options
     )
     if (response.ok) {
-      console.log('Request successful')
+      console.log('Request collectNumber successful')
     } else {
-      console.log('Request failed')
+      console.log('Request collectNumber failed')
     }
     const data = await response.json()
-    console.log(data)
+    // console.log(data)
     return data
   } catch (err) {
     console.log(err)

@@ -78,7 +78,7 @@ const Search = (props) => {
   const takeImageHandler = async () => {
     const image = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [16, 9],
+      // aspect: [16, 9],
       quality: 0.5
     })
     const file = {
@@ -102,6 +102,7 @@ const Search = (props) => {
           })
         } else {
           // 获取失败
+          alert('搜索异常！')
         }
       })
       .catch((err) => {

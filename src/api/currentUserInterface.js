@@ -14,9 +14,9 @@ export async function current(token) {
       options
     )
     if (response.ok) {
-      console.log('Request successful')
+      console.log('Request current successful')
     } else {
-      console.log('Request failed')
+      console.log('Request current failed')
     }
     const data = await response.json()
     console.log(data)

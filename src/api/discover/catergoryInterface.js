@@ -18,7 +18,7 @@ export async function Show_category(page, size) {
       console.log('Request failed')
     }
     const data = await response.json()
-    console.log(data)
+    // console.log(data)
     return data
   } catch (err) {
     console.log(err)

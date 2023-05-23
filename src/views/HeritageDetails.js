@@ -22,7 +22,7 @@ import {
 } from 'react-native-paper'
 import { render } from 'react-dom'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { collect_number } from '../api/CollectNumber'
+import { collectNumber } from '../api/CollectNumber'
 import { collect } from '../api/Collect'
 import { artifact } from '../api/ArtifactInfo'
 import { artifactComment } from '../api/ArtifactComment'
@@ -48,10 +48,21 @@ const HeritageDetails = (props) => {
   const [description, setDescription] = useState('')
   const [collectNum, setCollectNum] = useState(0)
   const [color, setColor] = useState(
-    props.isCollected ? MD3Colors.error60 : MD3Colors.neutral100
+    props.route.params.color==='#E7A960' ? '#E7A960' : MD3Colors.neutral100
   )
   const [comments, setComments] = useState([])
   const [comment, setComment] = useState('')
+
+  const [height, setHeight] = useState(180)
+  useEffect(() => {
+    if (imageUrl) {
+      Image.getSize(imageUrl, (w, h) => {
+        setHeight(h / w * 0.8 * Dimensions.get('window').width)
+      },
+      (failure) => { console.log('failure', failure) }
+      );
+    }
+  }, [imageUrl])
 
   //接收Home页面参数
   const id = props.route.params.id
@@ -61,8 +72,10 @@ const HeritageDetails = (props) => {
     try {
       const jsonValue = await AsyncStorage.getItem('userData')
       return jsonValue !== null ? JSON.parse(jsonValue) : null
-      console.log('userData')
-    } catch (e) {}
+      // console.log('userData')
+    } catch (e) {
+      alert(e)
+    }
   }
 
   //加载数据
@@ -101,11 +114,11 @@ const HeritageDetails = (props) => {
     getData()
       .then((userData) => {
         if (userData) {
-          if (color === MD3Colors.error60) {
+          if (color === '#E7A960') {
             setColor(MD3Colors.neutral100)
             setCollectNum(collectNum - 1)
           } else if (color === MD3Colors.neutral100) {
-            setColor(MD3Colors.error60)
+            setColor('#E7A960')
             setCollectNum(collectNum + 1)
           }
           collect(userData.data, artifactID).then(async (res) => {
@@ -150,12 +163,12 @@ const HeritageDetails = (props) => {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <LinearGradient
-          style={styles.backgroud}
+          style={styles.background}
           colors={['#727480', '#454653']}
         >
           {/* 文物图片 */}
           {imageUrl && (
-            <Image source={{ uri: imageUrl }} style={styles.imageStyle} />
+            <Image source={{ uri: imageUrl }} style={[styles.imageStyle, { height: height}]} />
           )}
 
           {/* 跳转按钮 */}
@@ -239,9 +252,9 @@ const HeritageDetails = (props) => {
 
         {/* 收藏 */}
         <IconButton
-          icon="star-outline"
+          icon="star"
           iconColor={color}
-          size={30}
+          size={24}
           onPress={onPressCollect}
           style={{ top: -8, left: 5 }}
         />
@@ -254,18 +267,18 @@ const HeritageDetails = (props) => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    flex: 1,
   },
-  backgroud: {
+  background: {
     width: Dimensions.get('window').width,
     flex: 1
   },
   imageStyle: {
     width: '80%',
-    height: 300,
-    alignContent: 'center',
+    // alignContent: 'center',
     marginLeft: '10%', //页边距
-    top: '2%', //和页面顶部的距离
+    marginTop: 30, //和页面顶部的距离
     borderRadius: 10
   },
   buttonsStyle: {

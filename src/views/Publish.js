@@ -62,6 +62,7 @@ const Publish = (props) => {
           publishInterface(userData.data, formData)
             .then((res) => {
               console.log(res)
+              props.navigation.goBack()
             })
             .catch((err) => {
               alert(err)
@@ -76,7 +77,7 @@ const Publish = (props) => {
   const takeImageHandler = async () => {
     const image = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [16, 9],
+      // aspect: [16, 9],
       quality: 0.5
     })
     setFile({

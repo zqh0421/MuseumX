@@ -14,10 +14,20 @@ import { collect } from '../api/Collect'
 const HomeListItem = (props) => {
   const { item } = props
   const [collectNum, setCollectNum] = useState(item.collectNum)
-  const [color, setColor] = useState(
-    new Set(props.collectSet).has(item.id) ? '#E7A960' : '#ccc'
-  )
-  console.log('collectset', props.collectSet)
+  const [color, setColor] = useState('#ccc')
+
+  const checkLogin = async () => {
+    const jsonValue = await AsyncStorage.getItem('userData')
+    return jsonValue ? true : false
+  }
+
+  useEffect(() => {
+    if (checkLogin() && new Set(props.collectSet).has(item.id)) {
+      setColor('#E7A960')
+    } else {
+      setColor('#ccc')
+    }
+  }, [])
 
   const onPressCollect = async () => {
     // 判断是否登录
@@ -26,7 +36,7 @@ const HomeListItem = (props) => {
       // 向后端发送请求，修改
       collect(JSON.parse(jsonValue).data, item.id)
         .then((res) => {
-          console.log(res)
+          // console.log(res)
           if (res.message === 'ok') {
             // 收藏按钮样式变化
             if (color === '#E7A960') {
@@ -47,7 +57,7 @@ const HomeListItem = (props) => {
   }
 
   const onPressItem = () => {
-    props.navigation.navigate('HeritageDetails', { id: item.id })
+    props.navigation.navigate('HeritageDetails', { id: item.id, color: color })
   }
   return (
     <Pressable onPress={onPressItem}>
@@ -125,7 +135,7 @@ const styles = StyleSheet.create({
     width: '100%',
     fontWeight: 'bold',
     color: '#fff',
-    fontSize: 20
+    fontSize: 16
   },
   desc: {
     width: '100%',

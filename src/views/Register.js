@@ -55,7 +55,7 @@ const Register = (props) => {
 
   return (
     <View style={styles.container}>
-      <LinearGradient colors={['#3A3A3A', '#525161']} style={styles.backgroud}>
+      <LinearGradient colors={['#3A3A3A', '#525161']} style={styles.background}>
         <MaterialCommunityIcons
           onPress={() => props.navigation.goBack()}
           name="close"
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1 // 布局
   },
-  backgroud: {
+  background: {
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1

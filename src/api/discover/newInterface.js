@@ -14,9 +14,9 @@ export async function allNew(page, size) {
     // console.log("response: ")
     // console.log(response)
     if (response.ok) {
-      console.log('Request successful')
+      console.log('Request allNew successful')
     } else {
-      console.log('Request failed')
+      console.log('Request allNew failed')
     }
     const data = await response.json()
     // console.log(data)

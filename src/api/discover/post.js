@@ -13,12 +13,12 @@ export async function post(token, formData) {
       options
     )
     if (response.ok) {
-      console.log('Request successful')
+      console.log('Request post successful')
     } else {
-      console.log('Request failed')
+      console.log('Request post failed')
     }
     const data = await response.json()
-    console.log(data)
+    // console.log(data)
     return data
   } catch (err) {
     console.log(err)
