@@ -1,9 +1,9 @@
-export async function editUsername(token,formData) {
+export async function editUsername(token, formData) {
   const options = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      'token': token
+      token: token
     },
     body: formData
   }

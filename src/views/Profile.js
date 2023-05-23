@@ -263,36 +263,36 @@ const Profile = (props) => {
 
   useEffect(() => {
     switch (toggleSelected) {
-      case '0':
-        setToggleBar0Style([styles.toggleBar])
-        setToggleBar1Style([styles.toggleBar, { opacity: 0 }])
-        setToggleBar2Style([styles.toggleBar, { opacity: 0 }])
-        break
-      case '1':
-        setToggleBar0Style([styles.toggleBar, { opacity: 0 }])
-        setToggleBar1Style([styles.toggleBar])
-        setToggleBar2Style([styles.toggleBar, { opacity: 0 }])
-        break
-      case '2':
-        setToggleBar0Style([styles.toggleBar, { opacity: 0 }])
-        setToggleBar1Style([styles.toggleBar, { opacity: 0 }])
-        setToggleBar2Style([styles.toggleBar])
-        break
-      default:
-        break
+    case '0':
+      setToggleBar0Style([styles.toggleBar])
+      setToggleBar1Style([styles.toggleBar, { opacity: 0 }])
+      setToggleBar2Style([styles.toggleBar, { opacity: 0 }])
+      break
+    case '1':
+      setToggleBar0Style([styles.toggleBar, { opacity: 0 }])
+      setToggleBar1Style([styles.toggleBar])
+      setToggleBar2Style([styles.toggleBar, { opacity: 0 }])
+      break
+    case '2':
+      setToggleBar0Style([styles.toggleBar, { opacity: 0 }])
+      setToggleBar1Style([styles.toggleBar, { opacity: 0 }])
+      setToggleBar2Style([styles.toggleBar])
+      break
+    default:
+      break
     }
   }, [toggleSelected])
 
   useEffect(() => {
     switch (toggleSelected) {
-      case '0':
-        setNum0(listData?.length || 0)
-        break
-      case '1':
-        setNum1(listData?.length || 0)
-        break
-      case '2':
-        setNum2(listData?.length || 0)
+    case '0':
+      setNum0(listData?.length || 0)
+      break
+    case '1':
+      setNum1(listData?.length || 0)
+      break
+    case '2':
+      setNum2(listData?.length || 0)
     }
   }, [listData])
 
@@ -376,50 +376,50 @@ const Profile = (props) => {
           listData &&
           listData?.length > 0 &&
           (toggleSelected === '0' || toggleSelected === '2') && (
-            <WaterfallFlow
-              style={{ paddingTop: 10 }}
-              contentContainerStyle={{
-                paddingLeft: '2%',
-                paddingRight: '2%'
-              }}
-              data={listData}
-              numColumns={2}
-              renderItem={({ item, index, columnIndex }) => (
-                <FlowListItem
-                  ket={item.id}
-                  item={item}
-                  likeSet={likeSet}
-                  navigation={props.navigation}
-                />
-              )}
-            />
-          )}
+          <WaterfallFlow
+            style={{ paddingTop: 10 }}
+            contentContainerStyle={{
+              paddingLeft: '2%',
+              paddingRight: '2%'
+            }}
+            data={listData}
+            numColumns={2}
+            renderItem={({ item, index, columnIndex }) => (
+              <FlowListItem
+                ket={item.id}
+                item={item}
+                likeSet={likeSet}
+                navigation={props.navigation}
+              />
+            )}
+          />
+        )}
         {!isError &&
           !isRefreshing &&
           listData &&
           listData?.length > 0 &&
           toggleSelected === '1' && (
-            <ScrollView
-              style={{
-                height: Dimensions.get('window').height - 305,
-                paddingLeft: '2%',
-                paddingRight: '2%',
-                paddingTop: 10
-              }}
-            >
-              {listData.map((item) => {
-                return (
-                  // eslint-disable-next-line react/jsx-key
-                  <HomeListItem
-                    key={item.id}
-                    item={item}
-                    navigation={props.navigation}
-                    collectSet={collectSet}
-                  />
-                )
-              })}
-            </ScrollView>
-          )}
+          <ScrollView
+            style={{
+              height: Dimensions.get('window').height - 305,
+              paddingLeft: '2%',
+              paddingRight: '2%',
+              paddingTop: 10
+            }}
+          >
+            {listData.map((item) => {
+              return (
+              // eslint-disable-next-line react/jsx-key
+                <HomeListItem
+                  key={item.id}
+                  item={item}
+                  navigation={props.navigation}
+                  collectSet={collectSet}
+                />
+              )
+            })}
+          </ScrollView>
+        )}
         {!isError && isRefreshing && <RefreshingContent />}
         {!isError && !isRefreshing && (!listData || listData?.length <= 0) && (
           <EmptyContent />

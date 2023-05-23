@@ -16,22 +16,25 @@ const Register = (props) => {
     console.log(username)
     console.log(pwd)
 
-    register(pwdSecond, username, pwd).then(async res => {
-      if (res.message === 'ok') { // TODO: 判断登录成功的条件根据实际接口修改！
-        try {
-          const jsonValue = JSON.stringify(res)
-          await AsyncStorage.setItem('userData', jsonValue)
-          console.log('userData')
-          console.log(await AsyncStorage.getItem('userData'))
-          // props.navigation.goBack()
-          props.navigation.navigate("Login")  ///跳转到登录
-        } catch (e) {
-          // saving error
+    register(pwdSecond, username, pwd)
+      .then(async (res) => {
+        if (res.message === 'ok') {
+          // TODO: 判断登录成功的条件根据实际接口修改！
+          try {
+            const jsonValue = JSON.stringify(res)
+            await AsyncStorage.setItem('userData', jsonValue)
+            console.log('userData')
+            console.log(await AsyncStorage.getItem('userData'))
+            // props.navigation.goBack()
+            props.navigation.navigate('Login') ///跳转到登录
+          } catch (e) {
+            // saving error
+          }
         }
-      }
-    }).catch(err => {
-      alert(err)
-    })
+      })
+      .catch((err) => {
+        alert(err)
+      })
   }
 
   // if (!username || !username.trim()) {
